@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Database files (managed separately)
+*.db
+*.db-shm
+*.db-wal
+backups/
+
+# Logs
+*.log
+server.log
+server_err.log
+server_out.log
+
+# Temp files
+nul
+started_flag.txt
+*.bak2
+
+# Test/audit scripts (not part of production)
+__dbtest/
+_audit_match.py
+_check_vid.py
+_check_vin.py
+_page_check.html
+test_match.js
+library_dump.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+*.swp
+*.swo
+*~
