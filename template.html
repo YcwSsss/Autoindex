@@ -999,10 +999,13 @@
 // 数据全部来自服务器 SQLite；页面启动时由 bootstrap() 从 /api/data 拉取。
 // 这里只声明可变容器，查询与编辑都基于它们；web 端的增删改直接写回 SQLite（不再用本机 localStorage）。
 let DATA = null;     // 车型库（数组）
-/* ===== 地区列：英文界面读车型库英文列，不经 i18n 字典 =====
+/* ===== 地区列：界面一律显示英文，数据层仍用中文原值 =====
    META.region_labels 由 /api/data 返回（regions.cn/en + vehicles.region_en）。
-   显示用 regShow(中文原值)；所有查询/过滤一律 regRaw() 转回中文原值，
-   因为后端 region 列存的是中文。没有任何轮询、observer 或全页扫描。 */
+   显示统一用 regShow()，中英界面都返回英文列；
+   所有查询 / 过滤 / 权限判断一律 regRaw() 转回中文原值，
+   因为后端 vehicles.region 列存的是中文（canEditRegion 也按中文比对）。
+   注意：车型库导出仍输出中文原值，否则导出再导入会写坏 region 列。
+   没有任何轮询、observer 或全页扫描。 */
 function _regionEn(){
   if(document.documentElement.lang === 'en') return true;
   try { return localStorage.getItem('vin_tools_lang') === 'en'; } catch(e){ return false; }
@@ -1012,7 +1015,8 @@ function _regionMap(){
   catch(e){ return {}; }
 }
 function regShow(v){
-  if(!v || !_regionEn()) return v;
+  // 地区只保留英文一种显示，中文界面也不例外（不再跟随语言切换）。
+  if(!v) return v;
   const m = _regionMap();
   return m[v] || v;
 }
