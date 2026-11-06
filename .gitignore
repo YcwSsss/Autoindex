@@ -21,15 +21,9 @@ started_flag.txt
 *.bak2
 
 # Test/audit scripts (not part of production)
-__dbtest/
-_audit_match.py
-_check_vid.py
-_check_vin.py
-_page_check.html
-test_match.js
-library_dump.json
-_dangling_archive_*.csv
-_dangling_report.html
+# 一次性排查 / 审计 / 试跑产物统一放 _devtests/，整个目录不进版本库。
+# 注意：build_vin_tool.py 是运行时依赖（dbstore 里 import 它），不要移动。
+_devtests/
 
 # OS files
 .DS_Store
