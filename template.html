@@ -248,10 +248,9 @@
   .fld-hint{margin-top:6px;font-size:11.5px;color:#8a897f;display:block}
   /* ===== VIN 码查询页：顶部 VIN 码查询 + 下方 车型查询(左) + 结果卡片(右) ===== */
   .vin-top{padding-bottom:12px;border-bottom:1px dashed #eeece5;margin-bottom:14px}
-  /* VIN 解析条 + NHTSA 按钮 + NHTSA 结果：同行显示，水平 flex */
+  /* VIN 解析条：与提示行同行显示 */
   .vin-meta-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
   .vin-meta-row .vinstrip{margin:0}
-  .vin-meta-row #vpicOut{margin-left:0}
   .cards-wrap{flex:1;min-width:0;display:flex;flex-direction:column;padding-top:36px}
   .cards-row{display:flex;flex-wrap:nowrap;overflow-x:auto;padding-bottom:8px;scrollbar-width:thin}
   .cards-row:empty{display:none}
@@ -443,12 +442,10 @@
             <button type="button" class="combo-clear" id="vinClear" title="清空" onclick="clearVin()">×</button>
           </div>
           <button class="btn" onclick="queryOne()">查询</button>
-          <span id="vpicBtnBox" style="display:inline-flex;align-items:stretch"></span>
         </div>
-        <!-- VIN 解析条 + NHTSA 按钮 + NHTSA 结果：同行显示 -->
+        <!-- VIN 解析条：与提示行同行显示 -->
         <div class="vin-meta-row" style="margin-top:8px">
           <div id="vinHints"></div>
-          <div id="vpicOut" style="margin-left:8px"></div>
         </div>
       </div>
 
@@ -568,11 +565,9 @@
             <button type="button" class="combo-clear" id="evinClear" title="清空" onclick="clearEditVin()">×</button>
           </div>
           <button class="btn" onclick="queryEdit()">查询</button>
-          <span id="evpicBtnBox" style="display:inline-flex;align-items:stretch"></span>
         </div>
         <div class="vin-meta-row" style="margin-top:8px">
           <div id="evinHints"></div>
-          <div id="evpicOut" style="margin-left:8px"></div>
         </div>
       </div>
 
@@ -1761,9 +1756,11 @@ function normVin(s){
 
 function validateVin(vin){
   // 澳洲/日本等非北美市场车辆第 9 位非校验位，不做校验位比对
-  if(vin.length !== 17) return {ok:false, msg:'长度 '+vin.length+' 位，标准 VIN 为 17 位'};
-  if(!/^[A-HJ-NPR-Z0-9]{17}$/.test(vin)) return {ok:false, msg:'含有非法字符（VIN 不含 I、O、Q）'};
-  return {ok:true, msg:'校验通过'};
+  if(vin.length !== 17) return {ok:false, msg: LANG === 'en'
+      ? ('Length ' + vin.length + ' characters; a standard VIN is 17 characters')
+      : ('长度 ' + vin.length + ' 位，标准 VIN 为 17 位')};
+  if(!/^[A-HJ-NPR-Z0-9]{17}$/.test(vin)) return {ok:false, msg:t('含有非法字符（VIN 不含 I、O、Q）')};
+  return {ok:true, msg:t('校验通过')};
 }
 
 function yearOf(vin){
@@ -2419,8 +2416,6 @@ function clearVin(){
   if(cb) cb.style.display = 'none';
   const out = document.getElementById('outS'); if(out) out.innerHTML = '';
   const hints = document.getElementById('vinHints'); if(hints) hints.innerHTML = '';
-  const vpic = document.getElementById('vpicOut'); if(vpic) vpic.innerHTML = '';
-  const vpicBtn = document.getElementById('vpicBtnBox'); if(vpicBtn) vpicBtn.innerHTML = '';
   const prods = document.getElementById('cardsProds');
   if(prods){ prods.classList.remove('open'); prods.innerHTML=''; prods.dataset.vid=''; }
   document.querySelectorAll('.vcard-vin.active').forEach(c => c.classList.remove('active'));
@@ -2833,8 +2828,6 @@ function clearEditVin(){
   if(cb) cb.style.display = 'none';
   const out = document.getElementById('eoutS'); if(out) out.innerHTML = '';
   const hints = document.getElementById('evinHints'); if(hints) hints.innerHTML = '';
-  const vpic = document.getElementById('evpicOut'); if(vpic) vpic.innerHTML = '';
-  const vpicBtn = document.getElementById('evpicBtnBox'); if(vpicBtn) vpicBtn.innerHTML = '';
   const prods = document.getElementById('ecardsProds');
   if(prods){ prods.classList.remove('open'); prods.innerHTML=''; prods.dataset.vid=''; }
   document.querySelectorAll('#eoutS .vcard-vin.active').forEach(c => c.classList.remove('active'));
@@ -3461,11 +3454,7 @@ async function queryEdit(){
   const hints    = document.getElementById('evinHints');
   const cardsBox = document.getElementById('eoutS');
   const prodsBox = document.getElementById('ecardsProds');
-  const vpicBox  = document.getElementById('evpicOut');
-  const vpicBtn  = document.getElementById('evpicBtnBox');
   if(prodsBox){ prodsBox.classList.remove('open'); prodsBox.innerHTML=''; prodsBox.dataset.vid=''; }
-  if(vpicBox){ vpicBox.innerHTML=''; }
-  if(vpicBtn){ vpicBtn.innerHTML=''; }
   document.querySelectorAll('#eoutS .vcard-vin.active').forEach(c => c.classList.remove('active'));
 
   const raw = (document.getElementById('evin').value || '').trim();
@@ -3481,7 +3470,6 @@ async function queryEdit(){
       cardsBox.innerHTML = idHits.map(editCard).join('');
       updateEditResultCount(idHits.length);
       hints.innerHTML = `<div class="msg m-ok">${t('按 ID 精确匹配到')} <b>${idHits.length}</b> ${t('条车型')}${idHits.length>1?t('（同名多配置）'):''}</div>`;
-      if(vpicBtn) vpicBtn.innerHTML = '';
       return;
     }
     hints.innerHTML = hits.length
@@ -3503,7 +3491,7 @@ async function queryEdit(){
     msgHtml += vinStrip(vin);
   }
   if(!val.ok){
-    msgHtml += `<div class="msg m-err">${val.msg} —— 仍按前缀尝试匹配：</div>`;
+    msgHtml += `<div class="msg m-err">${val.msg}${LANG === 'en' ? ' — still matching by prefix:' : ' —— 仍按前缀尝试匹配：'}</div>`;
   }
 
   // 地区组权限过滤：VIN 匹配结果也受地区限制
@@ -3542,10 +3530,16 @@ async function queryEdit(){
     if(_rg && !r.candidates.length && (r.level > 0 || r.exact)){
       msgHtml += `<div class="msg m-err"><b>匹配到的车型不在你可编辑的地区范围内。</b> 请联系管理员调整地区组权限。</div>`;
     } else {
-      msgHtml += `<div class="msg m-err"><b>未匹配到车型。</b>`;
-      if(r.wmiBrand) msgHtml += ` 该 VIN 的 WMI（${vin.slice(0,3)}）属于库内品牌 <b>${r.wmiBrand}</b>，但此具体车型未收录，建议补充车型库。`;
-      else if(r.wmiName) msgHtml += ` 按 WMI 规则识别为 <b>${r.wmiName}</b>（产地 ${r.country||'未知'}），但该厂商不在你的车型库覆盖范围内。`;
-      else msgHtml += ` WMI（${vin.slice(0,3)}）不在你的车型库覆盖范围内，公开 WMI 规则中也未收录。`;
+      msgHtml += `<div class="msg m-err"><b>${LANG === 'en' ? 'No matching vehicle.' : '未匹配到车型。'}</b>`;
+      if(r.wmiBrand) msgHtml += LANG === 'en'
+        ? ` The WMI (${vin.slice(0,3)}) of this VIN belongs to <b>${r.wmiBrand}</b> in the library, but this exact model is not covered. Consider adding it.`
+        : ` 该 VIN 的 WMI（${vin.slice(0,3)}）属于库内品牌 <b>${r.wmiBrand}</b>，但此具体车型未收录，建议补充车型库。`;
+      else if(r.wmiName) msgHtml += LANG === 'en'
+        ? ` Identified by WMI rules as <b>${r.wmiName}</b> (origin ${r.country||'unknown'}), but this manufacturer is outside your vehicle library.`
+        : ` 按 WMI 规则识别为 <b>${r.wmiName}</b>（产地 ${r.country||'未知'}），但该厂商不在你的车型库覆盖范围内。`;
+      else msgHtml += LANG === 'en'
+        ? ` WMI (${vin.slice(0,3)}) is outside your vehicle library and not found in public WMI rules.`
+        : ` WMI（${vin.slice(0,3)}）不在你的车型库覆盖范围内，公开 WMI 规则中也未收录。`;
       msgHtml += '</div>';
     }
     cardsBox.innerHTML = '';
@@ -3559,45 +3553,16 @@ async function queryEdit(){
     }
   }
 
-  if(vin.length === 17){
-    if(vpicBtn) vpicBtn.innerHTML = `<button class="btn" onclick="editVpicCheck('${vin}')">联网官方核对（NHTSA 美国交通部）</button>`;
-  } else if(vpicBtn){
-    vpicBtn.innerHTML = '';
-  }
-
   hints.innerHTML = msgHtml;
 }
-function editVpicCheck(vin){
-  const box = document.getElementById('evpicOut');
-  if(!box) return;
-  box.innerHTML = '<div class="hint">查询 NHTSA 官方库中…</div>';
-  fetch('/api/vpic?vin=' + vin).then(r => r.json()).then(d => {
-    if(!d.ok){ box.innerHTML = `<div class="msg m-err">官方查询失败：${esc(d.error||'')}</div>`; return; }
-    if(!d.make){
-      box.innerHTML = `<div class="msg m-warn"><b>NHTSA 无此 VIN 数据</b> —— 多为中国/澳洲等未在美注册车型。请以本工具"车型系列码（真实 VIN 样本）"或车型库为参考，并交叉核对实车铭牌。</div>`;
-      return;
-    }
-    let badge = '';
-    const r = window._lastR;
-    if(r && r.candidates.length){
-      const tbl = (r.candidates[0].brand || '').toUpperCase();
-      const off = (d.make || '').toUpperCase();
-      if(tbl && (off.includes(tbl) || tbl.includes(off))) badge = '<span class="badge b-ok">与车型库一致</span>';
-      else badge = `<span class="badge b-err">⚠ 与车型库不符：库内=${esc(r.candidates[0].brand)} / 官方=${esc(d.make)}</span>`;
-    }
-    box.innerHTML = `<div class="msg m-info" style="margin-top:10px"><b>官方数据库（NHTSA vPIC · 美国交通部）</b> ${badge}</div>
-      <div class="vgrid">${vitem('厂商', d.make)}${vitem('车型', d.model)}${vitem('年款', d.modelYear)}${vitem('配置', d.trim)}${vitem('系列', d.series)}${vitem('发动机', d.engineModel)}${vitem('排量(L)', d.displacementL)}${vitem('燃料', d.fuelType)}${vitem('车身', d.bodyClass)}${vitem('驱动', d.driveType)}${vitem('产国', d.plantCountry)}</div>`;
-  }).catch(e => { box.innerHTML = `<div class="msg m-err">${t('网络错误：')}${esc(e.message)}</div>`; });
-}
-
 function vinStrip(vin){
   const segs = [
-    {cls:'s-wmi', l:'品牌 WMI', t:vin.slice(0,3)},
-    {cls:'s-attr', l:'车型配置', t:vin.slice(3,8)},
-    {cls:'s-chk', l:'校验位', t:vin.slice(8,9)},
-    {cls:'s-year', l:'年款', t:vin.slice(9,10)},
-    {cls:'s-plant', l:'工厂', t:vin.slice(10,11)},
-    {cls:'s-ser', l:'序列号', t:vin.slice(11,17)}
+    {cls:'s-wmi', l:t('品牌 WMI'), t:vin.slice(0,3)},
+    {cls:'s-attr', l:t('车型配置'), t:vin.slice(3,8)},
+    {cls:'s-chk', l:t('校验位'), t:vin.slice(8,9)},
+    {cls:'s-year', l:t('年款'), t:vin.slice(9,10)},
+    {cls:'s-plant', l:t('工厂'), t:vin.slice(10,11)},
+    {cls:'s-ser', l:t('序列号'), t:vin.slice(11,17)}
   ];
   return '<div class="vinstrip">' + segs.map(s=>`<div class="seg ${s.cls}"><small>${s.l}</small><b>${s.t}</b></div>`).join('') + '</div>';
 }
@@ -4389,11 +4354,7 @@ async function queryOne(){
   const hints    = document.getElementById('vinHints');
   const cardsBox = document.getElementById('outS');
   const prodsBox = document.getElementById('cardsProds');
-  const vpicBox  = document.getElementById('vpicOut');
-  const vpicBtn  = document.getElementById('vpicBtnBox');
   if(prodsBox){ prodsBox.classList.remove('open'); prodsBox.innerHTML=''; prodsBox.dataset.vid=''; }
-  if(vpicBox){ vpicBox.innerHTML=''; }
-  if(vpicBtn){ vpicBtn.innerHTML=''; }
   document.querySelectorAll('.vcard-vin.active').forEach(c => c.classList.remove('active'));
 
   const raw = (document.getElementById('vin').value || '').trim();
@@ -4408,7 +4369,6 @@ async function queryOne(){
       cardsBox.innerHTML = idHits.map(candCard).join('');
       updateResultCount(idHits.length);
       hints.innerHTML = `<div class="msg m-ok">${t('按 ID 精确匹配到')} <b>${idHits.length}</b> ${t('条车型')}${idHits.length>1?t('（同名多配置）'):''}</div>`;
-      if(vpicBtn) vpicBtn.innerHTML = '';
       return;
     }
     hints.innerHTML = `<div class="msg m-err">${t('未找到 ID 为')}${esc(raw.toUpperCase())}</div>`;
@@ -4428,7 +4388,7 @@ async function queryOne(){
     msgHtml += vinStrip(vin);
   }
   if(!val.ok){
-    msgHtml += `<div class="msg m-err">${val.msg} —— 仍按前缀尝试匹配：</div>`;
+    msgHtml += `<div class="msg m-err">${val.msg}${LANG === 'en' ? ' — still matching by prefix:' : ' —— 仍按前缀尝试匹配：'}</div>`;
   }
 
   // ===== 收集候选车型 → 注入 #outS（共用下方 cards-wrap） =====
@@ -4465,10 +4425,16 @@ async function queryOne(){
   })();
 
   if(!collectRecs.main.length && !collectRecs.leftover.length){
-    msgHtml += `<div class="msg m-err"><b>未匹配到车型。</b>`;
-    if(r.wmiBrand) msgHtml += ` 该 VIN 的 WMI（${vin.slice(0,3)}）属于库内品牌 <b>${r.wmiBrand}</b>，但此具体车型未收录，建议补充车型库。`;
-    else if(r.wmiName) msgHtml += ` 按 WMI 规则识别为 <b>${r.wmiName}</b>（产地 ${r.country||'未知'}），但该厂商不在你的车型库覆盖范围内。`;
-    else msgHtml += ` WMI（${vin.slice(0,3)}）不在你的车型库覆盖范围内，公开 WMI 规则中也未收录。`;
+    msgHtml += `<div class="msg m-err"><b>${LANG === 'en' ? 'No matching vehicle.' : '未匹配到车型。'}</b>`;
+    if(r.wmiBrand) msgHtml += LANG === 'en'
+      ? ` The WMI (${vin.slice(0,3)}) of this VIN belongs to <b>${r.wmiBrand}</b> in the library, but this exact model is not covered. Consider adding it.`
+      : ` 该 VIN 的 WMI（${vin.slice(0,3)}）属于库内品牌 <b>${r.wmiBrand}</b>，但此具体车型未收录，建议补充车型库。`;
+    else if(r.wmiName) msgHtml += LANG === 'en'
+      ? ` Identified by WMI rules as <b>${r.wmiName}</b> (origin ${r.country||'unknown'}), but this manufacturer is outside your vehicle library.`
+      : ` 按 WMI 规则识别为 <b>${r.wmiName}</b>（产地 ${r.country||'未知'}），但该厂商不在你的车型库覆盖范围内。`;
+    else msgHtml += LANG === 'en'
+      ? ` WMI (${vin.slice(0,3)}) is outside your vehicle library and not found in public WMI rules.`
+      : ` WMI（${vin.slice(0,3)}）不在你的车型库覆盖范围内，公开 WMI 规则中也未收录。`;
     msgHtml += '</div>';
     cardsBox.innerHTML = '';
     updateResultCount(0);
@@ -4481,38 +4447,7 @@ async function queryOne(){
     }
   }
 
-  // 17 位 VIN 时在“查询”按钮右侧追加 NHTSA 联网核对按钮
-  if(vin.length === 17){
-    if(vpicBtn) vpicBtn.innerHTML = `<button class="btn" onclick="vpicCheck('${vin}')">联网官方核对（NHTSA 美国交通部）</button>`;
-  } else if(vpicBtn){
-    vpicBtn.innerHTML = '';
-  }
-
   hints.innerHTML = msgHtml;
-}
-
-// 联网核对：同源代理 /api/vpic 调 NHTSA vPIC 官方库（NHTSA 不开放 CORS，故服务端代理）
-function vpicCheck(vin){
-  const box = document.getElementById('vpicOut');
-  if(!box) return;
-  box.innerHTML = '<div class="hint">查询 NHTSA 官方库中…</div>';
-  fetch('/api/vpic?vin=' + vin).then(r => r.json()).then(d => {
-    if(!d.ok){ box.innerHTML = `<div class="msg m-err">官方查询失败：${esc(d.error||'')}</div>`; return; }
-    if(!d.make){
-      box.innerHTML = `<div class="msg m-warn"><b>NHTSA 无此 VIN 数据</b> —— 多为中国/澳洲等未在美注册车型。请以本工具"车型系列码（真实 VIN 样本）"或车型库为参考，并交叉核对实车铭牌。</div>`;
-      return;
-    }
-    let badge = '';
-    const r = window._lastR;
-    if(r && r.candidates.length){
-      const tbl = (r.candidates[0].brand || '').toUpperCase();
-      const off = (d.make || '').toUpperCase();
-      if(tbl && (off.includes(tbl) || tbl.includes(off))) badge = '<span class="badge b-ok">与车型库一致</span>';
-      else badge = `<span class="badge b-err">⚠ 与车型库不符：库内=${esc(r.candidates[0].brand)} / 官方=${esc(d.make)}</span>`;
-    }
-    box.innerHTML = `<div class="msg m-info" style="margin-top:10px"><b>官方数据库（NHTSA vPIC · 美国交通部）</b> ${badge}</div>
-      <div class="vgrid">${vitem('厂商', d.make)}${vitem('车型', d.model)}${vitem('年款', d.modelYear)}${vitem('配置', d.trim)}${vitem('系列', d.series)}${vitem('发动机', d.engineModel)}${vitem('排量(L)', d.displacementL)}${vitem('燃料', d.fuelType)}${vitem('车身', d.bodyClass)}${vitem('驱动', d.driveType)}${vitem('产国', d.plantCountry)}</div>`;
-  }).catch(e => { box.innerHTML = `<div class="msg m-err">${t('网络错误：')}${esc(e.message)}</div>`; });
 }
 
 // 页面启动：先从服务器拉元信息（VDS/品牌/总数，首屏不再带 1.5MB 产品），再分页拉首屏 200 条车型；
@@ -4945,7 +4880,7 @@ checkAuth();
    - 不挂 MutationObserver、不发额外接口、不轮询、不动业务表。
    ================================================================== */
 const LANG_KEY = 'vin_tools_lang';
-const I18N_EN = {"查询":"Search","编辑":"Edit","管理":"Manage","帮助":"Help","车辆查询":"Vehicle Search","产品查询":"Product Search","产品管理":"Product Management","产品编辑":"Product Edit","车型库管理":"Vehicle Library","品类管理":"Categories","用户管理":"Users","操作日志":"Activity Log","使用说明":"User Guide","反馈建议":"Feedback","退出登录":"Sign Out","账号设置":"Account Settings","编辑产品名":"Edit product name","车型库 · 产品 数据管理":"Vehicle & Product Data","AutoIndex":"AutoIndex","用户名 / 邮箱":"Username / Email","用户名或邮箱":"Username or email","密码":"Password","登 录":"Sign In","登录失败":"Sign-in failed","请输入用户名/邮箱和密码":"Enter your username/email and password","邮箱":"Email","用户名":"Username","权限":"Role","初始密码":"Initial password","登录用户名":"Login username","邮箱（也可用于登录）":"Email (also used for sign-in)","新增用户":"Add User","用户列表":"User List","状态":"Status","用户":"User","管理员":"Administrator","产品经理":"Product Manager","用户（仅查询）":"User (view only)","产品经理（查询 + 编辑）":"Product Manager (view + edit)","管理员（全部模块）":"Administrator (all modules)","管理品类":"Managed categories","地区组":"Region group","请选择":"Please select","启用":"Enable","停用":"Disable","暂无用户":"No users yet","编辑用户":"Edit user","编辑用户：":"Edit user: ","当前密码":"Current password","新密码（可选）":"New password (optional)","确认新密码":"Confirm new password","新密码（留空则不修改）":"New password (blank = unchanged)","重置密码（留空则不修改）":"Reset password (blank = unchanged)","修改邮箱或密码需要输入当前密码":"Enter your current password to change email or password","两次输入的新密码不一致":"The new passwords do not match","请输入用户名":"Enter a username","请输入初始密码":"Enter an initial password","请输入当前密码":"Enter your current password","没有需要修改的内容":"Nothing to update","已新增用户":"User added","请为产品经理至少选择一个管理品类":"Select at least one category for a Product Manager","请为产品经理选择地区组（CDC/CDI）":"Select a region group (CDC/CDI) for a Product Manager","确定删除该用户？此操作不可恢复。":"Delete this user? This cannot be undone.","（仅能看到/编辑所选品类的产品）":"(Can only view/edit products in the selected categories)","（控制产品编辑中可操作的车型地区）":"(Controls which vehicle regions can be edited)","CDC（仅澳新地区）":"CDC (Australia/NZ only)","CDI（除澳新外所有地区）":"CDI (all regions except Australia/NZ)","保存":"Save","取消":"Cancel","删除":"Delete","关闭":"Close","清空":"Clear","刷新":"Refresh","导出":"Export","添加":"Add","回复":"Reply","发送":"Send","提交反馈":"Submit","展开全部":"Expand all","收起全部":"Collapse all","模板下载":"Template","导入车型库":"Import","导出车型库":"Export","输入 ID，如 CDI1000":"Enter ID, e.g. CDI1000","确定":"OK","详情":"Details","操作":"Action","时间":"Time","已删除":"Deleted","已更新":"Updated","保存成功":"Saved","删除失败":"Delete failed","保存失败":"Save failed","添加失败":"Add failed","加载失败":"Load failed","操作失败":"Action failed","网络错误":"Network error","未知错误":"Unknown error","未知":"Unknown","无":"None","暂无数据":"No data","没有匹配的记录":"No matching records","已选：":"Selected: ","共":"Total ","可选":"Optional","保存失败：":"Save failed: ","删除失败：":"Delete failed: ","添加失败：":"Add failed: ","网络错误：":"Network error: ","加载失败：":"Load failed: ","操作失败：":"Action failed: ","导出失败：":"Export failed: ","导出失败：HTTP":"Export failed: HTTP","备注保存失败：":"Failed to save notes: ","保存备注失败：":"Failed to save notes: ","回复失败":"Reply failed","提交成功":"Submitted","提交失败":"Submit failed","请输入内容":"Enter some content","校验通过":"Valid","搜索失败：":"Search failed: ","搜索请求失败：":"Search request failed: ","查询失败：":"Query failed: ","查询车型失败：":"Vehicle query failed: ","解除关联失败：":"Unlink failed: ","正在检查…":"Checking…","查询中…":"Querying…","搜索中...":"Searching…","加载中...":"Loading…","加载中…":"Loading…","加载车型失败：":"Failed to load vehicles: ","VIN 码查询":"VIN Lookup","车型查询":"Vehicle Filter","输入 VIN 或 ID，如 LSJWH4092PU123456 / CDI1000":"Enter VIN or ID, e.g. LSJWH4092PU123456 / CDI1000","请输入 VIN 或 ID，如 LSJWH4092PU123456 / CDI1000":"Enter VIN or ID, e.g. LSJWH4092PU123456 / CDI1000","国家/地区":"Region","品牌":"Make","车型":"Model","年款":"Year","排量":"Capacity","发动机":"Engine","底盘":"Chassis","车系":"Series","功率":"Power","车身":"Body","燃料":"Fuel","驱动":"Drive","变速箱":"Transmission","产地":"Origin","配置":"Variant","不限":"Any","全部品牌":"All makes","全部地区":"All regions","全部产品":"All products","品牌筛选：":"Make: ","国家/地区：":"Region: ","请至少填写一个字段":"Enter at least one field","无匹配":"No match","无匹配项":"No match","当前条件组合下暂无候选":"No candidates under the current filters","未找到匹配车型。可清空部分条件后再试":"No matching vehicles. Try clearing some filters.","条车型":" vehicles","找到":"Found ","未找到匹配车型。":"No matching vehicles.","← 返回":"← Back","品牌 WMI":"WMI","车型配置":"Model code","校验位":"Check digit","工厂":"Plant","序列号":"Serial","实际VIN":"Actual VIN","VIN 前缀":"VIN prefix","VIN前缀":"VIN prefix","关联产品":"Linked products","关联车型":"Linked vehicles","暂无产品":"No products","该车型暂无关联产品":"No products linked to this vehicle","该产品暂未关联任何车型":"No vehicles linked to this product","座位数":"Seats","车门数":"Doors","气缸数":"Cylinders","每缸气门":"Valves/cyl.","档位数":"Gears","方向盘":"Steering","起始年":"Year from","截止年":"Year to","排量(L)":"Capacity (L)","产国":"Origin country","互换号":"Interchange","品名":"Product","供应商":"Supplier","采购价":"Cost","备注":"Notes","位置":"Position","OE 号":"OE No.","中文名":"Chinese name","英文名":"English name","产品中文名":"Chinese name","产品英文名":"English name","左":"Left","右":"Right","前":"Front","后":"Rear","里":"Inner","外":"Outer","上":"Upper","下":"Lower","多个用逗号或换行分隔":"Separate with commas or new lines","登记实际 VIN":"Register actual VIN","输入实际 VIN 码":"Enter actual VIN","当前已登记：":"Registered: ","当前无登记":"None registered","输入 OE 号或 CDAP 号，如 90915-10009 / A123":"Enter OE or CDAP No., e.g. 90915-10009 / A123","请输入 OE 号或 CDAP 号":"Enter an OE or CDAP number","添加产品":"Add product","删除该产品":"Delete this product","编辑产品":"Edit product","编辑产品：":"Edit product: ","＋ 添加产品":"+ Add product","＋产品":"+ Product","暂无带 OE / CDAP 号码的产品":"No products with OE / CDAP numbers","无匹配产品，请调整关键词":"No matching products, adjust the keyword","请先从下拉中选择一个产品名称":"Select a product name from the list first","请填写产品中文名":"Enter the Chinese product name","产品名称（搜索品类名称）":"Product name (search the catalogue)","从产品品类中选择名称自动填充，填写编号后保存；所有字段均相同视为重复":"Pick a name from the catalogue, fill in the numbers and save. Records with identical fields count as duplicates.","输入中文 / 英文名称搜索…":"Search by Chinese / English name…","规格":"Spec","数量":"Qty","暂无品类":"No categories yet","暂无品类，点击右上「＋ 新增品类」添加":"No categories. Click \"+ Add category\" at the top right.","无匹配品类":"No matching categories","＋ 新增品类":"+ Add category","删除品类":"Delete category","编辑品类":"Edit category","请选择上级品类":"Select a parent category","请填写品类代码":"Enter a category code","品类代码仅限 1-10 位字母 / 数字 / 连字符":"Category code: 1-10 letters, digits or hyphens","一级":"Level 1","二级":"Level 2","三级":"Level 3","（未命名）":"(unnamed)","未命名":"Unnamed","品类中文名：":"Category Chinese name: ","品类英文名：":"Category English name: ","请先点击「模板下载」获取标准模板。":"Download the standard template first.","请检查文件内容":"Check the file contents","文件为空或无有效数据":"The file is empty or has no valid data","无可用数据：":"No usable data: ","模板列名不正确，缺少必填列：":"Incorrect template columns, missing required: ","正在导入 ":"Importing ","正在生成 Excel…":"Generating Excel…","正在生成 Excel，请稍候…":"Generating Excel, please wait…","正在加载车型数据并生成 Excel...":"Loading vehicles and generating Excel…","无数据可导出":"No data to export","导出失败：无数据":"Export failed: no data","导出失败：无数据或服务器错误":"Export failed: no data or server error","导出请求失败":"Export request failed","请先查询（车型筛选 / VIN / ID）得到结果后再点导出":"Run a search (filter / VIN / ID) before exporting","解析/导入失败：":"Parse/import failed: ","未找到该车型（id 缺失）":"Vehicle not found (missing id)","未找到 ID 为":"No vehicle with ID ","品牌/车型 至少有一项为空":"Make and model must both be filled","含有非法字符（VIN 不含 I、O、Q）":"contains invalid characters (VIN excludes I, O, Q)","以下 VIN 不合法（须 17 位且不含 I/O/Q）：":"Invalid VINs (must be 17 characters, no I/O/Q): ","单条车型最多登记 50 个实际 VIN，当前":"At most 50 actual VINs per vehicle, currently ","为该车型登记/更新实际 17 位 VIN 码（多条用逗号、换行或分号分隔，每条须合法 VIN；提交即覆盖）":"Register or update the actual 17-character VINs (separate with commas, new lines or semicolons; each must be valid; submitting overwrites)","车型库导入模板.xlsx":"vehicle-library-template.xlsx","车型库导出_":"vehicle-library_","车型库模板":"Vehicle Library","车型库":"Vehicle Library","项关联产品）":" linked product(s))","关联车型：":"Linked vehicles: ","该产品还有":"This product still has ","个关联车型，请先解除所有关联后再删除":" linked vehicle(s). Unlink them all before deleting.","解除关联":"Unlink","你无权编辑该地区的车型产品":"You cannot edit products for this region","无权修改该品类下的产品":"You cannot modify products in this category","无权删除该品类下的产品":"You cannot delete products in this category","无权管理该品类产品的关联车型":"You cannot manage linked vehicles for this category","该 ID 对应的车型不在你可编辑的地区范围内":"This vehicle is outside the regions you can edit","匹配到的车型不在你可编辑的地区范围内。":"The matched vehicle is outside the regions you can edit.","请联系管理员调整地区组权限。":"Ask an administrator to adjust your region group.","你尚未被分配任何管理品类":"You have no assigned categories","你无权在该品类（":"You cannot add products in category (","）下添加产品":")","仅 WMI 品牌级匹配":"WMI brand-level match only","精确匹配":"Exact match","精确匹配（年款筛选）":"Exact match (year filtered)","✅ VDS 唯一判定":"✅ Unique VDS match","✅ 实际VIN码精确命中（已核实）":"✅ Exact actual-VIN match (verified)","✅ VIN 相似度匹配（参考":"✅ VIN similarity match (ref. ","⚠ VIN 相似度参考（":"⚠ VIN similarity (ref. ","⚠ VDS 多车型碰撞（":"⚠ VDS collision (","✅ VDS 多车型碰撞（":"⚠ VDS collision (","无 VDS 判定，":"No VDS match, ","个候选待人工确认":" candidate(s) need review","个候选":" candidate(s)","个候选）":" candidate(s))","按 ID 精确匹配到":"Exact match by ID: ","与车型库一致":"Matches library","与车型库不符":"Mismatch with library","位匹配":"-digit match","前 ":"First ","联网官方核对（NHTSA 美国交通部）":"Verify online (NHTSA · US DOT)","官方数据库（NHTSA vPIC · 美国交通部）":"Official database (NHTSA vPIC · US DOT)","NHTSA 无此 VIN 数据":"No NHTSA data for this VIN","查询 NHTSA 官方库中…":"Querying NHTSA…","官方查询失败：":"Official lookup failed: ","—— 多为中国/澳洲等未在美注册车型。请以本工具\"车型系列码（真实 VIN 样本）\"或车型库为参考，并交叉核对实车铭牌。":"— usually a China/Australia model not registered in the US. Use this tool's VDS codes (real VIN samples) or the vehicle library as reference, and cross-check the nameplate.","Markdown 编辑":"Markdown","实时预览":"Preview","一级标题":"Heading 1","二级标题":"Heading 2","三级标题":"Heading 3","粗体":"Bold","斜体":"Italic","代码":"Code","列表":"Bullet list","有序列表":"Numbered list","引用":"Quote","分隔线":"Divider","表格":"Table","• 列表":"• List","1. 列表":"1. List","❝ 引用":"❝ Quote","— 分隔线":"— Divider","☷ 表格":"☷ Table","写下你的建议或问题…":"Write your suggestion or question…","输入回复…":"Write a reply…","暂无反馈，写下你的第一条建议吧":"No feedback yet. Write your first suggestion.","确定删除这条反馈？":"Delete this feedback?","回复 · ":" replied · ","暂无日志":"No activity yet","确定删除产品「":"Delete product \"","」吗？此操作不可撤销。":"\"? This cannot be undone.","确定要删除「":"Delete \"","」？此操作不可撤销。":"\"? This cannot be undone.","确定要删除产品「":"Delete product \"","确定要解除该车型（":"Remove the link to vehicle (","）与产品的关联吗？":"\") from this product?","」吗？\n若该产品下已有产品号码，系统将拒绝删除。":"\"? If it still has part numbers, the system will refuse to delete it.","已存在完全相同的产品（id":"An identical product already exists (id ","），不可重复添加：\n":"), cannot be added twice:\n","产品数据加载中…":"Loading products…","产品数据加载中，稍候自动显示…":"Loading products, please wait…","产品数据异常":"Product data error","品类数据异常":"Category data error","该品类下暂无产品（该车型共":"No products in this category (vehicle has ","品牌:":"Make:","地区:":"Region:","，前 ":" , first ","/11 位一致）":", first 11 digits match)","/11 位一致），":", first 11 digits match), ","未匹配到车型。":"No matching vehicle.","导出请求失败：":"Export request failed: ","再次输入新密码":"Re-enter new password","代码（如 G1）":"Code (e.g. G1)","车型备注":"Vehicle note","(我)":"(me)","个车型）":" vehicle(s))","，但此具体车型未收录，建议补充车型库。":", but this specific model is not in the library. Consider adding it.","重复：该车型已存在相同产品（":"Duplicate: this vehicle already has the same product (","），请修改后重试":"). Please adjust and retry.","位，标准 VIN 为 17 位":" characters; a standard VIN is 17 characters","厂商":"Make","系列":"Series","中国":"China","日本":"Japan","韩国":"Korea","德国":"Germany","法国/西班牙等":"France / Spain etc.","英国":"United Kingdom","意大利":"Italy","瑞典/芬兰":"Sweden / Finland","瑞士/捷克等":"Switzerland / Czech etc.","美国":"United States","加拿大":"Canada","墨西哥":"Mexico","巴西":"Brazil","澳大利亚":"Australia","该产品还有 ":"This product still has ","筛选结果":"Filtered ","（已加载":" (loaded "," / 共":" / "," 条）":" total)","我":"me"," 条":" record(s)"," 条。":" record(s). "," 条错误":" error(s)"," 条，跳过 ":" record(s), skipped ","...共 ":"...total ","</b> 条":"</b> record(s)","前几条错误：":"First few errors:","单条车型最多登记 50 个实际 VIN，当前 ":"At most 50 actual VINs per vehicle, currently ","导入完成：成功 ":"Import complete: ","导入完成：成功 <b>":"Import complete: <b>","导入结果：成功 ":"Import result: ","导出失败：HTTP ":"Export failed: HTTP ","已存在完全相同的产品（id ":"An identical product already exists (id ","未找到 ID 为 ":"No vehicle with ID ","确定要删除品类「":"Delete category \"","请先选择一个车型，再添加产品":"Select a vehicle before adding products","（跳过 ":" (skipped ","，跳过 ":", skipped ","我已了解":"Got it","确定要删除品类「」吗？":"Delete this category?","另有 ":"Another "," 条产品记录未填写品类":" product record(s) have no category"};
+const I18N_EN = {"查询":"Search","编辑":"Edit","管理":"Manage","帮助":"Help","车辆查询":"Vehicle Search","产品查询":"Product Search","产品管理":"Product Management","产品编辑":"Product Edit","车型库管理":"Vehicle Library","品类管理":"Categories","用户管理":"Users","操作日志":"Activity Log","使用说明":"User Guide","反馈建议":"Feedback","退出登录":"Sign Out","账号设置":"Account Settings","编辑产品名":"Edit product name","车型库 · 产品 数据管理":"Vehicle & Product Data","AutoIndex":"AutoIndex","用户名 / 邮箱":"Username / Email","用户名或邮箱":"Username or email","密码":"Password","登 录":"Sign In","登录失败":"Sign-in failed","请输入用户名/邮箱和密码":"Enter your username/email and password","邮箱":"Email","用户名":"Username","权限":"Role","初始密码":"Initial password","登录用户名":"Login username","邮箱（也可用于登录）":"Email (also used for sign-in)","新增用户":"Add User","用户列表":"User List","状态":"Status","用户":"User","管理员":"Administrator","产品经理":"Product Manager","用户（仅查询）":"User (view only)","产品经理（查询 + 编辑）":"Product Manager (view + edit)","管理员（全部模块）":"Administrator (all modules)","管理品类":"Managed categories","地区组":"Region group","请选择":"Please select","启用":"Enable","停用":"Disable","暂无用户":"No users yet","编辑用户":"Edit user","编辑用户：":"Edit user: ","当前密码":"Current password","新密码（可选）":"New password (optional)","确认新密码":"Confirm new password","新密码（留空则不修改）":"New password (blank = unchanged)","重置密码（留空则不修改）":"Reset password (blank = unchanged)","修改邮箱或密码需要输入当前密码":"Enter your current password to change email or password","两次输入的新密码不一致":"The new passwords do not match","请输入用户名":"Enter a username","请输入初始密码":"Enter an initial password","请输入当前密码":"Enter your current password","没有需要修改的内容":"Nothing to update","已新增用户":"User added","请为产品经理至少选择一个管理品类":"Select at least one category for a Product Manager","请为产品经理选择地区组（CDC/CDI）":"Select a region group (CDC/CDI) for a Product Manager","确定删除该用户？此操作不可恢复。":"Delete this user? This cannot be undone.","（仅能看到/编辑所选品类的产品）":"(Can only view/edit products in the selected categories)","（控制产品编辑中可操作的车型地区）":"(Controls which vehicle regions can be edited)","CDC（仅澳新地区）":"CDC (Australia/NZ only)","CDI（除澳新外所有地区）":"CDI (all regions except Australia/NZ)","保存":"Save","取消":"Cancel","删除":"Delete","关闭":"Close","清空":"Clear","刷新":"Refresh","导出":"Export","添加":"Add","回复":"Reply","发送":"Send","提交反馈":"Submit","展开全部":"Expand all","收起全部":"Collapse all","模板下载":"Template","导入车型库":"Import","导出车型库":"Export","输入 ID，如 CDI1000":"Enter ID, e.g. CDI1000","确定":"OK","详情":"Details","操作":"Action","时间":"Time","已删除":"Deleted","已更新":"Updated","保存成功":"Saved","删除失败":"Delete failed","保存失败":"Save failed","添加失败":"Add failed","加载失败":"Load failed","操作失败":"Action failed","网络错误":"Network error","未知错误":"Unknown error","未知":"Unknown","无":"None","暂无数据":"No data","没有匹配的记录":"No matching records","已选：":"Selected: ","共":"Total ","可选":"Optional","保存失败：":"Save failed: ","删除失败：":"Delete failed: ","添加失败：":"Add failed: ","网络错误：":"Network error: ","加载失败：":"Load failed: ","操作失败：":"Action failed: ","导出失败：":"Export failed: ","导出失败：HTTP":"Export failed: HTTP","备注保存失败：":"Failed to save notes: ","保存备注失败：":"Failed to save notes: ","回复失败":"Reply failed","提交成功":"Submitted","提交失败":"Submit failed","请输入内容":"Enter some content","校验通过":"Valid","搜索失败：":"Search failed: ","搜索请求失败：":"Search request failed: ","查询失败：":"Query failed: ","查询车型失败：":"Vehicle query failed: ","解除关联失败：":"Unlink failed: ","正在检查…":"Checking…","查询中…":"Querying…","搜索中...":"Searching…","加载中...":"Loading…","加载中…":"Loading…","加载车型失败：":"Failed to load vehicles: ","VIN 码查询":"VIN Lookup","车型查询":"Vehicle Filter","输入 VIN 或 ID，如 LSJWH4092PU123456 / CDI1000":"Enter VIN or ID, e.g. LSJWH4092PU123456 / CDI1000","请输入 VIN 或 ID，如 LSJWH4092PU123456 / CDI1000":"Enter VIN or ID, e.g. LSJWH4092PU123456 / CDI1000","国家/地区":"Region","品牌":"Make","车型":"Model","年款":"Year","排量":"Capacity","发动机":"Engine","底盘":"Chassis","车系":"Series","功率":"Power","车身":"Body","燃料":"Fuel","驱动":"Drive","变速箱":"Transmission","产地":"Origin","配置":"Variant","不限":"Any","全部品牌":"All makes","全部地区":"All regions","全部产品":"All products","品牌筛选：":"Make: ","国家/地区：":"Region: ","请至少填写一个字段":"Enter at least one field","无匹配":"No match","无匹配项":"No match","当前条件组合下暂无候选":"No candidates under the current filters","未找到匹配车型。可清空部分条件后再试":"No matching vehicles. Try clearing some filters.","条车型":" vehicles","找到":"Found ","未找到匹配车型。":"No matching vehicles.","← 返回":"← Back","品牌 WMI":"WMI","车型配置":"Model code","校验位":"Check digit","工厂":"Plant","序列号":"Serial","实际VIN":"Actual VIN","VIN 前缀":"VIN prefix","VIN前缀":"VIN prefix","关联产品":"Linked products","关联车型":"Linked vehicles","暂无产品":"No products","该车型暂无关联产品":"No products linked to this vehicle","该产品暂未关联任何车型":"No vehicles linked to this product","座位数":"Seats","车门数":"Doors","气缸数":"Cylinders","每缸气门":"Valves/cyl.","档位数":"Gears","方向盘":"Steering","起始年":"Year from","截止年":"Year to","排量(L)":"Capacity (L)","产国":"Origin country","互换号":"Interchange","品名":"Product","供应商":"Supplier","采购价":"Cost","备注":"Notes","位置":"Position","OE 号":"OE No.","中文名":"Chinese name","英文名":"English name","产品中文名":"Chinese name","产品英文名":"English name","左":"Left","右":"Right","前":"Front","后":"Rear","里":"Inner","外":"Outer","上":"Upper","下":"Lower","多个用逗号或换行分隔":"Separate with commas or new lines","登记实际 VIN":"Register actual VIN","输入实际 VIN 码":"Enter actual VIN","当前已登记：":"Registered: ","当前无登记":"None registered","输入 OE 号或 CDAP 号，如 90915-10009 / A123":"Enter OE or CDAP No., e.g. 90915-10009 / A123","请输入 OE 号或 CDAP 号":"Enter an OE or CDAP number","添加产品":"Add product","删除该产品":"Delete this product","编辑产品":"Edit product","编辑产品：":"Edit product: ","＋ 添加产品":"+ Add product","＋产品":"+ Product","暂无带 OE / CDAP 号码的产品":"No products with OE / CDAP numbers","无匹配产品，请调整关键词":"No matching products, adjust the keyword","请先从下拉中选择一个产品名称":"Select a product name from the list first","请填写产品中文名":"Enter the Chinese product name","产品名称（搜索品类名称）":"Product name (search the catalogue)","从产品品类中选择名称自动填充，填写编号后保存；所有字段均相同视为重复":"Pick a name from the catalogue, fill in the numbers and save. Records with identical fields count as duplicates.","输入中文 / 英文名称搜索…":"Search by Chinese / English name…","规格":"Spec","数量":"Qty","暂无品类":"No categories yet","暂无品类，点击右上「＋ 新增品类」添加":"No categories. Click \"+ Add category\" at the top right.","无匹配品类":"No matching categories","＋ 新增品类":"+ Add category","删除品类":"Delete category","编辑品类":"Edit category","请选择上级品类":"Select a parent category","请填写品类代码":"Enter a category code","品类代码仅限 1-10 位字母 / 数字 / 连字符":"Category code: 1-10 letters, digits or hyphens","一级":"Level 1","二级":"Level 2","三级":"Level 3","（未命名）":"(unnamed)","未命名":"Unnamed","品类中文名：":"Category Chinese name: ","品类英文名：":"Category English name: ","请先点击「模板下载」获取标准模板。":"Download the standard template first.","请检查文件内容":"Check the file contents","文件为空或无有效数据":"The file is empty or has no valid data","无可用数据：":"No usable data: ","模板列名不正确，缺少必填列：":"Incorrect template columns, missing required: ","正在导入 ":"Importing ","正在生成 Excel…":"Generating Excel…","正在生成 Excel，请稍候…":"Generating Excel, please wait…","正在加载车型数据并生成 Excel...":"Loading vehicles and generating Excel…","无数据可导出":"No data to export","导出失败：无数据":"Export failed: no data","导出失败：无数据或服务器错误":"Export failed: no data or server error","导出请求失败":"Export request failed","请先查询（车型筛选 / VIN / ID）得到结果后再点导出":"Run a search (filter / VIN / ID) before exporting","解析/导入失败：":"Parse/import failed: ","未找到该车型（id 缺失）":"Vehicle not found (missing id)","未找到 ID 为":"No vehicle with ID ","品牌/车型 至少有一项为空":"Make and model must both be filled","含有非法字符（VIN 不含 I、O、Q）":"contains invalid characters (VIN excludes I, O, Q)","以下 VIN 不合法（须 17 位且不含 I/O/Q）：":"Invalid VINs (must be 17 characters, no I/O/Q): ","单条车型最多登记 50 个实际 VIN，当前":"At most 50 actual VINs per vehicle, currently ","为该车型登记/更新实际 17 位 VIN 码（多条用逗号、换行或分号分隔，每条须合法 VIN；提交即覆盖）":"Register or update the actual 17-character VINs (separate with commas, new lines or semicolons; each must be valid; submitting overwrites)","车型库导入模板.xlsx":"vehicle-library-template.xlsx","车型库导出_":"vehicle-library_","车型库模板":"Vehicle Library","车型库":"Vehicle Library","项关联产品）":" linked product(s))","关联车型：":"Linked vehicles: ","该产品还有":"This product still has ","个关联车型，请先解除所有关联后再删除":" linked vehicle(s). Unlink them all before deleting.","解除关联":"Unlink","你无权编辑该地区的车型产品":"You cannot edit products for this region","无权修改该品类下的产品":"You cannot modify products in this category","无权删除该品类下的产品":"You cannot delete products in this category","无权管理该品类产品的关联车型":"You cannot manage linked vehicles for this category","该 ID 对应的车型不在你可编辑的地区范围内":"This vehicle is outside the regions you can edit","匹配到的车型不在你可编辑的地区范围内。":"The matched vehicle is outside the regions you can edit.","请联系管理员调整地区组权限。":"Ask an administrator to adjust your region group.","你尚未被分配任何管理品类":"You have no assigned categories","你无权在该品类（":"You cannot add products in category (","）下添加产品":")","仅 WMI 品牌级匹配":"WMI brand-level match only","精确匹配":"Exact match","精确匹配（年款筛选）":"Exact match (year filtered)","✅ VDS 唯一判定":"✅ Unique VDS match","✅ 实际VIN码精确命中（已核实）":"✅ Exact actual-VIN match (verified)","✅ VIN 相似度匹配（参考":"✅ VIN similarity match (ref. ","⚠ VIN 相似度参考（":"⚠ VIN similarity (ref. ","⚠ VDS 多车型碰撞（":"⚠ VDS collision (","✅ VDS 多车型碰撞（":"⚠ VDS collision (","无 VDS 判定，":"No VDS match, ","个候选待人工确认":" candidate(s) need review","个候选":" candidate(s)","个候选）":" candidate(s))","按 ID 精确匹配到":"Exact match by ID: ","位匹配":"-digit match","前 ":"First ","Markdown 编辑":"Markdown","实时预览":"Preview","一级标题":"Heading 1","二级标题":"Heading 2","三级标题":"Heading 3","粗体":"Bold","斜体":"Italic","代码":"Code","列表":"Bullet list","有序列表":"Numbered list","引用":"Quote","分隔线":"Divider","表格":"Table","• 列表":"• List","1. 列表":"1. List","❝ 引用":"❝ Quote","— 分隔线":"— Divider","☷ 表格":"☷ Table","写下你的建议或问题…":"Write your suggestion or question…","输入回复…":"Write a reply…","暂无反馈，写下你的第一条建议吧":"No feedback yet. Write your first suggestion.","确定删除这条反馈？":"Delete this feedback?","回复 · ":" replied · ","暂无日志":"No activity yet","确定删除产品「":"Delete product \"","」吗？此操作不可撤销。":"\"? This cannot be undone.","确定要删除「":"Delete \"","」？此操作不可撤销。":"\"? This cannot be undone.","确定要删除产品「":"Delete product \"","确定要解除该车型（":"Remove the link to vehicle (","）与产品的关联吗？":"\") from this product?","」吗？\n若该产品下已有产品号码，系统将拒绝删除。":"\"? If it still has part numbers, the system will refuse to delete it.","已存在完全相同的产品（id":"An identical product already exists (id ","），不可重复添加：\n":"), cannot be added twice:\n","产品数据加载中…":"Loading products…","产品数据加载中，稍候自动显示…":"Loading products, please wait…","产品数据异常":"Product data error","品类数据异常":"Category data error","该品类下暂无产品（该车型共":"No products in this category (vehicle has ","品牌:":"Make:","地区:":"Region:","，前 ":" , first ","/11 位一致）":", first 11 digits match)","/11 位一致），":", first 11 digits match), ","未匹配到车型。":"No matching vehicle.","导出请求失败：":"Export request failed: ","再次输入新密码":"Re-enter new password","代码（如 G1）":"Code (e.g. G1)","车型备注":"Vehicle note","(我)":"(me)","个车型）":" vehicle(s))","，但此具体车型未收录，建议补充车型库。":", but this specific model is not in the library. Consider adding it.","重复：该车型已存在相同产品（":"Duplicate: this vehicle already has the same product (","），请修改后重试":"). Please adjust and retry.","位，标准 VIN 为 17 位":" characters; a standard VIN is 17 characters","厂商":"Make","系列":"Series","中国":"China","日本":"Japan","韩国":"Korea","德国":"Germany","法国/西班牙等":"France / Spain etc.","英国":"United Kingdom","意大利":"Italy","瑞典/芬兰":"Sweden / Finland","瑞士/捷克等":"Switzerland / Czech etc.","美国":"United States","加拿大":"Canada","墨西哥":"Mexico","巴西":"Brazil","澳大利亚":"Australia","该产品还有 ":"This product still has ","筛选结果":"Filtered ","（已加载":" (loaded "," / 共":" / "," 条）":" total)","我":"me"," 条":" record(s)"," 条。":" record(s). "," 条错误":" error(s)"," 条，跳过 ":" record(s), skipped ","...共 ":"...total ","</b> 条":"</b> record(s)","前几条错误：":"First few errors:","单条车型最多登记 50 个实际 VIN，当前 ":"At most 50 actual VINs per vehicle, currently ","导入完成：成功 ":"Import complete: ","导入完成：成功 <b>":"Import complete: <b>","导入结果：成功 ":"Import result: ","导出失败：HTTP ":"Export failed: HTTP ","已存在完全相同的产品（id ":"An identical product already exists (id ","未找到 ID 为 ":"No vehicle with ID ","确定要删除品类「":"Delete category \"","请先选择一个车型，再添加产品":"Select a vehicle before adding products","（跳过 ":" (skipped ","，跳过 ":", skipped ","我已了解":"Got it","确定要删除品类「」吗？":"Delete this category?","另有 ":"Another "," 条产品记录未填写品类":" product record(s) have no category"};
 
 let LANG = 'zh';
 try { const v = localStorage.getItem(LANG_KEY); if(v === 'en' || v === 'zh') LANG = v; } catch(e){}

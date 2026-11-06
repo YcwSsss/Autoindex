@@ -1,15 +1,13 @@
 #!/usr/bin/env python3
 # AutoIndex —— 本地服务（端口 3001）
 # 作用：① 托管 vin-tools 目录下的静态页面（index.html 等）
-#      ② /api/vpic?vin=XXXX 同源代理 NHTSA 官方 VIN 库（NHTSA 不开放 CORS，浏览器无法直接调用）
-#      ③ /api/data 返回车型库+产品+VDS 真值表（来自 SQLite）
-#      ④ /api/products、/api/vehicles 接收 web 端增删改并写回 SQLite
+#      ② /api/data 返回车型库+产品+VDS 真值表（来自 SQLite）
+#      ③ /api/products、/api/vehicles 接收 web 端增删改并写回 SQLite
 import http.server, socketserver, urllib.request, json, os, sys, secrets, re
 from urllib.parse import urlparse, parse_qs, quote
 
 PORT = 3001
 HERE = os.path.dirname(os.path.abspath(__file__))
-VPIC = 'https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValues/'
 
 # 数据层（SQLite）：与 server_proxy.py 同目录的 dbstore.py
 sys.path.insert(0, HERE)
@@ -197,34 +195,6 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 return self._send_json({'ok': True, 'items': dbstore.get_all_catalog()})
             except Exception as e:
                 return self._send_json({'ok': False, 'error': str(e)}, 500)
-        if self.path.startswith('/api/vpic'):
-            q = parse_qs(urlparse(self.path).query)
-            vin = (q.get('vin', [''])[0] or '').strip().upper()
-            if len(vin) != 17:
-                return self._send_json({'ok': False, 'error': 'VIN 必须为 17 位'}, 400)
-            try:
-                req = urllib.request.Request(VPIC + vin + '?format=json',
-                                             headers={'User-Agent': 'Mozilla/5.0'})
-                with urllib.request.urlopen(req, timeout=12) as r:
-                    data = json.loads(r.read().decode('utf-8'))
-                res = (data.get('Results') or [{}])[0]
-                g = lambda *ks: next((str(res[k]) for k in ks if str(res.get(k) or '').strip()), '')
-                note = '' if any(str(v).strip() for v in res.values()) else \
-                    'NHTSA 无此 VIN 数据（多为中国/澳洲等未在美注册车型）'
-                out = {'ok': True,
-                       'make': g('Make'), 'model': g('Model'),
-                       'modelYear': g('Model Year'), 'trim': g('Trim'),
-                       'series': g('Series'), 'engineModel': g('Engine Model'),
-                       'engineCylinders': g('Engine Cylinders'),
-                       'displacementL': g('Displacement (L)'),
-                       'fuelType': g('Fuel Type - Primary'),
-                       'bodyClass': g('Body Class'), 'driveType': g('Drive Type'),
-                       'plantCountry': g('Plant Country'),
-                       'plantCompany': g('Plant Company Name'),
-                       'vehicleType': g('Vehicle Type'), 'note': note}
-                return self._send_json(out)
-            except Exception as e:
-                return self._send_json({'ok': False, 'error': str(e)}, 502)
         # ---- 鉴权相关（需登录） ----
         if self.path.startswith('/api/me'):
             s = self._session_user()
