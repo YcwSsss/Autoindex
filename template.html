@@ -1111,6 +1111,113 @@ const WMI2 = {JT:"丰田 TOYOTA（日本）", JH:"本田 HONDA（日本）", JN:
   VF:"标致/雪铁龙/雷诺（法国）", YV:"沃尔沃（瑞典）"};
 // 第 1 位地理区域代码
 const COUNTRY_MAP = {L:"中国",J:"日本",K:"韩国",W:"德国",V:"法国/西班牙等",S:"英国",Z:"意大利",Y:"瑞典/芬兰",T:"瑞士/捷克等","1":"美国","4":"美国","5":"美国","2":"加拿大","3":"墨西哥","9":"巴西","6":"澳大利亚"};
+// WMI 品牌名 → 英文（仅英文界面展示用；中文原值仍在上面的 WMI_MAP 里，数据逻辑不依赖本表）
+const WMI_EN = {
+  "上汽 MG / 荣威":"SAIC MG / Roewe",
+  "上汽大通 MAXUS（LDV）":"SAIC Maxus (LDV)",
+  "上汽大通 MAXUS":"SAIC Maxus",
+  "长城汽车 GWM（哈弗/坦克/炮）":"GWM (Haval / Tank / Poer)",
+  "比亚迪 BYD":"BYD",
+  "比亚迪 BYD（商用车）":"BYD (commercial vehicles)",
+  "奇瑞 CHERY":"Chery",
+  "奇瑞新能源":"Chery New Energy",
+  "吉利 GEELY":"Geely",
+  "吉利（极氪/几何）":"Geely (Zeekr / Geometry)",
+  "江淮 JAC":"JAC",
+  "上汽大众":"SAIC Volkswagen",
+  "上汽通用":"SAIC-GM",
+  "一汽-大众":"FAW-Volkswagen",
+  "东风日产":"Dongfeng Nissan",
+  "长安福特":"Changan Ford",
+  "东风本田":"Dongfeng Honda",
+  "广汽丰田":"GAC Toyota",
+  "广汽本田":"GAC Honda",
+  "特斯拉（上海）":"Tesla (Shanghai)",
+  "上汽通用五菱":"SAIC-GM-Wuling",
+  "广汽传祺":"GAC Trumpchi",
+  "一汽丰田":"FAW Toyota",
+  "一汽丰田（天津）":"FAW Toyota (Tianjin)",
+  "神龙汽车（东风标致/雪铁龙）":"Dongfeng Peugeot-Citroen",
+  "东南汽车":"Soueast",
+  "观致汽车":"Qoros",
+  "沃尔沃（亚太）":"Volvo (Asia Pacific)",
+  "华晨宝马":"BMW Brilliance",
+  "北京奔驰":"Beijing Benz",
+  "北汽":"BAIC",
+  "众泰汽车":"Zotye",
+  "长安汽车":"Changan",
+  "东风裕隆":"Dongfeng Yulon",
+  "力帆汽车":"Lifan",
+  "江铃福特 JMC":"JMC Ford",
+  "丰田 TOYOTA（日本）":"Toyota (Japan)",
+  "丰田 TOYOTA（美国）":"Toyota (United States)",
+  "丰田 TOYOTA（加拿大）":"Toyota (Canada)",
+  "丰田 TOYOTA（英国）":"Toyota (United Kingdom)",
+  "丰田 TOYOTA（法国）":"Toyota (France)",
+  "丰田 TOYOTA（土耳其）":"Toyota (Turkey)",
+  "丰田 TOYOTA（泰国）":"Toyota (Thailand)",
+  "丰田 TOYOTA（印尼）":"Toyota (Indonesia)",
+  "丰田 TOYOTA（南非）":"Toyota (South Africa)",
+  "本田 HONDA（日本）":"Honda (Japan)",
+  "本田 HONDA / 讴歌（日本）":"Honda / Acura (Japan)",
+  "本田 HONDA（美国）":"Honda (United States)",
+  "本田讴歌 ACURA（美国）":"Honda Acura (United States)",
+  "本田 HONDA（加拿大）":"Honda (Canada)",
+  "本田 HONDA（泰国）":"Honda (Thailand)",
+  "本田 HONDA（英国）":"Honda (United Kingdom)",
+  "本田 HONDA（墨西哥）":"Honda (Mexico)",
+  "福特 FORD（美国轿车）":"Ford (US passenger cars)",
+  "福特 FORD（美国卡车）":"Ford (US trucks)",
+  "福特 FORD（美国中重卡）":"Ford (US medium/heavy trucks)",
+  "福特 FORD（美国重卡）":"Ford (US heavy trucks)",
+  "福特 FORD（美国 SUV/厢式）":"Ford (US SUV / van)",
+  "福特 FORD（美国皮卡）":"Ford (US pickups)",
+  "福特 FORD（加拿大）":"Ford (Canada)",
+  "福特 FORD（墨西哥）":"Ford (Mexico)",
+  "福特 FORD（德国/欧洲）":"Ford (Germany / Europe)",
+  "福特 FORD（澳大利亚）":"Ford (Australia)",
+  "福特 FORD（巴西）":"Ford (Brazil)",
+  "福特 FORD（南非）":"Ford (South Africa)",
+  "日产 NISSAN（日本）":"Nissan (Japan)",
+  "日产 NISSAN（美国）":"Nissan (United States)",
+  "日产 NISSAN（西班牙）":"Nissan (Spain)",
+  "日产 NISSAN（英国）":"Nissan (United Kingdom)",
+  "马自达 MAZDA（日本）":"Mazda (Japan)",
+  "斯巴鲁 SUBARU（日本）":"Subaru (Japan)",
+  "三菱 MITSUBISHI（日本）":"Mitsubishi (Japan)",
+  "三菱/五十铃（日本）":"Mitsubishi / Isuzu (Japan)",
+  "铃木 SUZUKI（日本）":"Suzuki (Japan)",
+  "现代 HYUNDAI（韩国）":"Hyundai (Korea)",
+  "现代 HYUNDAI（捷克）":"Hyundai (Czechia)",
+  "现代（韩国）":"Hyundai (Korea)",
+  "起亚 KIA（韩国）":"Kia (Korea)",
+  "起亚 KIA（斯洛伐克）":"Kia (Slovakia)",
+  "起亚（韩国）":"Kia (Korea)",
+  "GM 大宇（韩国）":"GM Daewoo (Korea)",
+  "大众 VOLKSWAGEN（德国）":"Volkswagen (Germany)",
+  "大众商用车（德国）":"Volkswagen Commercial Vehicles (Germany)",
+  "大众（墨西哥）":"Volkswagen (Mexico)",
+  "大众（美国）":"Volkswagen (United States)",
+  "大众（德国）":"Volkswagen (Germany)",
+  "奥迪 AUDI（德国）":"Audi (Germany)",
+  "奥迪/保时捷（德国）":"Audi / Porsche (Germany)",
+  "斯柯达 SKODA（捷克）":"Skoda (Czechia)",
+  "宝马 BMW（德国）":"BMW (Germany)",
+  "宝马 M（德国）":"BMW M (Germany)",
+  "宝马（德国）":"BMW (Germany)",
+  "奔驰 MERCEDES-BENZ（德国）":"Mercedes-Benz (Germany)",
+  "奔驰（德国）":"Mercedes-Benz (Germany)",
+  "沃尔沃 VOLVO（瑞典）":"Volvo (Sweden)",
+  "沃尔沃（瑞典）":"Volvo (Sweden)",
+  "雷诺 RENAULT（法国）":"Renault (France)",
+  "标致 PEUGEOT（法国）":"Peugeot (France)",
+  "雪铁龙 CITROËN（法国）":"Citroen (France)",
+  "标致/雪铁龙/雷诺（法国）":"Peugeot / Citroen / Renault (France)",
+  "菲亚特 FIAT（意大利）":"Fiat (Italy)",
+  "阿尔法·罗密欧（意大利）":"Alfa Romeo (Italy)",
+  "法拉利 FERRARI（意大利）":"Ferrari (Italy)",
+  "特斯拉 TESLA（美国）":"Tesla (United States)"
+};
 
 // 车型系列码（VIN 第 4-5 位）—— 粗略系列级提示，仅作方向参考（多车型共用，换代即变，不可唯一锁定）。
 const VS_MAP = { WH:"MG4 EV (一代 2023+)", EB:"MG4 EV (二代 2025+/新款)", W7:"MG ZS", Z1:"MG3", WP:"MG3(新款混动)", A3:"MG5", E2:"MG5 EV",
@@ -1781,6 +1888,12 @@ function ALL(){ return DATA || []; }
 function wmiOf(vin){
   return WMI_MAP[vin.slice(0,3)] || WMI2[vin.slice(0,2)] || null;
 }
+// WMI 品牌名的英文显示。查表未命中时返回 null，由调用方回退到中文原值。
+function wmiOfEn(vin){
+  const zh = wmiOf(vin);
+  if(!zh) return null;
+  return WMI_EN[zh] || null;
+}
 
 function esc(s){ return String(s||'').replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 
@@ -2078,7 +2191,9 @@ async function handleImportFile(input){
 
 function match(vin){
   const results = {vin, level:0, yearFiltered:false, candidates:[], wmiBrand:null,
-    wmiName: wmiOf(vin), country: COUNTRY_MAP[vin[0]] || null};
+    wmiName: wmiOf(vin), country: COUNTRY_MAP[vin[0]] || null,
+    wmiNameEn: wmiOfEn(vin),
+    countryEn: (typeof t === 'function' && COUNTRY_MAP[vin[0]]) ? t(COUNTRY_MAP[vin[0]]) : (COUNTRY_MAP[vin[0]] || null)};
   // 权威判定层：依据真实 VIN 样本核实的第 4-8 位 VDS（优先级高于车型库前缀）
   const vdsKey = vin.length >= 8 ? vin.slice(3,8) : '';
   results.vdsKey = vdsKey;
@@ -3535,7 +3650,7 @@ async function queryEdit(){
         ? ` The WMI (${vin.slice(0,3)}) of this VIN belongs to <b>${r.wmiBrand}</b> in the library, but this exact model is not covered. Consider adding it.`
         : ` 该 VIN 的 WMI（${vin.slice(0,3)}）属于库内品牌 <b>${r.wmiBrand}</b>，但此具体车型未收录，建议补充车型库。`;
       else if(r.wmiName) msgHtml += LANG === 'en'
-        ? ` Identified by WMI rules as <b>${r.wmiName}</b> (origin ${r.country||'unknown'}), but this manufacturer is outside your vehicle library.`
+        ? ` Identified by WMI rules as <b>${r.wmiNameEn || r.wmiName}</b> (origin ${r.countryEn || r.country || 'unknown'}), but this manufacturer is outside your vehicle library.`
         : ` 按 WMI 规则识别为 <b>${r.wmiName}</b>（产地 ${r.country||'未知'}），但该厂商不在你的车型库覆盖范围内。`;
       else msgHtml += LANG === 'en'
         ? ` WMI (${vin.slice(0,3)}) is outside your vehicle library and not found in public WMI rules.`
@@ -4430,7 +4545,7 @@ async function queryOne(){
       ? ` The WMI (${vin.slice(0,3)}) of this VIN belongs to <b>${r.wmiBrand}</b> in the library, but this exact model is not covered. Consider adding it.`
       : ` 该 VIN 的 WMI（${vin.slice(0,3)}）属于库内品牌 <b>${r.wmiBrand}</b>，但此具体车型未收录，建议补充车型库。`;
     else if(r.wmiName) msgHtml += LANG === 'en'
-      ? ` Identified by WMI rules as <b>${r.wmiName}</b> (origin ${r.country||'unknown'}), but this manufacturer is outside your vehicle library.`
+      ? ` Identified by WMI rules as <b>${r.wmiNameEn || r.wmiName}</b> (origin ${r.countryEn || r.country || 'unknown'}), but this manufacturer is outside your vehicle library.`
       : ` 按 WMI 规则识别为 <b>${r.wmiName}</b>（产地 ${r.country||'未知'}），但该厂商不在你的车型库覆盖范围内。`;
     else msgHtml += LANG === 'en'
       ? ` WMI (${vin.slice(0,3)}) is outside your vehicle library and not found in public WMI rules.`
