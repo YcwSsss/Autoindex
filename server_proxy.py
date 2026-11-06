@@ -163,7 +163,8 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 kw = (q.get('q', [''])[0] or '').strip()
                 br = (q.get('brand', [''])[0] or '').strip()
                 rg = (q.get('region', [''])[0] or '').strip()
-                rows, total = dbstore.get_vehicles_page(limit=limit, offset=offset, q=kw, brand=br, region=rg)
+                sid = (q.get('id', [''])[0] or '').strip()
+                rows, total = dbstore.get_vehicles_page(limit=limit, offset=offset, q=kw, brand=br, region=rg, serial=sid)
                 return self._send_json({
                     'ok': True,
                     'total': total,

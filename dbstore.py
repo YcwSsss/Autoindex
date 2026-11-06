@@ -125,6 +125,13 @@ def init_db():
             c.execute("ALTER TABLE product_vehicles ADD COLUMN remark TEXT DEFAULT ''")
     except sqlite3.OperationalError:
         pass
+    # 旧库迁移：vehicles 补 serial 列（CDI 流水号 ID，如 CDI1000）
+    try:
+        vcols = [r[1] for r in c.execute("PRAGMA table_info(vehicles)").fetchall()]
+        if 'serial' not in vcols:
+            c.execute("ALTER TABLE vehicles ADD COLUMN serial TEXT")
+    except sqlite3.OperationalError:
+        pass
     # 旧库迁移：products 补 loc 列（产品位置/安装位，如 左前/右后）
     try:
         cols = [r[1] for r in c.execute("PRAGMA table_info(products)").fetchall()]
@@ -299,6 +306,14 @@ def get_product_vehicles_by_code(oe, cdap):
                     if item["vid"] == vid and not item.get("remark"):
                         item["remark"] = r["remark"]
                         break
+    # 附带车型 ID（serial），供前端列表显示 CDI 流水号
+    if res:
+        vids = [x["vid"] for x in res]
+        ph = ",".join("?" * len(vids))
+        smap = {r["vid"]: (r["serial"] or "") for r in c.execute(
+            f"SELECT vid, serial FROM vehicles WHERE vid IN ({ph})", vids).fetchall()}
+        for x in res:
+            x["serial"] = smap.get(x["vid"], "")
     conn.close()
     return res
 
@@ -365,7 +380,7 @@ def set_product_vehicle_remark(pid, vid, remark):
 def get_all_data(include_products=True):
     conn = get_db()
     c = conn.cursor()
-    vrows = c.execute("SELECT id," + ",".join(VEHICLE_COLS) + " FROM vehicles").fetchall()
+    vrows = c.execute("SELECT id," + ",".join(VEHICLE_COLS) + ",serial FROM vehicles").fetchall()
     rows = [dict(r) for r in vrows]
 
     products = {}
@@ -398,12 +413,32 @@ def get_all_data(include_products=True):
             if part:
                 _region_set.add(part)
     regions = sorted(_region_set)
+    # 地区中英对照：regions 表优先，回退车型库 vehicles.region_en 列。
+    # 只供前端在英文界面下显示，查询/过滤仍用中文 region 列。
+    region_labels = {}
+    try:
+        for rl in c.execute("SELECT cn, en FROM regions "
+                            "WHERE en IS NOT NULL AND en != ''").fetchall():
+            k = (rl["cn"] or '').strip()
+            if k:
+                region_labels[k] = (rl["en"] or '').strip()
+    except Exception:
+        pass
+    try:
+        for rl in c.execute("SELECT DISTINCT region, region_en FROM vehicles "
+                            "WHERE region_en IS NOT NULL AND region_en != ''").fetchall():
+            k = (rl["region"] or '').strip()
+            if k and k not in region_labels:
+                region_labels[k] = (rl["region_en"] or '').strip()
+    except Exception:
+        pass
     prefixes = sorted({r["prefix"] for r in rows if r["prefix"]})
     wmis = sorted({p[:3] for p in prefixes if p and len(p) >= 3})
     meta = {
         "source": "SQLite (vin_data.db)",
         "brands": brands,
         "regions": regions,
+        "region_labels": region_labels,
         "nRecords": len(rows),
         "nPrefixes": len(prefixes),
         "nWmi": len(wmis),
@@ -416,7 +451,7 @@ def get_all_data(include_products=True):
     return {"DATA": rows, "META": meta, "PRODUCTS": products, "VDS_MAP": VDS_MAP, "VDS_SRC": VDS_SRC}
 
 
-def get_vehicles_page(limit=200, offset=0, q="", brand="", region=""):
+def get_vehicles_page(limit=200, offset=0, q="", brand="", region="", serial=""):
     """分页拉取车型；支持品牌、地区过滤与模糊搜索（按 brand/model/sub/prefix/engine/chassis/series/vid/vin17/body/fuel）。
     limit=-1 表示不限制，返回全部匹配数据。
     返回 (rows, total)。rows 已按 id 升序，便于追加分页时保持稳定。"""
@@ -439,23 +474,28 @@ def get_vehicles_page(limit=200, offset=0, q="", brand="", region=""):
                      ")")
         params.extend([like] * 14)
     if brand:
-        where.append("brand = ?")
+        # 大小写不敏感：手输 asia cab 也能命中库里的 ASIA CAB
+        where.append("UPPER(brand) = UPPER(?)")
         params.append(brand)
     if region:
         where.append("region LIKE ?")
         params.append(f"%{region}%")
+    if serial:
+        # 车型 ID（CDI 流水号）精确查询，大小写不敏感；前端搜索框用这个
+        where.append("UPPER(serial) = UPPER(?)")
+        params.append(str(serial).strip())
     where_sql = (" WHERE " + " AND ".join(where)) if where else ""
     total = c.execute(f"SELECT COUNT(*) AS n FROM vehicles{where_sql}", params).fetchone()["n"]
     if limit is None:
         # 不限制，返回全部
         rows = c.execute(
-            f"SELECT id," + ",".join(VEHICLE_COLS) +
+            f"SELECT id," + ",".join(VEHICLE_COLS) + ",serial" +
             f" FROM vehicles{where_sql} ORDER BY id",
             params
         ).fetchall()
     else:
         rows = c.execute(
-            f"SELECT id," + ",".join(VEHICLE_COLS) +
+            f"SELECT id," + ",".join(VEHICLE_COLS) + ",serial" +
             f" FROM vehicles{where_sql} ORDER BY id LIMIT ? OFFSET ?",
             params + [limit, offset]
         ).fetchall()
@@ -901,9 +941,15 @@ def add_vehicle(rec):
     # 地区默认"澳新地区"
     if not rec.get("region"):
         rec["region"] = "澳新地区"
-    vals = [rec.get(col) for col in VEHICLE_COLS]
-    cur = c.execute("INSERT INTO vehicles(" + ",".join(VEHICLE_COLS) + ") VALUES (" +
-                    ",".join("?" * len(VEHICLE_COLS)) + ")", vals)
+    # 新车型自动分配 CDI 流水号 ID（serial 列），与既有车型保持同一编号体系
+    if not rec.get("serial"):
+        row = c.execute("SELECT MAX(CAST(SUBSTR(serial,4) AS INTEGER)) AS n "
+                        "FROM vehicles WHERE serial LIKE 'CDI%'").fetchone()
+        rec["serial"] = "CDI" + str((row["n"] or 999) + 1)
+    cols = VEHICLE_COLS + ["serial"]
+    vals = [rec.get(col) for col in cols]
+    cur = c.execute("INSERT INTO vehicles(" + ",".join(cols) + ") VALUES (" +
+                    ",".join("?" * len(cols)) + ")", vals)
     new_id = cur.lastrowid
     conn.commit()
     conn.close()
@@ -1369,6 +1415,14 @@ def export_vehicles_excel(vids=None, filters=None):
     wrap_align = Alignment(wrap_text=True, vertical='center', horizontal='left')
     center_align = Alignment(horizontal='center', vertical='center')
 
+    def _vid_cell_value(v):
+        # vid 既可能是 62036 这种纯数字，也可能是 PFAAC000003 这种字母编号。
+        # 强转 int 会在字母编号上抛 ValueError（导出接口直接 500）。
+        s = str(v['vid'] if v['vid'] is not None else '').strip()
+        if s.isdigit():
+            return int(s)
+        return s
+
     def _build_vehicle_name(v):
         parts = [v['brand'] or '', v['model'] or '']
         if v['sub']: parts.append(v['sub'])
@@ -1396,7 +1450,7 @@ def export_vehicles_excel(vids=None, filters=None):
         vin_str = (v['vin17'] or '').replace(',', ' / ')
         ws_list.cell(row=ri, column=1, value=v['brand'] or '').border = thin_border
         ws_list.cell(row=ri, column=2, value=vehicle_name).border = thin_border
-        ws_list.cell(row=ri, column=3, value=int(vid_str)).border = thin_border
+        ws_list.cell(row=ri, column=3, value=_vid_cell_value(v)).border = thin_border
         vin_cell = ws_list.cell(row=ri, column=4, value=vin_str)
         vin_cell.border = thin_border
 
@@ -1416,11 +1470,11 @@ def export_vehicles_excel(vids=None, filters=None):
 
     for v in vehicles:
         vid_str = str(v['vid'])
-        safe_name = vid_str[:31]
+        safe_name = (vid_str or str(v['serial'] or '') or 'NOVID')[:31]
         try:
             ws = wb.create_sheet(safe_name)
         except Exception:
-            safe_name = f"VID_{vid_str}"[:31]
+            safe_name = (f"VID_{vid_str}" or 'NOVID')[:31]
             ws = wb.create_sheet(safe_name)
 
         vehicle_name = _build_vehicle_name(v)
@@ -1444,7 +1498,7 @@ def export_vehicles_excel(vids=None, filters=None):
         c4 = ws.cell(row=4, column=3, value="VID:")
         c4.font = bold_font
         c4.alignment = Alignment(horizontal='left')
-        ws.cell(row=4, column=4, value=int(vid_str)).alignment = wrap_align
+        ws.cell(row=4, column=4, value=_vid_cell_value(v)).alignment = wrap_align
 
         # R6: 表头（从 B 列开始）
         for ci, h in enumerate(prod_headers, 2):

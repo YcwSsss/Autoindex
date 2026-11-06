@@ -439,7 +439,7 @@
         <div class="title2">VIN 码查询</div>
         <div class="row" style="margin-top:8px;align-items:stretch">
           <div class="combo" id="vinCombo">
-            <input type="text" id="vin" class="combo-input" maxlength="20" placeholder="输入 VIN 码或 VID，如 LSJWH4092PU123456 或 62036" oninput="toggleClear('vin','vinClear')" onkeydown="if(event.key==='Enter')queryOne()">
+            <input type="text" id="vin" class="combo-input" maxlength="20" placeholder="输入 VIN 码或 ID，如 LSJWH4092PU123456 或 CDI1000" oninput="toggleClear('vin','vinClear')" onkeydown="if(event.key==='Enter')queryOne()">
             <button type="button" class="combo-clear" id="vinClear" title="清空" onclick="clearVin()">×</button>
           </div>
           <button class="btn" onclick="queryOne()">查询</button>
@@ -458,77 +458,77 @@
         <div class="fld-panel">
         <div class="title2" style="height:28px;line-height:28px;margin:0">车型查询</div>
         <div class="fld-vert">
-          <div class="fld"><label>REGION <small>国家/地区</small></label>
+          <div class="fld"><label><span class="fld-en">REGION</span><span class="fld-zh">国家/地区</span></label>
             <div class="filter-input-wrap">
               <input type="text" id="fRegion" maxlength="40" oninput="onFilterChange()" onfocus="onFilterFocus('fRegion')" autocomplete="off">
               <div class="filter-dropdown" id="ddRegion"></div>
             </div></div>
-          <div class="fld"><label>MAKE <small>品牌</small></label>
+          <div class="fld"><label><span class="fld-en">MAKE</span><span class="fld-zh">品牌</span></label>
             <div class="filter-input-wrap">
               <input type="text" id="fMake" maxlength="40" oninput="onFilterChange()" onfocus="onFilterFocus('fMake')" autocomplete="off">
               <div class="filter-dropdown" id="ddMake"></div>
             </div></div>
-          <div class="fld"><label>MODEL <small>车型</small></label>
+          <div class="fld"><label><span class="fld-en">MODEL</span><span class="fld-zh">车型</span></label>
             <div class="filter-input-wrap">
               <input type="text" id="fModel" maxlength="40" oninput="onFilterChange()" onfocus="onFilterFocus('fModel')" autocomplete="off">
               <div class="filter-dropdown" id="ddModel"></div>
             </div></div>
-          <div class="fld"><label>Sub Model</label>
+          <div class="fld"><label><span class="fld-en">Sub Model</span><span class="fld-zh">配置</span></label>
             <div class="filter-input-wrap">
               <input type="text" id="fSub" maxlength="40" oninput="onFilterChange()" onfocus="onFilterFocus('fSub')" autocomplete="off">
               <div class="filter-dropdown" id="ddSub"></div>
             </div></div>
-          <div class="fld"><label>YEAR <small>年款</small></label>
+          <div class="fld"><label><span class="fld-en">YEAR</span><span class="fld-zh">年款</span></label>
             <div class="filter-input-wrap">
               <input type="text" id="fYear" maxlength="10" oninput="onFilterChange()" onfocus="onFilterFocus('fYear')" autocomplete="off">
               <div class="filter-dropdown" id="ddYear"></div>
             </div></div>
-          <div class="fld"><label>Capacity <small>排量</small></label>
+          <div class="fld"><label><span class="fld-en">Capacity</span><span class="fld-zh">排量</span></label>
             <div class="filter-input-wrap">
               <input type="text" id="fCap" maxlength="30" oninput="onFilterChange()" onfocus="onFilterFocus('fCap')" autocomplete="off">
               <div class="filter-dropdown" id="ddCap"></div>
             </div></div>
-          <div class="fld"><label>ENGINE <small>发动机</small></label>
+          <div class="fld"><label><span class="fld-en">ENGINE</span><span class="fld-zh">发动机</span></label>
             <div class="filter-input-wrap">
               <input type="text" id="fEngine" maxlength="40" oninput="onFilterChange()" onfocus="onFilterFocus('fEngine')" autocomplete="off">
               <div class="filter-dropdown" id="ddEngine"></div>
             </div></div>
-          <div class="fld"><label>CHASSIS <small>底盘</small></label>
+          <div class="fld"><label><span class="fld-en">CHASSIS</span><span class="fld-zh">底盘</span></label>
             <div class="filter-input-wrap">
               <input type="text" id="fChassis" maxlength="40" oninput="onFilterChange()" onfocus="onFilterFocus('fChassis')" autocomplete="off">
               <div class="filter-dropdown" id="ddChassis"></div>
             </div></div>
-          <div class="fld"><label>SERIES <small>车系</small></label>
+          <div class="fld"><label><span class="fld-en">SERIES</span><span class="fld-zh">车系</span></label>
             <div class="filter-input-wrap">
               <input type="text" id="fSeries" maxlength="40" oninput="onFilterChange()" onfocus="onFilterFocus('fSeries')" autocomplete="off">
               <div class="filter-dropdown" id="ddSeries"></div>
             </div></div>
-          <div class="fld"><label>POWER <small>功率</small></label>
+          <div class="fld"><label><span class="fld-en">POWER</span><span class="fld-zh">功率</span></label>
             <div class="filter-input-wrap">
               <input type="text" id="fKw" maxlength="20" oninput="onFilterChange()" onfocus="onFilterFocus('fKw')" autocomplete="off">
               <div class="filter-dropdown" id="ddKw"></div>
             </div></div>
-          <div class="fld"><label>BODY <small>车身</small></label>
+          <div class="fld"><label><span class="fld-en">BODY</span><span class="fld-zh">车身</span></label>
             <div class="filter-input-wrap">
               <input type="text" id="fBody" maxlength="40" oninput="onFilterChange()" onfocus="onFilterFocus('fBody')" autocomplete="off">
               <div class="filter-dropdown" id="ddBody"></div>
             </div></div>
-          <div class="fld"><label>FUEL <small>燃料</small></label>
+          <div class="fld"><label><span class="fld-en">FUEL</span><span class="fld-zh">燃料</span></label>
             <div class="filter-input-wrap">
               <input type="text" id="fFuel" maxlength="40" oninput="onFilterChange()" onfocus="onFilterFocus('fFuel')" autocomplete="off">
               <div class="filter-dropdown" id="ddFuel"></div>
             </div></div>
-          <div class="fld"><label>DRIVE <small>驱动</small></label>
+          <div class="fld"><label><span class="fld-en">DRIVE</span><span class="fld-zh">驱动</span></label>
             <div class="filter-input-wrap">
               <input type="text" id="fDrive" maxlength="40" oninput="onFilterChange()" onfocus="onFilterFocus('fDrive')" autocomplete="off">
               <div class="filter-dropdown" id="ddDrive"></div>
             </div></div>
-          <div class="fld"><label>TRANS <small>变速箱</small></label>
+          <div class="fld"><label><span class="fld-en">TRANS</span><span class="fld-zh">变速箱</span></label>
             <div class="filter-input-wrap">
               <input type="text" id="fTrans" maxlength="40" oninput="onFilterChange()" onfocus="onFilterFocus('fTrans')" autocomplete="off">
               <div class="filter-dropdown" id="ddTrans"></div>
             </div></div>
-          <div class="fld"><label>ORIGIN <small>产地</small></label>
+          <div class="fld"><label><span class="fld-en">ORIGIN</span><span class="fld-zh">产地</span></label>
             <div class="filter-input-wrap">
               <input type="text" id="fOrigin" maxlength="40" oninput="onFilterChange()" onfocus="onFilterFocus('fOrigin')" autocomplete="off">
               <div class="filter-dropdown" id="ddOrigin"></div>
@@ -545,7 +545,7 @@
               <input type="text" id="prodSearchInput" maxlength="60" placeholder="搜索产品（支持中英文）" onkeydown="if(event.key==='Enter')prodSearch()">
               <button class="btn" onclick="prodSearch()">查找</button>
             </div>
-            <div id="prodTree" class="ptree"><div class="ptree-none">加载中…</div></div>
+            <div id="prodTree" class="ptree"><div class="ptree-none" data-zh="加载中…" data-en="Loading…">加载中…</div></div>
           </div>
           <span class="fld-hint" id="fldHint"></span>
         </div>
@@ -564,7 +564,7 @@
         <div class="title2">产品编辑</div>
         <div class="row" style="margin-top:8px;align-items:stretch">
           <div class="combo" id="evinCombo">
-            <input type="text" id="evin" class="combo-input" maxlength="20" placeholder="输入 VIN 码或 VID，如 LSJWH4092PU123456 或 62036" oninput="toggleClear('evin','evinClear')" onkeydown="if(event.key==='Enter')queryEdit()">
+            <input type="text" id="evin" class="combo-input" maxlength="20" placeholder="输入 VIN 码或 ID，如 LSJWH4092PU123456 或 CDI1000" oninput="toggleClear('evin','evinClear')" onkeydown="if(event.key==='Enter')queryEdit()">
             <button type="button" class="combo-clear" id="evinClear" title="清空" onclick="clearEditVin()">×</button>
           </div>
           <button class="btn" onclick="queryEdit()">查询</button>
@@ -581,77 +581,77 @@
         <div class="fld-panel">
           <div class="title2" style="height:28px;line-height:28px;margin:0">车型查询</div>
           <div class="fld-vert">
-            <div class="fld"><label>REGION <small>国家/地区</small></label>
+            <div class="fld"><label><span class="fld-en">REGION</span><span class="fld-zh">国家/地区</span></label>
               <div class="filter-input-wrap">
                 <input type="text" id="efRegion" maxlength="40" oninput="onFilterChange()" onfocus="onFilterFocus('efRegion')" autocomplete="off">
                 <div class="filter-dropdown" id="eddRegion"></div>
               </div></div>
-            <div class="fld"><label>MAKE <small>品牌</small></label>
+            <div class="fld"><label><span class="fld-en">MAKE</span><span class="fld-zh">品牌</span></label>
               <div class="filter-input-wrap">
                 <input type="text" id="efMake" maxlength="40" oninput="onFilterChange()" onfocus="onFilterFocus('efMake')" autocomplete="off">
                 <div class="filter-dropdown" id="eddMake"></div>
               </div></div>
-            <div class="fld"><label>MODEL <small>车型</small></label>
+            <div class="fld"><label><span class="fld-en">MODEL</span><span class="fld-zh">车型</span></label>
               <div class="filter-input-wrap">
                 <input type="text" id="efModel" maxlength="40" oninput="onFilterChange()" onfocus="onFilterFocus('efModel')" autocomplete="off">
                 <div class="filter-dropdown" id="eddModel"></div>
               </div></div>
-            <div class="fld"><label>Sub Model</label>
+            <div class="fld"><label><span class="fld-en">Sub Model</span><span class="fld-zh">配置</span></label>
               <div class="filter-input-wrap">
                 <input type="text" id="efSub" maxlength="40" oninput="onFilterChange()" onfocus="onFilterFocus('efSub')" autocomplete="off">
                 <div class="filter-dropdown" id="eddSub"></div>
               </div></div>
-            <div class="fld"><label>YEAR <small>年款</small></label>
+            <div class="fld"><label><span class="fld-en">YEAR</span><span class="fld-zh">年款</span></label>
               <div class="filter-input-wrap">
                 <input type="text" id="efYear" maxlength="10" oninput="onFilterChange()" onfocus="onFilterFocus('efYear')" autocomplete="off">
                 <div class="filter-dropdown" id="eddYear"></div>
               </div></div>
-            <div class="fld"><label>Capacity <small>排量</small></label>
+            <div class="fld"><label><span class="fld-en">Capacity</span><span class="fld-zh">排量</span></label>
               <div class="filter-input-wrap">
                 <input type="text" id="efCap" maxlength="30" oninput="onFilterChange()" onfocus="onFilterFocus('efCap')" autocomplete="off">
                 <div class="filter-dropdown" id="eddCap"></div>
               </div></div>
-            <div class="fld"><label>ENGINE <small>发动机</small></label>
+            <div class="fld"><label><span class="fld-en">ENGINE</span><span class="fld-zh">发动机</span></label>
               <div class="filter-input-wrap">
                 <input type="text" id="efEngine" maxlength="40" oninput="onFilterChange()" onfocus="onFilterFocus('efEngine')" autocomplete="off">
                 <div class="filter-dropdown" id="eddEngine"></div>
               </div></div>
-            <div class="fld"><label>CHASSIS <small>底盘</small></label>
+            <div class="fld"><label><span class="fld-en">CHASSIS</span><span class="fld-zh">底盘</span></label>
               <div class="filter-input-wrap">
                 <input type="text" id="efChassis" maxlength="40" oninput="onFilterChange()" onfocus="onFilterFocus('efChassis')" autocomplete="off">
                 <div class="filter-dropdown" id="eddChassis"></div>
               </div></div>
-              <div class="fld"><label>SERIES <small>车系</small></label>
+              <div class="fld"><label><span class="fld-en">SERIES</span><span class="fld-zh">车系</span></label>
               <div class="filter-input-wrap">
                 <input type="text" id="efSeries" maxlength="40" oninput="onFilterChange()" onfocus="onFilterFocus('efSeries')" autocomplete="off">
                 <div class="filter-dropdown" id="eddSeries"></div>
               </div></div>
-              <div class="fld"><label>POWER <small>功率</small></label>
+              <div class="fld"><label><span class="fld-en">POWER</span><span class="fld-zh">功率</span></label>
               <div class="filter-input-wrap">
                 <input type="text" id="efKw" maxlength="20" oninput="onFilterChange()" onfocus="onFilterFocus('efKw')" autocomplete="off">
                 <div class="filter-dropdown" id="eddKw"></div>
               </div></div>
-              <div class="fld"><label>BODY <small>车身</small></label>
+              <div class="fld"><label><span class="fld-en">BODY</span><span class="fld-zh">车身</span></label>
               <div class="filter-input-wrap">
                 <input type="text" id="efBody" maxlength="40" oninput="onFilterChange()" onfocus="onFilterFocus('efBody')" autocomplete="off">
                 <div class="filter-dropdown" id="eddBody"></div>
               </div></div>
-              <div class="fld"><label>FUEL <small>燃料</small></label>
+              <div class="fld"><label><span class="fld-en">FUEL</span><span class="fld-zh">燃料</span></label>
               <div class="filter-input-wrap">
                 <input type="text" id="efFuel" maxlength="40" oninput="onFilterChange()" onfocus="onFilterFocus('efFuel')" autocomplete="off">
                 <div class="filter-dropdown" id="eddFuel"></div>
               </div></div>
-              <div class="fld"><label>DRIVE <small>驱动</small></label>
+              <div class="fld"><label><span class="fld-en">DRIVE</span><span class="fld-zh">驱动</span></label>
               <div class="filter-input-wrap">
                 <input type="text" id="efDrive" maxlength="40" oninput="onFilterChange()" onfocus="onFilterFocus('efDrive')" autocomplete="off">
                 <div class="filter-dropdown" id="eddDrive"></div>
               </div></div>
-              <div class="fld"><label>TRANS <small>变速箱</small></label>
+              <div class="fld"><label><span class="fld-en">TRANS</span><span class="fld-zh">变速箱</span></label>
               <div class="filter-input-wrap">
                 <input type="text" id="efTrans" maxlength="40" oninput="onFilterChange()" onfocus="onFilterFocus('efTrans')" autocomplete="off">
                 <div class="filter-dropdown" id="eddTrans"></div>
               </div></div>
-              <div class="fld"><label>ORIGIN <small>产地</small></label>
+              <div class="fld"><label><span class="fld-en">ORIGIN</span><span class="fld-zh">产地</span></label>
               <div class="filter-input-wrap">
                 <input type="text" id="efOrigin" maxlength="40" oninput="onFilterChange()" onfocus="onFilterFocus('efOrigin')" autocomplete="off">
                 <div class="filter-dropdown" id="eddOrigin"></div>
@@ -669,7 +669,7 @@
               <input type="text" id="eprodSearchInput" maxlength="60" placeholder="搜索产品（支持中英文）" onkeydown="if(event.key==='Enter')eprodSearch()">
               <button class="btn" onclick="eprodSearch()">查找</button>
             </div>
-            <div id="eprodTree" class="ptree"><div class="ptree-none">加载中…</div></div>
+            <div id="eprodTree" class="ptree"><div class="ptree-none" data-zh="加载中…" data-en="Loading…">加载中…</div></div>
           </div>
           <span class="fld-hint" id="efldHint"></span>
         </div>
@@ -811,7 +811,7 @@
         <button id="btnCancelGuide" onclick="cancelEditGuide()" style="display:none;padding:4px 12px;font-size:12px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer">取消</button>
       </div>
       <div class="guide-body" id="guideBody">
-        <div class="guide-loading">加载中…</div>
+        <div class="guide-loading" data-zh="加载中…" data-en="Loading…">加载中…</div>
       </div>
       <div id="guideEditorWrap" style="display:none;border:1px solid #ddd;border-radius:6px;overflow:hidden;height:calc(100vh - 120px);display:none;flex-direction:column">
         <div class="md-toolbar" style="display:flex;gap:2px;padding:6px 8px;background:#fafafa;border-bottom:1px solid #ddd;flex-wrap:wrap;flex-shrink:0">
@@ -858,7 +858,7 @@
           <span id="fbMsg" class="fb-msg"></span>
         </div>
         <div class="fb-list" id="fbList">
-          <div class="guide-loading">加载中…</div>
+          <div class="guide-loading" data-zh="加载中…" data-en="Loading…">加载中…</div>
         </div>
       </div>
     </div>
@@ -923,7 +923,7 @@
       </div>
       <div class="pm-card-bd">
         <div class="pm-rel-add">
-          <input id="pmRelInput" placeholder="输入车型 VID，如 A12345" onkeydown="if(event.key==='Enter')pmAddRel()">
+          <input id="pmRelInput" placeholder="输入 ID，如 CDI1000" onkeydown="if(event.key==='Enter')pmAddRel()">
           <button class="btn" onclick="pmAddRel()">添加</button>
         </div>
         <ul id="pmRelList" class="pm-rel-list"></ul>
@@ -999,6 +999,62 @@
 // 数据全部来自服务器 SQLite；页面启动时由 bootstrap() 从 /api/data 拉取。
 // 这里只声明可变容器，查询与编辑都基于它们；web 端的增删改直接写回 SQLite（不再用本机 localStorage）。
 let DATA = null;     // 车型库（数组）
+/* ===== 地区列：英文界面读车型库英文列，不经 i18n 字典 =====
+   META.region_labels 由 /api/data 返回（regions.cn/en + vehicles.region_en）。
+   显示用 regShow(中文原值)；所有查询/过滤一律 regRaw() 转回中文原值，
+   因为后端 region 列存的是中文。没有任何轮询、observer 或全页扫描。 */
+function _regionEn(){
+  if(document.documentElement.lang === 'en') return true;
+  try { return localStorage.getItem('vin_tools_lang') === 'en'; } catch(e){ return false; }
+}
+function _regionMap(){
+  try { return (typeof META !== 'undefined' && META && META.region_labels) || {}; }
+  catch(e){ return {}; }
+}
+function regShow(v){
+  if(!v || !_regionEn()) return v;
+  const m = _regionMap();
+  return m[v] || v;
+}
+function regRaw(v){
+  if(!v) return v;
+  const m = _regionMap();
+  if(Object.prototype.hasOwnProperty.call(m, v)) return v;
+  for(const cn in m){ if(m[cn] === v) return cn; }
+  return v;
+}
+function regVal(id){
+  const el = document.getElementById(id);
+  return regRaw(el ? (el.value || '').trim() : '');
+}
+
+/* ===== 车型 ID：vehicles.serial（CDI1000 格式）=====
+   仅用于「显示」与「搜索入口」；产品关联、API 参数、DATA 内部键仍用 vid，不动。 */
+function idOf(r){ return (r && r.serial) ? String(r.serial) : ''; }
+function idOfVid(vid){
+  const rows = (typeof ALL === 'function') ? (ALL() || []) : [];
+  const r = rows.find(x => String(x.vid) === String(vid));
+  return r ? idOf(r) : '';
+}
+// ID 搜索必须覆盖全库：DATA 是分页加载的（每页 200），本地没命中就问后端。
+async function findVehicleById(id){
+  const key = String(id || '').trim().toUpperCase();
+  if(!key) return null;
+  const rows = (typeof ALL === 'function') ? (ALL() || []) : [];
+  const local = rows.find(r => String(r.serial || '').toUpperCase() === key);
+  if(local) return local;
+  try{
+    const d = await (await fetch('/api/vehicles?limit=1&id=' + encodeURIComponent(key))).json();
+    if(d && d.ok && d.vehicles && d.vehicles.length){
+      const row = d.vehicles[0];
+      if(typeof DATA !== 'undefined' && Array.isArray(DATA) &&
+         !DATA.some(x => String(x.id) === String(row.id))) DATA.push(row);
+      return row;
+    }
+  }catch(e){}
+  return null;
+}
+
 let META = null;     // 元信息（品牌/计数等）
 let PRODUCTS = {};   // { vid(str): [ {id,cn,en,brand,cdap,oe,notes,supplier,cost,moq,grp}, ... ] }
 let PRODUCTS_READY = false;  // 产品型号数据是否已后台加载完成（懒加载标志）
@@ -1075,18 +1131,18 @@ function init(){
   const sel = document.getElementById('libBrand');
   if(sel && META && Array.isArray(META.brands)){
     const cur = sel.value;
-    sel.innerHTML = '<option value="">全部品牌</option>' + META.brands.map(b=>`<option value="${esc(b)}">${esc(b)}</option>`).join('');
+    sel.innerHTML = `<option value="">${t('全部品牌')}</option>` + META.brands.map(b=>`<option value="${esc(b)}">${esc(b)}</option>`).join('');
     sel.value = cur;
   }
   // 地区下拉（车型库管理 + 产品编辑 - 车辆查询的 fRegion/fMake 已改为 input+datalist）
   const _regionOpts = (META && Array.isArray(META.regions))
-    ? META.regions.map(r=>`<option value="${esc(r)}">${esc(r)}</option>`).join('')
+    ? META.regions.map(r=>`<option value="${esc(r)}">${esc(regShow(r))}</option>`).join('')
     : '';
   ['libRegion','efRegion'].forEach(id => {
     const sel = document.getElementById(id);
     if(!sel) return;
     const cur = sel.value;
-    const placeholder = id === 'libRegion' ? '全部地区' : '不限';
+    const placeholder = id === 'libRegion' ? t('全部地区') : t('不限');
     sel.innerHTML = `<option value="">${placeholder}</option>` + _regionOpts;
     sel.value = cur;
   });
@@ -1116,7 +1172,7 @@ function applyLibraryFilter(){
     const lc = document.getElementById('libCount');
     const _bf = (document.getElementById('libBrand')||{}).value;
     const _rf = (document.getElementById('libRegion')||{}).value;
-    const _filterHint = (_bf || _rf) ? `（已筛选${_rf ? ' 地区:'+_rf : ''}${_bf ? ' 品牌:'+_bf : ''}）` : '';
+    const _filterHint = (_bf || _rf) ? `（已筛选${_rf ? ' 地区:'+regShow(_rf) : ''}${_bf ? ' 品牌:'+_bf : ''}）` : '';
     if(lc) lc.textContent = `共 ${VEH_TOTAL || 0} 条${_filterHint}`;
   }, 300);
 }
@@ -1128,15 +1184,15 @@ let PM_OPEN = {};      // 各品类展开状态（按 code）
 
 async function loadCats(){
   const list = document.getElementById('catList');
-  if(list && !CATS) list.innerHTML = '<div class="empty">加载中…</div>';
+  if(list && !CATS) list.innerHTML = '<div class="empty">' + t('加载中…') + '</div>';
   try{
     const r = await fetch('/api/categories');
     const d = await r.json();
-    if(!d.ok) throw new Error(d.error || '加载失败');
+    if(!d.ok) throw new Error(d.error || t('加载失败'));
     CATS = d.categories || [];
     CAT_UN = d.unclassified || 0;
   }catch(e){
-    if(list) list.innerHTML = `<div class="msg m-err">无法加载品类数据：${esc(e.message)}</div>`;
+    if(list) list.innerHTML = `<div class="msg m-err">${t('无法加载品类数据：')}${esc(e.message)}</div>`;
     return;
   }
   renderCats();
@@ -1163,7 +1219,7 @@ function _buildCatTree(cats){
 function _renderCatNode(cat, byParent, depth){
   const code = cat.code;
   const open = !!PM_OPEN[code];
-  const label = cat.cn ? esc(cat.cn) : (cat.en ? esc(cat.en) : '（未命名）');
+  const label = nm(cat) ? esc(nm(cat)) : '（未命名）';
   const children = byParent[code] || [];
   const hasKids = children.length > 0;
   const products = cat.products || [];
@@ -1174,7 +1230,7 @@ function _renderCatNode(cat, byParent, depth){
 
   // 产品行（三级叶子品类不显示产品列表）
   const prodHtml = isLeaf ? '' : products.map(p => {
-    return `<div class="ptree-item" style="padding-left:${indent+22}px" id="pci_${esc(code)}_${esc(p.cn.replace(/"/g,''))}"><span class="pn">${esc(p.cn)}${p.en ? ` <small>${esc(p.en)}</small>` : ''}</span>`
+    return `<div class="ptree-item" style="padding-left:${indent+22}px" id="pci_${esc(code)}_${esc(p.cn.replace(/"/g,''))}"><span class="pn">${esc(nm(p))}</span>`
       + `<button class="ghost btn cat-mini pm-editbtn" onclick="event.stopPropagation();editCatalogProduct('${esc(code)}','${esc(p.cn)}','${esc(p.en||'')}')" title="编辑产品名">编辑</button></div>`;
   }).join('');
 
@@ -1420,11 +1476,11 @@ async function deleteCatalogProduct(code, cn){
 
 async function exportCatalog(){
   try{
-    catMsg('正在生成 Excel…');
+    catMsg(t('正在生成 Excel…'));
     const r = await fetch('/api/export-catalog', {method:'POST'});
-    if(!r.ok) throw new Error('导出请求失败');
+    if(!r.ok) throw new Error(t('导出请求失败'));
     const blob = await r.blob();
-    if(blob.size < 100){ catMsg('导出失败：无数据', true); return; }
+    if(blob.size < 100){ catMsg(t('导出失败：无数据'), true); return; }
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -1476,7 +1532,7 @@ async function loadGuide(){
   try{
     const r = await fetch('/api/user-guide');
     const d = await r.json();
-    if(!d.ok){ body.innerHTML = '<div class="guide-loading">加载失败：'+esc(d.error||'未知错误')+'</div>'; return; }
+    if(!d.ok){ body.innerHTML = '<div class="guide-loading">' + t('加载失败：') + esc(d.error||t('未知错误')) + '</div>'; return; }
     guideRawContent = d.content || '';
     if(typeof marked !== 'undefined' && marked.parse){
       body.innerHTML = marked.parse(guideRawContent);
@@ -1570,28 +1626,28 @@ let FB_CACHE = [];
 async function loadFeedbacks(){
   const list = document.getElementById('fbList');
   if(!list) return;
-  list.innerHTML = '<div class="guide-loading">加载中…</div>';
+  list.innerHTML = '<div class="guide-loading">' + t('加载中…') + '</div>';
   try{
     const r = await fetch('/api/feedbacks');
     const d = await r.json();
-    if(!d.ok){ list.innerHTML = '<div class="fb-empty">加载失败</div>'; return; }
+    if(!d.ok){ list.innerHTML = '<div class="fb-empty">' + t('加载失败') + '</div>'; return; }
     FB_CACHE = d.feedbacks || [];
     renderFeedbacks();
   }catch(e){
-    list.innerHTML = '<div class="fb-empty">网络错误</div>';
+    list.innerHTML = '<div class="fb-empty">' + t('网络错误') + '</div>';
   }
 }
 
 async function loadLogs(){
   const list = document.getElementById('logList');
   if(!list) return;
-  list.innerHTML = '<div style="text-align:center;color:#888">加载中...</div>';
+  list.innerHTML = '<div style="text-align:center;color:#888">' + t('加载中...') + '</div>';
   try{
     const r = await fetch('/api/logs?limit=200');
     const d = await r.json();
-    if(!d.ok){ list.innerHTML = '<div style="color:red">加载失败：'+(d.error||'未知错误')+'</div>'; return; }
+    if(!d.ok){ list.innerHTML = '<div style="color:red">' + t('加载失败：') + (d.error||t('未知错误')) + '</div>'; return; }
     const logs = d.logs || [];
-    if(!logs.length){ list.innerHTML = '<div style="text-align:center;color:#888">暂无日志</div>'; return; }
+    if(!logs.length){ list.innerHTML = '<div style="text-align:center;color:#888">' + t('暂无日志') + '</div>'; return; }
     list.innerHTML = '<table style="width:100%;border-collapse:collapse;font-size:13px">' +
       '<thead><tr style="background:#f5f5f5;border-bottom:2px solid #ddd">' +
       '<th style="padding:8px;text-align:left;width:180px">时间</th>' +
@@ -1796,7 +1852,7 @@ function renderLibrary(){
     return;
   }
   let html = `<table><thead><tr>
-    <th>#</th><th>品牌</th><th>车型</th><th>配置</th><th>年款</th><th>VIN前缀</th><th>排量</th><th>功率</th><th>发动机</th><th>车身</th><th>燃料</th><th>驱动</th><th>变速箱</th><th>vid</th>
+    <th>#</th><th>品牌</th><th>车型</th><th>配置</th><th>年款</th><th>VIN前缀</th><th>排量</th><th>功率</th><th>发动机</th><th>车身</th><th>燃料</th><th>驱动</th><th>变速箱</th><th>ID</th>
   </tr></thead><tbody>`;
   recs.forEach((r,i) => {
     html += `<tr>
@@ -1813,7 +1869,7 @@ function renderLibrary(){
       <td>${esc(r.fuel)}</td>
       <td>${esc(r.drive)}</td>
       <td>${esc(r.transmission)}</td>
-      <td class="mono" style="color:#8a897f">${esc(r.vid)}</td>
+      <td class="mono" style="color:#8a897f">${esc(idOf(r))}</td>
     </tr>`;
   });
   el.innerHTML = html + '</tbody></table>';
@@ -1836,7 +1892,7 @@ function renderLibrary(){
 async function loadMoreVehts(){
   if(VEH_LOADING) return;
   const more = document.getElementById('libMore');
-  if(more) more.innerHTML = '<span class="hint">加载中…</span>';
+  if(more) more.innerHTML = '<span class="hint">' + t('加载中…') + '</span>';
   await fetchVehiclePage(true);
   renderLibrary();
 }
@@ -1905,7 +1961,7 @@ function hideExportLoading(){ const el = document.getElementById('exportOverlay'
 
 // 导出当前库内全部车型为 xlsx
 async function exportVehiclesExcel(){
-  showExportLoading('正在加载车型数据并生成 Excel...');
+  showExportLoading(t('正在加载车型数据并生成 Excel...'));
   // 从服务端拉取全部车型（limit=-1 不限制）
   const params = new URLSearchParams({limit: '-1', offset: '0'});
   const sq = (document.getElementById('libSearch')?.value || '').trim();
@@ -2204,13 +2260,13 @@ function renderProdTree(){
     if(q) PROD_TREE_OP[code] = true;
     const open = !!PROD_TREE_OP[code];
     const selC = PROD_FILTER.code === code && !PROD_FILTER.name;
-    const label = cat.cn ? esc(cat.cn) : (cat.en ? esc(cat.en) : '（未命名）');
+    const label = nm(cat) ? esc(nm(cat)) : '（未命名）';
     const showProds = q && catHit && !matched.length ? prods : matched;
     const kids = showProds.map(p => {
       const pi = prods.indexOf(p);
       const sel = PROD_FILTER.code === code && PROD_FILTER.name === p.cn;
       return `<div class="ptree-item${sel?' sel':''}" style="margin-left:20px" title="${esc(p.cn)}${p.en?' '+esc(p.en):''}" onclick="prodPick(${ci},${pi})">
-        <span class="pn">${esc(p.cn)}${p.en ? ` <small>${esc(p.en)}</small>` : ''}</span></div>`;
+        <span class="pn">${esc(nm(p))}</span></div>`;
     }).join('');
 
     const hasExpand = children.length > 0 || prods.length > 0;
@@ -2224,7 +2280,7 @@ function renderProdTree(){
 
   let html = `<div class="ptree-cat ptree-all${!PROD_FILTER.code && !PROD_FILTER.name?' sel':''}" onclick="prodPickAll()">
         <span class="arr" style="visibility:hidden">▶</span>
-        <span>所有类别</span>
+        <span>${t('所有类别')}</span>
       </div>`;
   roots.forEach(c => {
     const result = _renderProdNode(c, 0);
@@ -2293,13 +2349,13 @@ async function renderActiveProds(vid){
   if(!target) return;
   target.dataset.vid = String(vid);
   if(!PRODUCTS_READY){
-    target.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center"><b style="color:#3c3489;font-size:13px">VID ${esc(vid)} 关联产品</b><span style="color:#8a897f;font-size:11.5px">产品型号加载中…</span></div><div class="empty">正在后台加载产品数据，稍候自动显示…</div>`;
+    target.innerHTML = `<div style="color:#8a897f;font-size:11.5px">${t('产品型号加载中…')}</div><div class="empty">${t('正在后台加载产品数据，稍候自动显示…')}</div>`;
     loadProductsLazy();
     return;
   }
   let prods = filterProdsForVid(vid);
   if(!prods.length){
-    target.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center"><b style="color:#3c3489;font-size:13px">VID ${esc(vid)} 关联产品</b></div><div class="empty">该车型暂无关联产品</div>`;
+    target.innerHTML = `<div class="empty">${t('该车型暂无关联产品')}</div>`;
     return;
   }
   // 拉取该车型下每个产品的备注（存于 product_vehicles.remark，按 product_id 关联）
@@ -2312,7 +2368,15 @@ async function renderActiveProds(vid){
     }
   }catch(e){}
   prods = prods.map(p => Object.assign({}, p, {remark: remarkMap[p.id] || ''}));
-  target.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><b style="color:#3c3489;font-size:13px">VID ${esc(vid)} 关联产品</b></div>${renderProducts(prods)}`;
+  target.innerHTML = renderProducts(prods);
+  applyI18nProdPanel(target);
+}
+// 分组表头取品类品名：categories 表自带 cn / en，与语言一一对应，不经 i18n 字典。
+function catNameByCode(code, lang){
+  const k = String(code || '').toUpperCase();
+  const c = (CATS || []).find(x => String(x.code || '').toUpperCase() === k);
+  if(!c) return code;
+  return (lang === 'en') ? (c.en || c.cn || code) : (c.cn || c.en || code);
 }
 function renderProducts(items){
   if(!items || !items.length) return '';
@@ -2324,18 +2388,18 @@ function renderProducts(items){
   order.forEach(g => groups[g].sort((a, b) => (a.en || '').localeCompare(b.en || '', undefined, {numeric: true, sensitivity: 'base'})));
   let body = `<table class="ptab"><thead><tr><th>品名</th><th>OE 号</th><th>品牌</th><th>CDAP</th><th>位置</th><th>备注</th></tr></thead><tbody>`;
   order.forEach(g => {
-    if(g) body += `<tr class="pgrp-tr"><td colspan="6">${esc(g)} 类</td></tr>`;
+    if(g) body += `<tr class="pgrp-tr"><td colspan="6" data-zh="${esc(catNameByCode(g,'zh'))}" data-en="${esc(catNameByCode(g,'en'))}">${esc(catNameByCode(g,LANG))}</td></tr>`;
     groups[g].forEach(p => {
-      body += `<tr><td>${esc(p.cn)}${p.en ? ` <span class="pen">${esc(p.en)}</span>` : ''}</td>`
+      body += `<tr><td>${esc(nm(p))}</td>`
             + `<td class="mono">${p.oe ? esc(p.oe) : '—'}</td>`
             + `<td>${p.brand ? esc(p.brand) : '—'}</td>`
             + `<td>${p.cdap ? esc(p.cdap) : '—'}</td>`
-            + `<td>${p.loc ? esc(p.loc) : '—'}</td>`
+            + `<td class="td-loc" data-loc="${esc(p.loc)}">${p.loc ? esc(locShow(p.loc)) : '—'}</td>`
             + `<td style="color:#666;font-size:12px;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${esc(p.remark||'')}">${p.remark ? esc(p.remark) : '—'}</td></tr>`;
     });
   });
   body += '</tbody></table>';
-  return `<div class="prod"><div class="prod-h">关联产品</div>${body}</div>`;
+  return `<div class="prod">${body}</div>`;
 }
 
 // ===== 产品编辑（弹窗内，自动保存至服务器 SQLite；查询页只读）=====
@@ -2384,7 +2448,7 @@ async function reloadData(){
 function candCard(r){
   const showV = (val) => val ? esc(val) : '<span class="empty-v">—</span>';
   return `<div class="vcard vcard-vin" data-vid="${esc(r.vid)}" onclick="vinToggleProds('${esc(r.vid)}', this)">
-    <div class="vc-vid" title="VID ${esc(r.vid)}">VID ${esc(r.vid)}</div>
+    <div class="vc-vid" title="ID ${esc(idOf(r))}">ID ${esc(idOf(r))}</div>
     <div class="vc-rows">
       <div class="vc-row" title="${esc(r.brand)}">${showV(r.brand)}</div>
       <div class="vc-row" title="${esc(r.model)}">${showV(r.model)}</div>
@@ -2492,7 +2556,7 @@ function renderEditProdTree(){
     if(q) ePROD_TREE_OP[code] = true;
     const open = !!ePROD_TREE_OP[code];
     const selC = ePROD_FILTER.code === code && !ePROD_FILTER.name;
-    const label = cat.cn ? esc(cat.cn) : (cat.en ? esc(cat.en) : '（未命名）');
+    const label = nm(cat) ? esc(nm(cat)) : '（未命名）';
     const showProds = q && catHit && !matched.length ? prods : matched;
     const kids = showProds.map(p => {
       const pi = prods.indexOf(p);
@@ -2501,7 +2565,7 @@ function renderEditProdTree(){
       const cnt = vidCounts[ck] || 0;
       const cntBadge = curVid ? `<span class="pm-prod-count${cnt?'':' zero'}">${cnt}</span>` : '';
       return `<div class="ptree-item${sel?' sel':''}" style="margin-left:20px" title="${esc(p.cn)}${p.en?' '+esc(p.en):''}" onclick="eprodPick(${ci},${pi})">
-        <span class="pn">${esc(p.cn)}${p.en ? ` <small>${esc(p.en)}</small>` : ''}${cntBadge}</span>
+        <span class="pn">${esc(nm(p))}${cntBadge}</span>
         <button class="ghost btn cat-mini" style="margin-left:6px;flex-shrink:0;font-size:11px;padding:1px 7px" onclick="event.stopPropagation();addProdFromCat(${ci},${pi})" title="添加到当前车型">＋</button></div>`;
     }).join('');
 
@@ -2516,7 +2580,7 @@ function renderEditProdTree(){
 
   let html = `<div class="ptree-cat ptree-all${!ePROD_FILTER.code && !ePROD_FILTER.name?' sel':''}" onclick="eprodPickAll()">
         <span class="arr" style="visibility:hidden">▶</span>
-        <span>所有类别</span>
+        <span>${t('所有类别')}</span>
       </div>`;
   roots.forEach(c => {
     const result = _renderEditProdNode(c, 0);
@@ -2582,17 +2646,19 @@ function eFilterProdsForVid(vid){
 }
 
 // ---- 产品编辑页字段筛选 ----
-function queryEditByAttrs(){
+async function queryEditByAttrs(){
+  const _seq = (window._attrSeqEdit = (window._attrSeqEdit || 0) + 1);
   const outS = document.getElementById('eoutS'); if(outS) outS.innerHTML = '';
+  const eh = document.getElementById('evinHints'); if(eh) eh.innerHTML = '';
   const prods = document.getElementById('ecardsProds');
   if(prods){ prods.classList.remove('open'); prods.innerHTML=''; prods.dataset.vid=''; }
   document.querySelectorAll('#eoutS .vcard-vin.active').forEach(c => c.classList.remove('active'));
   document.querySelectorAll('#eoutF .vcard:not(.vcard-vin).active').forEach(c => c.classList.remove('active'));
   const out = document.getElementById('eoutF');
   if(!out) return;
+  const regionVal = regVal('efRegion');
+  const brandVal  = (document.getElementById('efMake').value || '').trim();
   const items = [
-    ['REGION',  (document.getElementById('efRegion') .value || '').trim(),                  r => (r.region||'').split(',').map(s=>s.trim())],
-    ['MAKE',    (document.getElementById('efMake')   .value || '').trim(),                  r => String(r.brand   || '')],
     ['MODEL',   (document.getElementById('efModel')  .value || '').trim().toUpperCase(),    r => String(r.model   || '').toUpperCase()],
     ['SubModel',(document.getElementById('efSub')    .value || '').trim().toUpperCase(),    r => String(r.sub     || '').toUpperCase()],
     ['YEAR',    (document.getElementById('efYear')   .value || '').trim(),                  r => String(r.year    || '')],
@@ -2608,18 +2674,27 @@ function queryEditByAttrs(){
     ['ORIGIN',  (document.getElementById('efOrigin') .value || '').trim().toUpperCase(),    r => String(r.origin  || '').toUpperCase()],
   ].filter(([_, v]) => v);
 
-  if(!items.length){
-    out.innerHTML = '<div class="empty">请至少填写一个字段</div>';
+  if(!regionVal && !brandVal && !items.length){
+    out.innerHTML = '<div class="empty">' + t('请至少填写一个字段') + '</div>';
     return;
   }
-  const DB = ALL();
-  if(!DB.length){
-    out.innerHTML = '<div class="empty">车型数据尚未加载完成</div>';
+  out.innerHTML = '<div class="loading">' + t('搜索中...') + '</div>';
+  const params = new URLSearchParams({limit:'-1', offset:'0'});
+  if(regionVal) params.set('region', regionVal);
+  if(brandVal)  params.set('brand', brandVal);
+  let serverData = [];
+  try{
+    const resp = await fetch('/api/vehicles?' + params.toString());
+    const d = await resp.json();
+    if(!d.ok){ out.innerHTML = '<div class="empty">' + t('搜索失败：') + esc(d.error || t('未知错误')) + '</div>'; return; }
+    serverData = d.vehicles || [];
+  }catch(e){
+    out.innerHTML = '<div class="empty">' + t('搜索请求失败：') + esc(e.message) + '</div>';
     return;
   }
-  const matches = DB.filter(r => items.every(([k, v, get]) => {
+  if(_seq !== window._attrSeqEdit) return;  // 已被「清空」或更新的查询取代
+  const matches = serverData.filter(r => items.every(([k, v, get]) => {
     if(k === 'YEAR') return yearMatch(v, r);
-    if(k === 'REGION') return get(r).includes(v);
     const val = get(r);
     return !!(val && val.includes(v));
   }));
@@ -2630,7 +2705,7 @@ function queryEditByAttrs(){
   hint.textContent = '';
 
   if(!filtered.length){
-    out.innerHTML = '<div class="cards-empty">未找到匹配车型。可清空部分条件后再试</div>';
+    out.innerHTML = '<div class="cards-empty">' + t('未找到匹配车型。可清空部分条件后再试') + '</div>';
     const p = document.getElementById('ecardsProds'); if(p){ p.classList.remove('open'); p.innerHTML=''; }
     updateEditResultCount(0);
     return;
@@ -2638,7 +2713,7 @@ function queryEditByAttrs(){
   const showV = (val) => val ? esc(val) : '<span class="empty-v">—</span>';
   out.innerHTML = filtered.map((r) => {
     return `<div class="vcard" data-vid="${esc(r.vid)}" onclick="etoggleCardProds('${esc(r.vid)}', this)">
-      <div class="vc-vid" title="VID ${esc(r.vid)}">VID ${esc(r.vid)}</div>
+      <div class="vc-vid" title="ID ${esc(idOf(r))}">ID ${esc(idOf(r))}</div>
       <div class="vc-rows">
         <div class="vc-row" title="${esc(r.brand)}">${showV(r.brand)}</div>
         <div class="vc-row" title="${esc(r.model)}">${showV(r.model)}</div>
@@ -2670,7 +2745,7 @@ function showExportLoading(){
     el = document.createElement('div');
     el.id = 'exportLoading';
     el.className = 'export-loading';
-    el.innerHTML = '<div class="spinner"></div><div class="txt">正在生成 Excel，请稍候…</div>';
+    el.innerHTML = '<div class="spinner"></div><div class="txt">' + t('正在生成 Excel，请稍候…') + '</div>';
     document.body.appendChild(el);
   }
   el.classList.add('show');
@@ -2679,7 +2754,7 @@ function hideExportLoading(){
   const el = document.getElementById('exportLoading');
   if(el) el.classList.remove('show');
 }
-// 导出 = 当前查询结果显示的车型（车型筛选 / VIN / VID 查询，只看屏幕结果）
+// 导出 = 当前查询结果显示的车型（车型筛选 / VIN / ID 查询，只看屏幕结果）
 async function exportEditVehicles(){
   // 采集屏幕上结果卡片的 VID（eoutS=VIN/VID 查询，eoutF=车型属性筛选；二者互斥，仅其一有内容）
   const vids = new Set();
@@ -2688,7 +2763,7 @@ async function exportEditVehicles(){
     if(v) vids.add(String(v));
   });
   const vidArr = [...vids];
-  if(!vidArr.length){ alert('请先查询（车型筛选 / VIN / VID）得到结果后再点导出'); return; }
+  if(!vidArr.length){ alert(t('请先查询（车型筛选 / VIN / ID）得到结果后再点导出')); return; }
   showExportLoading();
   try{
     const r = await fetch('/api/export-vehicles', {
@@ -2742,9 +2817,11 @@ function clearEditAttrs(){
   document.querySelectorAll('#eoutF .vcard:not(.vcard-vin).active').forEach(c => c.classList.remove('active'));
   const hint = document.getElementById('efldHint'); if(hint) hint.textContent = '';
   updateEditResultCount('');
+  clearEditVin();                              // 一并清空 VIN / ID 搜索框及其结果区
+  window._attrSeqEdit = (window._attrSeqEdit || 0) + 1;  // 作废在途筛选请求
 }
 
-// ---- 产品编辑页 VIN/VID 查询 ----
+// ---- 产品编辑页 VIN/ID 查询 ----
 function clearEditVin(){
   const inp = document.getElementById('evin');
   if(inp){ inp.value = ''; inp.focus(); }
@@ -2767,7 +2844,7 @@ function updateEditResultCount(n){
     const cntS = document.querySelectorAll('#eoutS .vcard[data-vid]').length;
     n = cntF + cntS;
   }
-  el.textContent = n ? (n + ' Results') : '';
+  el.textContent = n ? (n + (LANG === 'en' ? ' Results' : ' 条')) : '';
 }
 // VIN查询页结果计数（paneS）
 function updateResultCount(n){
@@ -2778,12 +2855,12 @@ function updateResultCount(n){
     const cntS = document.querySelectorAll('#outS .vcard[data-vid]').length;
     n = cntF + cntS;
   }
-  el.textContent = n ? (n + ' Results') : '';
+  el.textContent = n ? (n + (LANG === 'en' ? ' Results' : ' 条')) : '';
 }
 function editCard(r){
   const showV = (val) => val ? esc(val) : '<span class="empty-v">—</span>';
   return `<div class="vcard vcard-vin" data-vid="${esc(r.vid)}" onclick="editToggleProds('${esc(r.vid)}', this)">
-    <div class="vc-vid" title="VID ${esc(r.vid)}">VID ${esc(r.vid)}</div>
+    <div class="vc-vid" title="ID ${esc(idOf(r))}">ID ${esc(idOf(r))}</div>
     <div class="vc-rows">
       <div class="vc-row" title="${esc(r.brand)}">${showV(r.brand)}</div>
       <div class="vc-row" title="${esc(r.model)}">${showV(r.model)}</div>
@@ -2830,13 +2907,14 @@ async function renderEditProds(vid){
   if(!target) return;
   target.dataset.vid = String(vid);
   if(!PRODUCTS_READY){
-    target.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center"><b style="color:#3c3489;font-size:13px">VID ${esc(vid)} 关联产品</b><span style="color:#8a897f;font-size:11.5px">产品型号加载中…</span></div><div class="empty">正在后台加载产品数据，稍候自动显示…</div>`;
+    target.innerHTML = `<div style="color:#8a897f;font-size:11.5px">${t('产品型号加载中…')}</div><div class="empty">${t('正在后台加载产品数据，稍候自动显示…')}</div>`;
     loadProductsLazy();
     return;
   }
   let prods = eFilterProdsForVid(vid);
   if(!prods.length){
-    target.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><b style="color:#3c3489;font-size:13px">VID ${esc(vid)} 关联产品</b><button class="ghost btn" style="padding:2px 10px;font-size:12px" onclick="toggleEditVinInput('${esc(vid)}', true)">+ 添加 VIN 码</button></div><div id="editVinInputArea" style="display:none;margin-bottom:8px"></div><div class="empty">该车型暂无关联产品（可从左侧品类树「＋」添加）</div>`;
+    target.innerHTML = `<div style="display:flex;justify-content:flex-end;align-items:center;gap:10px"><button class="ghost btn" style="padding:2px 10px;font-size:12px" onclick="toggleEditVinInput('${esc(vid)}', true)">+ 添加 VIN 码</button></div><div id="editVinInputArea" style="display:none;margin-bottom:8px"></div><div class="empty">${t('该车型暂无关联产品（可从左侧品类树「＋」添加）')}</div>`;
+    applyI18nProdPanel(target);
     return;
   }
   // 拉取该车型下所有产品-车型备注（仅本表展示，不进入产品管理）
@@ -2848,7 +2926,8 @@ async function renderEditProds(vid){
       d.remarks.forEach(x => { EDIT_REMARKS[x.product_id] = x.remark || ''; });
     }
   }catch(e){}
-  target.innerHTML = `<div style="margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;gap:10px"><b style="color:#3c3489;font-size:13px">VID ${esc(vid)} 关联产品</b><button class="ghost btn" style="padding:2px 10px;font-size:12px" onclick="toggleEditVinInput('${esc(vid)}', true)">+ 添加 VIN 码</button></div><div id="editVinInputArea" style="display:none;margin-bottom:8px"></div>${renderEditProductsTable(prods, vid)}`;
+  target.innerHTML = `<div style="margin-bottom:8px;display:flex;justify-content:flex-end;align-items:center;gap:10px"><button class="ghost btn" style="padding:2px 10px;font-size:12px" onclick="toggleEditVinInput('${esc(vid)}', true)">+ 添加 VIN 码</button></div><div id="editVinInputArea" style="display:none;margin-bottom:8px"></div>${renderEditProductsTable(prods, vid)}`;
+  applyI18nProdPanel(target);
 }
 // 保存某产品针对某车型的备注（失焦即存；仅产品编辑页使用）
 async function saveRemark(vid, pid){
@@ -2886,6 +2965,7 @@ function toggleEditVinInput(vid, show){
         </div>
       </div>`;
     area.style.display = 'block';
+    applyI18nProdPanel(document.getElementById('ecardsProds'));
   } else {
     area.style.display = 'none';
     area.innerHTML = '';
@@ -2929,10 +3009,18 @@ async function saveEditVin(vid){
 }
 // 位置枚举：左 右 前 后 里 外 上 下（复选框组，值存为选中字符拼接，如「左前」）
 const LOC_OPTS = ['左','右','前','后','里','外','上','下'];
+// 方位词英译：封闭枚举，逐字映射即可覆盖「左前下」这类组合值。
+// 注意库里还遗留 2 条含「内」的记录（左内），虽不在复选表内也一并映射。
+const LOC_EN = {'左':'Left','右':'Right','前':'Front','后':'Rear','里':'Inner','外':'Outer','上':'Upper','下':'Lower','内':'Inner'};
+function locShow(loc){
+  if(!loc) return '';
+  if(LANG !== 'en') return loc;
+  return String(loc).split('').map(ch => LOC_EN[ch] || ch).join(' ');
+}
 function locCheckboxes(loc){
   const cur = loc || '';
   return '<span class="loc-cbs">' + LOC_OPTS.map(o =>
-    `<label class="loc-cb"><input type="checkbox" data-f="loc" value="${o}" ${cur.includes(o)?'checked':''}>${o}</label>`
+    `<label class="loc-cb"><input type="checkbox" data-f="loc" value="${o}" ${cur.includes(o)?'checked':''}>${esc(locShow(o))}</label>`
   ).join('') + '</span>';
 }
 function locFromCheckboxes(scope){
@@ -2948,19 +3036,19 @@ function renderEditProductsTable(items, vid){
   const order = Object.keys(groups).sort((a, b) => a.localeCompare(b));
   let body = `<table class="ptab"><thead><tr><th>品名</th><th>OE 号</th><th>品牌</th><th>CDAP</th><th>供应商</th><th>MOQ</th><th>采购价</th><th>位置</th><th>备注</th><th style="width:60px;text-align:right;padding-right:4px"></th></tr></thead><tbody>`;
   order.forEach(g => {
-    if(g) body += `<tr class="pgrp-tr"><td colspan="10">${esc(g)} 类</td></tr>`;
+    if(g) body += `<tr class="pgrp-tr"><td colspan="10" data-zh="${esc(catNameByCode(g,'zh'))}" data-en="${esc(catNameByCode(g,'en'))}">${esc(catNameByCode(g,LANG))}</td></tr>`;
     groups[g].forEach(p => {
       const idx = allProds.indexOf(p);
       const remark = EDIT_REMARKS[p.id] || '';
       body += `<tr data-idx="${idx}">
-        <td>${esc(p.cn)}${p.en ? ` <span class="pen">${esc(p.en)}</span>` : ''}</td>
+        <td>${esc(nm(p))}</td>
         <td class="mono td-oe">${p.oe ? esc(p.oe) : '—'}</td>
         <td class="td-brand">${p.brand ? esc(p.brand) : '—'}</td>
         <td class="td-cdap">${p.cdap ? esc(p.cdap) : '—'}</td>
         <td class="td-supplier">${p.supplier ? esc(p.supplier) : '—'}</td>
         <td class="td-moq">${p.moq ? esc(p.moq) : '—'}</td>
         <td class="td-cost">${p.cost ? esc(p.cost) : '—'}</td>
-        <td class="td-loc">${p.loc ? esc(p.loc) : '—'}</td>
+        <td class="td-loc" data-loc="${esc(p.loc)}">${p.loc ? esc(locShow(p.loc)) : '—'}</td>
         <td class="td-remark"><span class="remark-text">${esc(remark) || '—'}</span></td>
         <td class="td-act" style="text-align:right;padding-right:4px">
           <button class="ghost btn" style="padding:2px 10px;font-size:12px" onclick="enterEditProdRow('${esc(vid)}', ${idx})">编辑</button>
@@ -2969,7 +3057,7 @@ function renderEditProductsTable(items, vid){
     });
   });
   body += '</tbody></table>';
-  return `<div class="prod"><div class="prod-h">关联产品</div>${body}</div>`;
+  return `<div class="prod">${body}</div>`;
 }
 // 进入行编辑：把 OE/品牌/CDAP/供应商 变为输入框，按钮换为「保存/取消」
 function enterEditProdRow(vid, idx){
@@ -2989,6 +3077,7 @@ function enterEditProdRow(vid, idx){
   row.querySelector('.td-act').innerHTML = `<div style="display:flex;flex-wrap:wrap;gap:4px;justify-content:flex-end;align-items:center"><button class="btn" style="padding:2px 6px;font-size:12px;background:#dc3545;color:#fff;border-color:#dc3545" onclick="deleteProdRow('${esc(vid)}',${idx})">删除</button><button class="btn" style="padding:2px 6px;font-size:12px" onclick="saveEditProdRow('${esc(vid)}',${idx})">保存</button><button class="ghost btn" style="padding:2px 6px;font-size:12px" onclick="cancelEditProdRow('${esc(vid)}',${idx})">取消</button></div>`;
   row.querySelector('.td-act').style.textAlign = 'right';
   row.querySelector('.td-act').style.paddingRight = '4px';
+  applyI18nProdPanel(document.getElementById('ecardsProds'));
 }
 // 取消：重渲染该车型产品区（恢复只读）
 function cancelEditProdRow(vid, idx){
@@ -3131,7 +3220,7 @@ function openAddProdModal(vid, grp, cn, en){
   ov.innerHTML = `
     <div class="pm-card" onclick="event.stopPropagation()">
       <div class="pm-card-hd">
-        <div class="t">添加产品 <small>VID ${esc(vid)}</small></div>
+        <div class="t">添加产品 <small>ID ${esc(idOfVid(vid))}</small></div>
         <button class="pm-card-close" onclick="document.getElementById('addProdOverlay').remove()">×</button>
       </div>
       <div class="pm-card-bd">
@@ -3149,7 +3238,7 @@ function openAddProdModal(vid, grp, cn, en){
           <div class="pm-fld" style="flex:1"><label><b>MOQ</b></label><input id="apMoq" placeholder="可选"></div>
           <div class="pm-fld" style="flex:1"><label><b>采购价</b></label><input id="apCost" placeholder="可选"></div>
         </div>
-        <div class="pm-fld" style="margin-top:10px"><label><b>位置</b></label><span class="loc-cbs">${LOC_OPTS.map(o=>`<label class="loc-cb"><input type="checkbox" data-f="loc" value="${o}">${o}</label>`).join('')}</span></div>
+        <div class="pm-fld" style="margin-top:10px"><label><b>位置</b></label><span class="loc-cbs">${LOC_OPTS.map(o=>`<label class="loc-cb"><input type="checkbox" data-f="loc" value="${o}">${esc(locShow(o))}</label>`).join('')}</span></div>
         <div class="pm-fld" style="margin-top:10px"><label><b>备注</b></label><input id="apNotes" placeholder="可选"></div>
         <div class="pm-fld" style="margin-top:10px"><label><b>互换号</b></label><input id="apInterchange" placeholder="多个用逗号或换行分隔"></div>
       </div>
@@ -3242,7 +3331,7 @@ async function openAddProductModal(vid){
     <div class="modal-box" style="max-width:540px" onclick="event.stopPropagation()">
       <div class="modal-head">
         <div>
-          <div style="font-size:15px;font-weight:600;color:#26215c">添加产品（VID ${esc(vid)}）</div>
+          <div style="font-size:15px;font-weight:600;color:#26215c">添加产品（ID ${esc(idOfVid(vid))}）</div>
           <div style="font-size:11.5px;color:#8a897f;margin-top:2px">从产品品类中选择名称自动填充，填写编号后保存；所有字段均相同视为重复</div>
         </div>
         <button class="modal-close" onclick="document.getElementById('addProductOverlay').remove()">×</button>
@@ -3267,7 +3356,7 @@ async function openAddProductModal(vid){
       </div>
       <div style="margin-top:10px">
         <label style="font-size:12px;color:#5f5e5a">位置</label>
-        <div class="loc-cbs" style="margin-top:4px">${LOC_OPTS.map(o=>`<label class="loc-cb"><input type="checkbox" data-f="loc" value="${o}">${o}</label>`).join('')}</div>
+        <div class="loc-cbs" style="margin-top:4px">${LOC_OPTS.map(o=>`<label class="loc-cb"><input type="checkbox" data-f="loc" value="${o}">${esc(locShow(o))}</label>`).join('')}</div>
       </div>
       <div style="margin-top:10px">
         <label style="font-size:12px;color:#5f5e5a">备注</label>
@@ -3361,7 +3450,7 @@ async function submitAddProduct(vid){
     alert('添加失败：' + e.message);
   }
 }
-function queryEdit(){
+async function queryEdit(){
   const outF = document.getElementById('eoutF'); if(outF) outF.innerHTML = '';
   const efldHint = document.getElementById('efldHint'); if(efldHint) efldHint.textContent = '';
 
@@ -3376,27 +3465,30 @@ function queryEdit(){
   document.querySelectorAll('#eoutS .vcard-vin.active').forEach(c => c.classList.remove('active'));
 
   const raw = (document.getElementById('evin').value || '').trim();
-  if(raw){
-    let vidHits = ALL().filter(r => String(r.vid) === raw);
+  if(/^CDI\d+$/i.test(raw)){
+    let hits = ALL().filter(r => String(r.serial || '').toUpperCase() === raw.toUpperCase());
+    if(!hits.length){
+      const row = await findVehicleById(raw);
+      if(row) hits = [row];
+    }
     const rg = myRegionGroup();
-    if(rg) vidHits = vidHits.filter(r => canEditRegion(r.region));
-    if(vidHits.length){
-      cardsBox.innerHTML = vidHits.map(editCard).join('');
-      updateEditResultCount(vidHits.length);
-      hints.innerHTML = `<div class="msg m-ok">按 VID 精确匹配到 <b>${vidHits.length}</b> 条车型${vidHits.length>1?'（同名多配置）':''}</div>`;
+    const idHits = rg ? hits.filter(r => canEditRegion(r.region)) : hits;
+    if(idHits.length){
+      cardsBox.innerHTML = idHits.map(editCard).join('');
+      updateEditResultCount(idHits.length);
+      hints.innerHTML = `<div class="msg m-ok">${t('按 ID 精确匹配到')} <b>${idHits.length}</b> ${t('条车型')}${idHits.length>1?t('（同名多配置）'):''}</div>`;
       if(vpicBtn) vpicBtn.innerHTML = '';
       return;
     }
-    if(rg && ALL().filter(r => String(r.vid) === raw).length && !vidHits.length){
-      hints.innerHTML = `<div class="msg m-err">该 VID 对应的车型不在你可编辑的地区范围内</div>`;
-      cardsBox.innerHTML = '';
-      updateEditResultCount(0);
-      return;
-    }
+    hints.innerHTML = hits.length
+      ? `<div class="msg m-err">${t('该 ID 对应的车型不在你可编辑的地区范围内')}</div>`
+      : `<div class="msg m-err">${t('未找到 ID 为')}${esc(raw.toUpperCase())}</div>`;
+    cardsBox.innerHTML = ''; updateEditResultCount(0);
+    return;
   }
 
   const vin = normVin(raw);
-  if(!vin){ hints.innerHTML = '<div class="empty">请输入 VIN 码或 VID（如 62036）</div>'; cardsBox.innerHTML=''; updateEditResultCount(0); return; }
+  if(!vin){ hints.innerHTML = '<div class="empty">' + t('请输入 VIN 码或 ID（如 CDI1000）') + '</div>'; cardsBox.innerHTML=''; updateEditResultCount(0); return; }
 
   const val = validateVin(vin);
   const r = match(vin);
@@ -3491,7 +3583,7 @@ function editVpicCheck(vin){
     }
     box.innerHTML = `<div class="msg m-info" style="margin-top:10px"><b>官方数据库（NHTSA vPIC · 美国交通部）</b> ${badge}</div>
       <div class="vgrid">${vitem('厂商', d.make)}${vitem('车型', d.model)}${vitem('年款', d.modelYear)}${vitem('配置', d.trim)}${vitem('系列', d.series)}${vitem('发动机', d.engineModel)}${vitem('排量(L)', d.displacementL)}${vitem('燃料', d.fuelType)}${vitem('车身', d.bodyClass)}${vitem('驱动', d.driveType)}${vitem('产国', d.plantCountry)}</div>`;
-  }).catch(e => { box.innerHTML = `<div class="msg m-err">网络错误：${esc(e.message)}</div>`; });
+  }).catch(e => { box.innerHTML = `<div class="msg m-err">${t('网络错误：')}${esc(e.message)}</div>`; });
 }
 
 function vinStrip(vin){
@@ -3581,7 +3673,7 @@ function renderPmAllProducts(){
   const cnt = document.getElementById('pmAllCount');
   if(!wrap) return;
   if(!PRODUCTS_READY){
-    wrap.innerHTML = '<div class="empty">产品数据加载中…</div>';
+    wrap.innerHTML = '<div class="empty">' + t('产品数据加载中…') + '</div>';
     if(cnt) cnt.textContent = '…';
     return;
   }
@@ -3652,7 +3744,7 @@ function appendPmAllBatch(){
       + `<td class="mono">${c(p.oe)}</td>`
       + `<td class="mono">${c(p.cdap)}</td>`
       + `<td class="mono">${c((p.interchange||'').split(',').join(', '))}</td>`
-      + `<td>${c(p.loc)}</td>`
+      + `<td class="td-loc" data-loc="${c(p.loc)}">${c(locShow(p.loc))}</td>`
       + `<td>${c(p.supplier)}</td>`
       + `<td>${c(p.moq)}</td>`
       + `<td>${c(p.cost)}</td>`
@@ -3742,7 +3834,8 @@ async function pmSaveEdit(){
       tr.children[3].innerHTML = '<span class="mono">'+esc(p.oe)+'</span>';
       tr.children[4].innerHTML = '<span class="mono">'+esc((p.interchange||'').split(',').join(', '))+'</span>';
       tr.children[5].innerHTML = '<span class="mono">'+esc(p.cdap)+'</span>';
-      tr.children[6].innerHTML = esc(p.loc);
+      tr.children[6].innerHTML = esc(locShow(p.loc));
+      tr.children[6].setAttribute('data-loc', p.loc || '');
       tr.children[7].innerHTML = esc(p.supplier);
       tr.children[8].innerHTML = esc(p.moq);
       tr.children[9].innerHTML = esc(p.cost);
@@ -3810,7 +3903,7 @@ function pmHideRel(){
 async function pmLoadRel(){
   if(PM_REL_PID == null) return;
   const list = document.getElementById('pmRelList');
-  list.innerHTML = '<li class="pm-rel-empty">加载中…</li>';
+  list.innerHTML = '<li class="pm-rel-empty">' + t('加载中…') + '</li>';
   try{
     const r = await fetch('/api/product-vehicles-by-code?oe=' + encodeURIComponent(PM_REL_OE) + '&cdap=' + encodeURIComponent(PM_REL_CDAP));
     const d = await r.json();
@@ -3826,10 +3919,10 @@ async function pmLoadRel(){
       const vq = (v.vid||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'");
       const rq = remark.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
       const editBtn = `<button type="button" class="btn ghost sm" onclick="pmEditRelRow('${vq}','${rq}',${v.owner})">编辑</button>`;
-      return `<li class="pm-rel-item" id="pmrel_${vq}"><span class="pm-rel-vid">${esc(v.vid)}</span><span class="pm-rel-meta">${meta}</span><span class="pm-rel-remark">${remark || '<span style="color:#c0c0c0">&nbsp;</span>'}</span><span class="pm-rel-act">${editBtn}</span></li>`;
+      return `<li class="pm-rel-item" id="pmrel_${vq}"><span class="pm-rel-vid">${esc(v.serial || idOfVid(v.vid) || v.vid)}</span><span class="pm-rel-meta">${meta}</span><span class="pm-rel-remark">${remark || '<span style="color:#c0c0c0">&nbsp;</span>'}</span><span class="pm-rel-act">${editBtn}</span></li>`;
     }).join('');
   }catch(e){
-    list.innerHTML = '<li class="pm-rel-empty">加载失败：' + esc(e) + '</li>';
+    list.innerHTML = '<li class="pm-rel-empty">' + t('加载失败：') + esc(e) + '</li>';
   }
 }
 // ---- 关联车型行内编辑：备注 + 关联状态 ----
@@ -3884,8 +3977,14 @@ function pmCancelRelRow(vid, remark, isOwner){
 async function pmAddRel(){
   if(PM_REL_PID == null) return;
   const inp = document.getElementById('pmRelInput');
-  const vid = (inp.value || '').trim();
-  if(!vid) return;
+  const typed = (inp.value || '').trim();
+  if(!typed) return;
+  let vid = typed;
+  if(/^CDI\d+$/i.test(typed)){
+    const row = await findVehicleById(typed);
+    if(!row){ alert(t('未找到 ID 为') + typed.toUpperCase()); return; }
+    vid = String(row.vid);
+  }
   try{
     const r = await fetch('/api/product-vehicles', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({id: PM_REL_PID, vid: vid, action:'add'})});
     const d = await r.json();
@@ -3933,8 +4032,10 @@ function clearPmOe(){
 // ---- 字段筛选：MAKE/MODEL/Sub Model/YEAR/Capacity/ENGINE/CHASSIS/SERIES 多字段 AND 组合 ----
 // 基于已加载的 DATA 进行筛选（前端即时，199 条无需服务端往返；未来数据量增大可下沉到 /api/vehicles）
 async function queryByAttrs(){
+  const _seq = (window._attrSeqMain = (window._attrSeqMain || 0) + 1);
   // 互斥：清空 VIN 码查询结果 + 关闭已展开的产品区
   const outS = document.getElementById('outS'); if(outS) outS.innerHTML = '';
+  const vh = document.getElementById('vinHints'); if(vh) vh.innerHTML = '';
   const prods = document.getElementById('cardsProds');
   if(prods){ prods.classList.remove('open'); prods.innerHTML=''; prods.dataset.vid=''; }
   document.querySelectorAll('.vcard-vin.active').forEach(c => c.classList.remove('active'));
@@ -3943,7 +4044,7 @@ async function queryByAttrs(){
   if(!out) return;
   
   // Collect filter values
-  const regionVal = (document.getElementById('fRegion')?.value || '').trim();
+  const regionVal = regVal('fRegion');   // 英文显示值 -> 车型库中文原值
   const brandVal = (document.getElementById('fMake')?.value || '').trim();
   
   const items = [
@@ -3972,7 +4073,7 @@ async function queryByAttrs(){
   if(regionVal) params.set('region', regionVal);
   if(brandVal) params.set('brand', brandVal);
   
-  out.innerHTML = '<div class="loading">搜索中...</div>';
+  out.innerHTML = '<div class="loading">' + t('搜索中...') + '</div>';
   
   let serverData = [];
   try {
@@ -3985,6 +4086,7 @@ async function queryByAttrs(){
     return;
   }
   
+  if(_seq !== window._attrSeqMain) return;   // 已被「清空」或更新的查询取代
   // Further filter client-side for exact field matches
   const filtered = serverData.filter(r => items.every(([k, v, get]) => {
     if(k === 'YEAR') return yearMatch(v, r);
@@ -3996,7 +4098,7 @@ async function queryByAttrs(){
   hint.textContent = '';
 
   if(!filtered.length){
-    out.innerHTML = '<div class="cards-empty">未找到匹配车型。可清空部分条件后再试</div>';
+    out.innerHTML = '<div class="cards-empty">' + t('未找到匹配车型。可清空部分条件后再试') + '</div>';
     const p = document.getElementById('cardsProds'); if(p){ p.classList.remove('open'); p.innerHTML=''; }
     updateResultCount(0);
     return;
@@ -4005,7 +4107,7 @@ async function queryByAttrs(){
   const showV = (val) => val ? esc(val) : '<span class="empty-v">—</span>';
   out.innerHTML = filtered.map((r) => {
     return `<div class="vcard" data-vid="${esc(r.vid)}" onclick="toggleCardProds('${esc(r.vid)}', this)">
-      <div class="vc-vid" title="VID ${esc(r.vid)}">VID ${esc(r.vid)}</div>
+      <div class="vc-vid" title="ID ${esc(idOf(r))}">ID ${esc(idOf(r))}</div>
       <div class="vc-rows">
         <div class="vc-row" title="${esc(r.brand)}">${showV(r.brand)}</div>
         <div class="vc-row" title="${esc(r.model)}">${showV(r.model)}</div>
@@ -4161,7 +4263,7 @@ function onFilterChange(immediate, map){
     const filters = {};
     map.forEach(item => {
       const v = (document.getElementById(item.id)?.value || '').trim();
-      if(v) filters[item.field] = v;
+      if(v) filters[item.field] = (item.field === 'region') ? regRaw(v) : v;
     });
     // 请求服务端级联选项
     const params = new URLSearchParams(filters);
@@ -4192,9 +4294,10 @@ function onFilterChange(immediate, map){
         }
         
         // 取当前输入值做前缀过滤（联想）
-        const curVal = (document.getElementById(item.id)?.value || '').trim().toLowerCase();
+        const raw = (document.getElementById(item.id)?.value || '').trim();
+        const curVal = ((item.field === 'region') ? regRaw(raw) : raw).toLowerCase();
         const filtered = curVal ? values.filter(v => v.toLowerCase().includes(curVal)) : values;
-        dd.innerHTML = filtered.map(v => `<div class="filter-dropdown-item" onmousedown="pickFilter('${item.id}','${esc(v).replace(/'/g,"\\'")}')">${esc(v)}</div>`).join('');
+        dd.innerHTML = filtered.map(v => `<div class="filter-dropdown-item"${item.field === 'region' ? ` data-cn="${esc(v)}"` : ''} onmousedown="pickFilter('${item.id}','${esc(v).replace(/'/g,"\\'")}')">${esc(item.field === 'region' ? regShow(v) : v)}</div>`).join('');
       });
     } catch(e) { /* 静默失败 */ }
   };
@@ -4206,7 +4309,7 @@ function onFilterChange(immediate, map){
 function pickFilter(inputId, value){
   const inp = document.getElementById(inputId);
   if(inp) {
-    inp.value = value;
+    inp.value = regShow(value);   // 存显示值；查询时 regRaw() 转回中文原值
     const wrap = inp.closest('.filter-input-wrap');
     if(wrap) wrap.classList.add('has-value');
   }
@@ -4225,7 +4328,7 @@ function onFilterFocus(inputId){
   closeAllDropdowns();
   
   // 立即显示下拉并显示加载状态
-  dd.innerHTML = '<div class="filter-dropdown-item" style="color:#999">加载中...</div>';
+  dd.innerHTML = '<div class="filter-dropdown-item" style="color:#999">' + t('加载中...') + '</div>';
   dd.classList.add('show');
   _activeDropdown = dd;
   _activeInput = document.getElementById(inputId);
@@ -4253,8 +4356,8 @@ document.addEventListener('DOMContentLoaded', initFilterClearButtons);
 
 function clearAttrs(){
   closeAllDropdowns();
-  FILTER_MAP.forEach(([id]) => {
-    const el = document.getElementById(id);
+  FILTER_MAP.forEach(item => {
+    const el = document.getElementById(item.id);
     if(el) {
       el.value = '';
       const wrap = el.closest('.filter-input-wrap');
@@ -4270,9 +4373,11 @@ function clearAttrs(){
   document.querySelectorAll('.vcard:not(.vcard-vin).active').forEach(c => c.classList.remove('active'));
   const hint = document.getElementById('fldHint'); if(hint) hint.textContent = '';
   updateResultCount('');
+  clearVin();                                   // 一并清空 VIN / ID 搜索框及其结果区
+  window._attrSeqMain = (window._attrSeqMain || 0) + 1;   // 作废在途筛选请求
 }
 
-function queryOne(){
+async function queryOne(){
   // 互斥：清空车型查询（字段筛选）结果
   const outF = document.getElementById('outF'); if(outF) outF.innerHTML = '';
   const fldHint = document.getElementById('fldHint'); if(fldHint) fldHint.textContent = '';
@@ -4288,20 +4393,27 @@ function queryOne(){
   document.querySelectorAll('.vcard-vin.active').forEach(c => c.classList.remove('active'));
 
   const raw = (document.getElementById('vin').value || '').trim();
-  // ===== 新增：VID 精确查询（VID 为纯数字，如 62036）—— 优先于 VIN 前缀匹配 =====
-  if(raw){
-    const vidHits = ALL().filter(r => String(r.vid) === raw);
-    if(vidHits.length){
-      cardsBox.innerHTML = vidHits.map(candCard).join('');
-      updateResultCount(vidHits.length);
-      hints.innerHTML = `<div class="msg m-ok">按 VID 精确匹配到 <b>${vidHits.length}</b> 条车型${vidHits.length>1?'（同名多配置）':''}</div>`;
+  // ===== 车型 ID 精确查询（CDI 流水号，如 CDI1000）—— 优先于 VIN 前缀匹配 =====
+  if(/^CDI\d+$/i.test(raw)){
+    let idHits = ALL().filter(r => String(r.serial || '').toUpperCase() === raw.toUpperCase());
+    if(!idHits.length){
+      const row = await findVehicleById(raw);
+      if(row) idHits = [row];
+    }
+    if(idHits.length){
+      cardsBox.innerHTML = idHits.map(candCard).join('');
+      updateResultCount(idHits.length);
+      hints.innerHTML = `<div class="msg m-ok">${t('按 ID 精确匹配到')} <b>${idHits.length}</b> ${t('条车型')}${idHits.length>1?t('（同名多配置）'):''}</div>`;
       if(vpicBtn) vpicBtn.innerHTML = '';
       return;
     }
+    hints.innerHTML = `<div class="msg m-err">${t('未找到 ID 为')}${esc(raw.toUpperCase())}</div>`;
+    cardsBox.innerHTML = ''; updateResultCount(0);
+    return;
   }
 
   const vin = normVin(raw);
-  if(!vin){ hints.innerHTML = '<div class="empty">请输入 VIN 码或 VID（如 62036）</div>'; cardsBox.innerHTML=''; updateResultCount(0); return; }
+  if(!vin){ hints.innerHTML = '<div class="empty">' + t('请输入 VIN 码或 ID（如 CDI1000）') + '</div>'; cardsBox.innerHTML=''; updateResultCount(0); return; }
 
   const val = validateVin(vin);
   const r = match(vin);
@@ -4396,7 +4508,7 @@ function vpicCheck(vin){
     }
     box.innerHTML = `<div class="msg m-info" style="margin-top:10px"><b>官方数据库（NHTSA vPIC · 美国交通部）</b> ${badge}</div>
       <div class="vgrid">${vitem('厂商', d.make)}${vitem('车型', d.model)}${vitem('年款', d.modelYear)}${vitem('配置', d.trim)}${vitem('系列', d.series)}${vitem('发动机', d.engineModel)}${vitem('排量(L)', d.displacementL)}${vitem('燃料', d.fuelType)}${vitem('车身', d.bodyClass)}${vitem('驱动', d.driveType)}${vitem('产国', d.plantCountry)}</div>`;
-  }).catch(e => { box.innerHTML = `<div class="msg m-err">网络错误：${esc(e.message)}</div>`; });
+  }).catch(e => { box.innerHTML = `<div class="msg m-err">${t('网络错误：')}${esc(e.message)}</div>`; });
 }
 
 // 页面启动：先从服务器拉元信息（VDS/品牌/总数，首屏不再带 1.5MB 产品），再分页拉首屏 200 条车型；
@@ -4679,14 +4791,14 @@ function applyRoleMenu(role){
 let USERS_CACHE = [];
 async function loadUsers(){
   const wrap = document.getElementById('umListWrap');
-  if(wrap) wrap.innerHTML = '<div class="empty">加载中…</div>';
+  if(wrap) wrap.innerHTML = '<div class="empty">' + t('加载中…') + '</div>';
   try{
     const r = await fetch('/api/users');
     const d = await r.json();
-    if(!d.ok){ if(wrap) wrap.innerHTML = `<div class="um-msg err">${esc(d.error||'加载失败')}</div>`; return; }
+    if(!d.ok){ if(wrap) wrap.innerHTML = `<div class="um-msg err">${esc(d.error||t('加载失败'))}</div>`; return; }
     USERS_CACHE = d.users || [];
     renderUsers();
-  }catch(e){ if(wrap) wrap.innerHTML = `<div class="um-msg err">网络错误：${esc(e.message)}</div>`; }
+  }catch(e){ if(wrap) wrap.innerHTML = `<div class="um-msg err">${t('网络错误：')}${esc(e.message)}</div>`; }
 }
 
 function renderUsers(){
@@ -4805,6 +4917,360 @@ function umSetMsg(t, isErr){ const m=document.getElementById('umMsg'); if(m){ m.
 
 // 启动：先校验登录态；未登录则停留在登录门
 checkAuth();
+</script>
+
+<!-- ===== i18n 叠加层（9476bc4 + 中英双语） ===== -->
+<style>
+  .lang-btn{display:block;width:100%;height:30px;margin:0 0 8px;border:1px solid #e3e2dc;
+    background:#f6f5f1;color:#57554d;border-radius:7px;cursor:pointer;font-size:12px;
+    font-weight:500;white-space:nowrap;font-family:inherit;letter-spacing:.3px}
+  .lang-btn:hover{background:#eeedfe;color:#3c3489;border-color:#d9d7cf}
+  /* 筛选字段标签：中文界面只显示中文，英文界面只显示英文，不双语堆叠。
+     纯 CSS，不进字典、不跑 JS。 */
+  .fld-vert .fld label .fld-en{display:none}
+  .fld-vert .fld label .fld-zh{display:inline}
+  html[lang="en"] .fld-vert .fld label .fld-en{display:inline}
+  html[lang="en"] .fld-vert .fld label .fld-zh{display:none}
+</style>
+
+<script>
+/* ==================================================================
+   i18n 叠加层：9476bc4 原界面 + 中英双语（只翻译静态界面文案）
+   - 车型库 / 产品库 / 品类 / 地区的值都来自数据库英文字段，前端不翻译；
+   - 地区显示由 regShow() 读 META.region_labels（车型库英文列），查询用 regRaw()；
+   - 不挂 MutationObserver、不发额外接口、不轮询、不动业务表。
+   ================================================================== */
+const LANG_KEY = 'vin_tools_lang';
+const I18N_EN = {"查询":"Search","编辑":"Edit","管理":"Manage","帮助":"Help","车辆查询":"Vehicle Search","产品查询":"Product Search","产品管理":"Product Management","产品编辑":"Product Edit","车型库管理":"Vehicle Library","品类管理":"Categories","用户管理":"Users","操作日志":"Activity Log","使用说明":"User Guide","反馈建议":"Feedback","退出登录":"Sign Out","账号设置":"Account Settings","编辑产品名":"Edit product name","车型库 · 产品 数据管理":"Vehicle & Product Data","AutoIndex":"AutoIndex","用户名 / 邮箱":"Username / Email","用户名或邮箱":"Username or email","密码":"Password","登 录":"Sign In","登录失败":"Sign-in failed","请输入用户名/邮箱和密码":"Enter your username/email and password","邮箱":"Email","用户名":"Username","权限":"Role","初始密码":"Initial password","登录用户名":"Login username","邮箱（也可用于登录）":"Email (also used for sign-in)","新增用户":"Add User","用户列表":"User List","状态":"Status","用户":"User","管理员":"Administrator","产品经理":"Product Manager","用户（仅查询）":"User (view only)","产品经理（查询 + 编辑）":"Product Manager (view + edit)","管理员（全部模块）":"Administrator (all modules)","管理品类":"Managed categories","地区组":"Region group","请选择":"Please select","启用":"Enable","停用":"Disable","暂无用户":"No users yet","编辑用户":"Edit user","编辑用户：":"Edit user: ","当前密码":"Current password","新密码（可选）":"New password (optional)","确认新密码":"Confirm new password","新密码（留空则不修改）":"New password (blank = unchanged)","重置密码（留空则不修改）":"Reset password (blank = unchanged)","修改邮箱或密码需要输入当前密码":"Enter your current password to change email or password","两次输入的新密码不一致":"The new passwords do not match","请输入用户名":"Enter a username","请输入初始密码":"Enter an initial password","请输入当前密码":"Enter your current password","没有需要修改的内容":"Nothing to update","已新增用户":"User added","请为产品经理至少选择一个管理品类":"Select at least one category for a Product Manager","请为产品经理选择地区组（CDC/CDI）":"Select a region group (CDC/CDI) for a Product Manager","确定删除该用户？此操作不可恢复。":"Delete this user? This cannot be undone.","（仅能看到/编辑所选品类的产品）":"(Can only view/edit products in the selected categories)","（控制产品编辑中可操作的车型地区）":"(Controls which vehicle regions can be edited)","CDC（仅澳新地区）":"CDC (Australia/NZ only)","CDI（除澳新外所有地区）":"CDI (all regions except Australia/NZ)","保存":"Save","取消":"Cancel","删除":"Delete","关闭":"Close","清空":"Clear","刷新":"Refresh","导出":"Export","添加":"Add","回复":"Reply","发送":"Send","提交反馈":"Submit","展开全部":"Expand all","收起全部":"Collapse all","模板下载":"Template","导入车型库":"Import","导出车型库":"Export","输入 ID，如 CDI1000":"Enter ID, e.g. CDI1000","确定":"OK","详情":"Details","操作":"Action","时间":"Time","已删除":"Deleted","已更新":"Updated","保存成功":"Saved","删除失败":"Delete failed","保存失败":"Save failed","添加失败":"Add failed","加载失败":"Load failed","操作失败":"Action failed","网络错误":"Network error","未知错误":"Unknown error","未知":"Unknown","无":"None","暂无数据":"No data","没有匹配的记录":"No matching records","已选：":"Selected: ","共":"Total ","可选":"Optional","保存失败：":"Save failed: ","删除失败：":"Delete failed: ","添加失败：":"Add failed: ","网络错误：":"Network error: ","加载失败：":"Load failed: ","操作失败：":"Action failed: ","导出失败：":"Export failed: ","导出失败：HTTP":"Export failed: HTTP","备注保存失败：":"Failed to save notes: ","保存备注失败：":"Failed to save notes: ","回复失败":"Reply failed","提交成功":"Submitted","提交失败":"Submit failed","请输入内容":"Enter some content","校验通过":"Valid","搜索失败：":"Search failed: ","搜索请求失败：":"Search request failed: ","查询失败：":"Query failed: ","查询车型失败：":"Vehicle query failed: ","解除关联失败：":"Unlink failed: ","正在检查…":"Checking…","查询中…":"Querying…","搜索中...":"Searching…","加载中...":"Loading…","加载中…":"Loading…","加载车型失败：":"Failed to load vehicles: ","VIN 码查询":"VIN Lookup","车型查询":"Vehicle Filter","输入 VIN 或 ID，如 LSJWH4092PU123456 / CDI1000":"Enter VIN or ID, e.g. LSJWH4092PU123456 / CDI1000","请输入 VIN 或 ID，如 LSJWH4092PU123456 / CDI1000":"Enter VIN or ID, e.g. LSJWH4092PU123456 / CDI1000","国家/地区":"Region","品牌":"Make","车型":"Model","年款":"Year","排量":"Capacity","发动机":"Engine","底盘":"Chassis","车系":"Series","功率":"Power","车身":"Body","燃料":"Fuel","驱动":"Drive","变速箱":"Transmission","产地":"Origin","配置":"Variant","不限":"Any","全部品牌":"All makes","全部地区":"All regions","全部产品":"All products","品牌筛选：":"Make: ","国家/地区：":"Region: ","请至少填写一个字段":"Enter at least one field","无匹配":"No match","无匹配项":"No match","当前条件组合下暂无候选":"No candidates under the current filters","未找到匹配车型。可清空部分条件后再试":"No matching vehicles. Try clearing some filters.","条车型":" vehicles","找到":"Found ","未找到匹配车型。":"No matching vehicles.","← 返回":"← Back","品牌 WMI":"WMI","车型配置":"Model code","校验位":"Check digit","工厂":"Plant","序列号":"Serial","实际VIN":"Actual VIN","VIN 前缀":"VIN prefix","VIN前缀":"VIN prefix","关联产品":"Linked products","关联车型":"Linked vehicles","暂无产品":"No products","该车型暂无关联产品":"No products linked to this vehicle","该产品暂未关联任何车型":"No vehicles linked to this product","座位数":"Seats","车门数":"Doors","气缸数":"Cylinders","每缸气门":"Valves/cyl.","档位数":"Gears","方向盘":"Steering","起始年":"Year from","截止年":"Year to","排量(L)":"Capacity (L)","产国":"Origin country","互换号":"Interchange","品名":"Product","供应商":"Supplier","采购价":"Cost","备注":"Notes","位置":"Position","OE 号":"OE No.","中文名":"Chinese name","英文名":"English name","产品中文名":"Chinese name","产品英文名":"English name","左":"Left","右":"Right","前":"Front","后":"Rear","里":"Inner","外":"Outer","上":"Upper","下":"Lower","多个用逗号或换行分隔":"Separate with commas or new lines","登记实际 VIN":"Register actual VIN","输入实际 VIN 码":"Enter actual VIN","当前已登记：":"Registered: ","当前无登记":"None registered","输入 OE 号或 CDAP 号，如 90915-10009 / A123":"Enter OE or CDAP No., e.g. 90915-10009 / A123","请输入 OE 号或 CDAP 号":"Enter an OE or CDAP number","添加产品":"Add product","删除该产品":"Delete this product","编辑产品":"Edit product","编辑产品：":"Edit product: ","＋ 添加产品":"+ Add product","＋产品":"+ Product","暂无带 OE / CDAP 号码的产品":"No products with OE / CDAP numbers","无匹配产品，请调整关键词":"No matching products, adjust the keyword","请先从下拉中选择一个产品名称":"Select a product name from the list first","请填写产品中文名":"Enter the Chinese product name","产品名称（搜索品类名称）":"Product name (search the catalogue)","从产品品类中选择名称自动填充，填写编号后保存；所有字段均相同视为重复":"Pick a name from the catalogue, fill in the numbers and save. Records with identical fields count as duplicates.","输入中文 / 英文名称搜索…":"Search by Chinese / English name…","规格":"Spec","数量":"Qty","暂无品类":"No categories yet","暂无品类，点击右上「＋ 新增品类」添加":"No categories. Click \"+ Add category\" at the top right.","无匹配品类":"No matching categories","＋ 新增品类":"+ Add category","删除品类":"Delete category","编辑品类":"Edit category","请选择上级品类":"Select a parent category","请填写品类代码":"Enter a category code","品类代码仅限 1-10 位字母 / 数字 / 连字符":"Category code: 1-10 letters, digits or hyphens","一级":"Level 1","二级":"Level 2","三级":"Level 3","（未命名）":"(unnamed)","未命名":"Unnamed","品类中文名：":"Category Chinese name: ","品类英文名：":"Category English name: ","请先点击「模板下载」获取标准模板。":"Download the standard template first.","请检查文件内容":"Check the file contents","文件为空或无有效数据":"The file is empty or has no valid data","无可用数据：":"No usable data: ","模板列名不正确，缺少必填列：":"Incorrect template columns, missing required: ","正在导入 ":"Importing ","正在生成 Excel…":"Generating Excel…","正在生成 Excel，请稍候…":"Generating Excel, please wait…","正在加载车型数据并生成 Excel...":"Loading vehicles and generating Excel…","无数据可导出":"No data to export","导出失败：无数据":"Export failed: no data","导出失败：无数据或服务器错误":"Export failed: no data or server error","导出请求失败":"Export request failed","请先查询（车型筛选 / VIN / ID）得到结果后再点导出":"Run a search (filter / VIN / ID) before exporting","解析/导入失败：":"Parse/import failed: ","未找到该车型（id 缺失）":"Vehicle not found (missing id)","未找到 ID 为":"No vehicle with ID ","品牌/车型 至少有一项为空":"Make and model must both be filled","含有非法字符（VIN 不含 I、O、Q）":"contains invalid characters (VIN excludes I, O, Q)","以下 VIN 不合法（须 17 位且不含 I/O/Q）：":"Invalid VINs (must be 17 characters, no I/O/Q): ","单条车型最多登记 50 个实际 VIN，当前":"At most 50 actual VINs per vehicle, currently ","为该车型登记/更新实际 17 位 VIN 码（多条用逗号、换行或分号分隔，每条须合法 VIN；提交即覆盖）":"Register or update the actual 17-character VINs (separate with commas, new lines or semicolons; each must be valid; submitting overwrites)","车型库导入模板.xlsx":"vehicle-library-template.xlsx","车型库导出_":"vehicle-library_","车型库模板":"Vehicle Library","车型库":"Vehicle Library","项关联产品）":" linked product(s))","关联车型：":"Linked vehicles: ","该产品还有":"This product still has ","个关联车型，请先解除所有关联后再删除":" linked vehicle(s). Unlink them all before deleting.","解除关联":"Unlink","你无权编辑该地区的车型产品":"You cannot edit products for this region","无权修改该品类下的产品":"You cannot modify products in this category","无权删除该品类下的产品":"You cannot delete products in this category","无权管理该品类产品的关联车型":"You cannot manage linked vehicles for this category","该 ID 对应的车型不在你可编辑的地区范围内":"This vehicle is outside the regions you can edit","匹配到的车型不在你可编辑的地区范围内。":"The matched vehicle is outside the regions you can edit.","请联系管理员调整地区组权限。":"Ask an administrator to adjust your region group.","你尚未被分配任何管理品类":"You have no assigned categories","你无权在该品类（":"You cannot add products in category (","）下添加产品":")","仅 WMI 品牌级匹配":"WMI brand-level match only","精确匹配":"Exact match","精确匹配（年款筛选）":"Exact match (year filtered)","✅ VDS 唯一判定":"✅ Unique VDS match","✅ 实际VIN码精确命中（已核实）":"✅ Exact actual-VIN match (verified)","✅ VIN 相似度匹配（参考":"✅ VIN similarity match (ref. ","⚠ VIN 相似度参考（":"⚠ VIN similarity (ref. ","⚠ VDS 多车型碰撞（":"⚠ VDS collision (","✅ VDS 多车型碰撞（":"⚠ VDS collision (","无 VDS 判定，":"No VDS match, ","个候选待人工确认":" candidate(s) need review","个候选":" candidate(s)","个候选）":" candidate(s))","按 ID 精确匹配到":"Exact match by ID: ","与车型库一致":"Matches library","与车型库不符":"Mismatch with library","位匹配":"-digit match","前 ":"First ","联网官方核对（NHTSA 美国交通部）":"Verify online (NHTSA · US DOT)","官方数据库（NHTSA vPIC · 美国交通部）":"Official database (NHTSA vPIC · US DOT)","NHTSA 无此 VIN 数据":"No NHTSA data for this VIN","查询 NHTSA 官方库中…":"Querying NHTSA…","官方查询失败：":"Official lookup failed: ","—— 多为中国/澳洲等未在美注册车型。请以本工具\"车型系列码（真实 VIN 样本）\"或车型库为参考，并交叉核对实车铭牌。":"— usually a China/Australia model not registered in the US. Use this tool's VDS codes (real VIN samples) or the vehicle library as reference, and cross-check the nameplate.","Markdown 编辑":"Markdown","实时预览":"Preview","一级标题":"Heading 1","二级标题":"Heading 2","三级标题":"Heading 3","粗体":"Bold","斜体":"Italic","代码":"Code","列表":"Bullet list","有序列表":"Numbered list","引用":"Quote","分隔线":"Divider","表格":"Table","• 列表":"• List","1. 列表":"1. List","❝ 引用":"❝ Quote","— 分隔线":"— Divider","☷ 表格":"☷ Table","写下你的建议或问题…":"Write your suggestion or question…","输入回复…":"Write a reply…","暂无反馈，写下你的第一条建议吧":"No feedback yet. Write your first suggestion.","确定删除这条反馈？":"Delete this feedback?","回复 · ":" replied · ","暂无日志":"No activity yet","确定删除产品「":"Delete product \"","」吗？此操作不可撤销。":"\"? This cannot be undone.","确定要删除「":"Delete \"","」？此操作不可撤销。":"\"? This cannot be undone.","确定要删除产品「":"Delete product \"","确定要解除该车型（":"Remove the link to vehicle (","）与产品的关联吗？":"\") from this product?","」吗？\n若该产品下已有产品号码，系统将拒绝删除。":"\"? If it still has part numbers, the system will refuse to delete it.","已存在完全相同的产品（id":"An identical product already exists (id ","），不可重复添加：\n":"), cannot be added twice:\n","产品数据加载中…":"Loading products…","产品数据加载中，稍候自动显示…":"Loading products, please wait…","产品数据异常":"Product data error","品类数据异常":"Category data error","该品类下暂无产品（该车型共":"No products in this category (vehicle has ","品牌:":"Make:","地区:":"Region:","，前 ":" , first ","/11 位一致）":", first 11 digits match)","/11 位一致），":", first 11 digits match), ","未匹配到车型。":"No matching vehicle.","导出请求失败：":"Export request failed: ","再次输入新密码":"Re-enter new password","代码（如 G1）":"Code (e.g. G1)","车型备注":"Vehicle note","(我)":"(me)","个车型）":" vehicle(s))","，但此具体车型未收录，建议补充车型库。":", but this specific model is not in the library. Consider adding it.","重复：该车型已存在相同产品（":"Duplicate: this vehicle already has the same product (","），请修改后重试":"). Please adjust and retry.","位，标准 VIN 为 17 位":" characters; a standard VIN is 17 characters","厂商":"Make","系列":"Series","中国":"China","日本":"Japan","韩国":"Korea","德国":"Germany","法国/西班牙等":"France / Spain etc.","英国":"United Kingdom","意大利":"Italy","瑞典/芬兰":"Sweden / Finland","瑞士/捷克等":"Switzerland / Czech etc.","美国":"United States","加拿大":"Canada","墨西哥":"Mexico","巴西":"Brazil","澳大利亚":"Australia","该产品还有 ":"This product still has ","筛选结果":"Filtered ","（已加载":" (loaded "," / 共":" / "," 条）":" total)","我":"me"," 条":" record(s)"," 条。":" record(s). "," 条错误":" error(s)"," 条，跳过 ":" record(s), skipped ","...共 ":"...total ","</b> 条":"</b> record(s)","前几条错误：":"First few errors:","单条车型最多登记 50 个实际 VIN，当前 ":"At most 50 actual VINs per vehicle, currently ","导入完成：成功 ":"Import complete: ","导入完成：成功 <b>":"Import complete: <b>","导入结果：成功 ":"Import result: ","导出失败：HTTP ":"Export failed: HTTP ","已存在完全相同的产品（id ":"An identical product already exists (id ","未找到 ID 为 ":"No vehicle with ID ","确定要删除品类「":"Delete category \"","请先选择一个车型，再添加产品":"Select a vehicle before adding products","（跳过 ":" (skipped ","，跳过 ":", skipped ","我已了解":"Got it","确定要删除品类「」吗？":"Delete this category?","另有 ":"Another "," 条产品记录未填写品类":" product record(s) have no category"};
+
+let LANG = 'zh';
+try { const v = localStorage.getItem(LANG_KEY); if(v === 'en' || v === 'zh') LANG = v; } catch(e){}
+
+function t(s){
+  if(LANG !== 'en' || !s) return s;
+  return I18N_EN[s] !== undefined ? I18N_EN[s] : s;
+}
+// 名称类字段的中英文由数据库字段提供（o.cn / o.en），i18n 只负责选列，
+// 不硬编码、不翻译、不改写任何数据库内容。
+function nm(o, base){
+  if(!o) return '';
+  if(LANG === 'en'){
+    const en = o[base + 'en'] !== undefined ? o[base + 'en'] : o.en;
+    if(en) return en;
+    return o[base + 'cn'] || o.cn || '';
+  }
+  return o[base + 'cn'] !== undefined ? o[base + 'cn'] : (o.cn || o.en || '');
+}
+
+let _i18nBusy = false;
+
+const _i18nOrig = new WeakMap();   // 文本节点 → 原始中文
+const _i18nAttrOrig = new WeakMap(); // 元素 → {attr: 原始值}
+
+const ATTR_I18N = ['placeholder','title','alt','aria-label'];
+// 不进入的区域：脚本/样式/可编辑区。
+// 注意 TEXTAREA 只跳过「文本内容」（用户输入不能被翻），它的 placeholder 仍要翻，
+// 所以在 _walk 里对 textarea 单独处理，不放进这里。
+const SKIP_TAGS = {SCRIPT:1, STYLE:1, NOSCRIPT:1, CODE:1, PRE:1};
+
+// 整片子树交给业务代码自己管，i18n 层不进入：
+//   #paneLog          操作日志，服务端以中文写入，翻了会中英混搭。
+//   .filter-dropdown  15 个联想下拉。一次筛选变更会重建约 1.4 万个选项节点，
+//                     全页翻译和 observer 都要白扫一遍 —— 英文界面卡顿主因。
+//                     选项就是车型库原值（不做任何翻译），字典翻译毫无作用。
+//   .vcard            车型卡片：VID + 14 行字段值，全是数据。查泰国时会有
+//                     11380 张卡片（十几万个文本节点），整片跳过。
+//                     卡片外的 #cardsProds、空状态提示仍在翻译范围内。
+//   .fld-vert         车型筛选 15 字段。选项值一律来自车型库原值，不翻译、不转换；
+//                     标签本来就是 REGION/MAKE/MODEL 英文缩写，无需字典介入。
+const NO_I18N_SEL = '#paneLog, .filter-dropdown, .vcard, .fld-vert, .ptab tbody tr:not(.pgrp-tr) > td';
+
+function _trText(node, skipGuard){
+  const raw = node.nodeValue;
+  if(!raw) return;
+  const key = raw.trim();
+  if(!key) return;
+  if(!/[A-Za-z\u4e00-\u9fff]/.test(key)) return;
+  // 永不翻译区域内的文本直接放过。
+  // skipGuard：_walk 的 TreeWalker 已经 REJECT 掉整棵 #paneLog 子树，
+  // 这里再对每个文本节点 closest() 一次纯属重复（2000 张卡片 = 上万次 DOM 回溯）。
+  if(!skipGuard && NO_I18N_SEL && node.parentElement && node.parentElement.closest(NO_I18N_SEL)) return;
+  // 双语元素（data-zh/data-en）的文本由 _trDual 独占管理，字典不再插手，
+  // 否则两边都改写同一个节点，最终显示哪个取决于执行顺序。
+  if(node.parentElement && node.parentElement.hasAttribute &&
+     (node.parentElement.hasAttribute('data-zh') || node.parentElement.hasAttribute('data-en'))) return;
+
+  if(LANG === 'en'){
+    if(!I18N_EN.hasOwnProperty(key)) return;         // 不在字典 → 用户数据，跳过
+    if(!_i18nOrig.has(node)) _i18nOrig.set(node, raw);
+    const lead = raw.match(/^\s*/)[0], trail = raw.match(/\s*$/)[0];
+    node.nodeValue = lead + I18N_EN[key] + trail;
+  } else {
+    if(_i18nOrig.has(node)){
+      node.nodeValue = _i18nOrig.get(node);
+      _i18nOrig.delete(node);
+    }
+  }
+}
+
+// 双语元素：元素自带 data-zh / data-en 两份文案，按当前语言只显示其中一份。
+// 用于「中文模式显示中文、英文模式显示英文」的标签（如筛选器的 REGION / 国家·地区）。
+// 与字典翻译的区别：这里不是查表替换，而是同一元素上并存的两份原文。
+function _trDual(el){
+  if(!el || el.nodeType !== 1) return;
+  const zh = el.getAttribute('data-zh');
+  const en = el.getAttribute('data-en');
+  if(zh === null && en === null) return;
+  const want = (LANG === 'en') ? (en !== null ? en : zh) : (zh !== null ? zh : en);
+  if(want === null) return;
+  // 用 textContent 整体替换：这类标签只含纯文本，没有子结构。
+  // 已经是目标值就不动，避免无谓的 mutation（会再次触发 observer）。
+  if(el.textContent === want) return;
+  el.textContent = want;
+}
+
+function _trAttrs(el, skipGuard){
+  // 永不翻译区域内的属性也不动（_walk 路径由 TreeWalker 保证，免重复回溯）
+  if(!skipGuard && NO_I18N_SEL && el.closest && el.closest(NO_I18N_SEL)) return;
+  for(const a of ATTR_I18N){
+    const v = el.getAttribute(a);
+    if(!v) continue;
+    const key = v.trim();
+    if(!key) continue;
+    if(LANG === 'en'){
+      if(!I18N_EN.hasOwnProperty(key)) continue;
+      let m = _i18nAttrOrig.get(el); if(!m){ m = {}; _i18nAttrOrig.set(el, m); }
+      // 记录「当前这次的中文原文」。有些属性会被 JS 在运行时反复重写（如输入框
+      // placeholder 随模式变化），若只在首次记录，之后切回中文会还原成旧值。
+      m[a] = v;
+      el.setAttribute(a, I18N_EN[key]);
+    } else {
+      const m = _i18nAttrOrig.get(el);
+      if(m && (a in m)){ el.setAttribute(a, m[a]); delete m[a]; }
+    }
+  }
+}
+
+function _walk(root){
+  if(!root) return;
+  if(root.nodeType === 3){ _trText(root); return; }
+  if(root.nodeType !== 1) return;
+  if(SKIP_TAGS[root.tagName]) return;
+  // 永不翻译区域：整棵子树跳过（#paneLog 操作日志）
+  if(NO_I18N_SEL && root.matches && root.matches(NO_I18N_SEL)) return;
+  _trDual(root);
+  _trAttrs(root);
+  // 【不要用 querySelectorAll('[title],...') 批量预扫属性】
+  // 它会绕过 TreeWalker 的 NO_I18N_SEL 排除：车型卡片每一行都带 title，
+  // 大结果集下会收集十几万个元素再逐个 closest()，实测把主线程锁死 15s+，
+  // 表现就是「页面点不动」。属性翻译交给下面的 TreeWalker，被 REJECT 的
+  // 整片数据区根本不会遍历到，比批量查询更快也更安全。
+  // textarea 只翻 placeholder 等属性，内部文本是用户输入内容，不碰
+  if(root.tagName === 'TEXTAREA') return;
+
+  // 双语元素（data-zh/data-en）必须在这里整片预扫一遍。
+  //
+  // 为什么不能只靠下面的 TreeWalker：acceptNode 里对双语元素返回的是
+  // FILTER_REJECT，而 REJECT 的元素本身**不会被 nextNode() 返回**，
+  // 循环里那句 _trDual(n) 根本收不到它。只有根节点自己碰巧是双语元素时才会翻到。
+  // 结果就是「首次加载语言已是英文」时，导航和筛选器标签停在中英混排，
+  // 而走 setLang() 切换因为有末尾补扫才正常 —— 两条路径表现不一致。
+  try {
+    if(root.querySelectorAll){
+      const duals = root.querySelectorAll('[data-zh],[data-en]');
+      for(const d of duals) _trDual(d);
+    }
+  } catch(e){}
+
+  const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT, {
+    acceptNode(n){
+      if(n.nodeType === 1){
+        if(SKIP_TAGS[n.tagName]) return NodeFilter.FILTER_REJECT;
+        // FILTER_REJECT 会连同整棵子树一起跳过，所以永不翻译区域用 REJECT 而不是 SKIP，
+        // 否则从祖先容器扫下来时仍会进入 #paneLog 内部把日志翻成英文。
+        if(NO_I18N_SEL && n.matches && n.matches(NO_I18N_SEL)) return NodeFilter.FILTER_REJECT;
+        // 双语元素：文本已由上面一轮预扫定好，字典不再插手
+        if(n.hasAttribute && (n.hasAttribute('data-zh') || n.hasAttribute('data-en')))
+          return NodeFilter.FILTER_REJECT;
+      }
+      return NodeFilter.FILTER_ACCEPT;
+    }
+  });
+  let n;
+  while((n = w.nextNode())){
+    if(n.nodeType === 3) _trText(n, true);
+    // 元素节点的属性在这里处理。双语元素已被 acceptNode REJECT，
+    // 上面的 data-zh/data-en 预扫负责它们；大数据区同样进不来。
+    else if(n.nodeType === 1) _trAttrs(n, true);
+  }
+}
+
+function applyI18n(root){
+  // 自保护：即便调用方忘了置 _i18nBusy，这里也不让 observer 介入自身写入
+  const prev = _i18nBusy;
+  _i18nBusy = true;
+  try {
+    _walk(root || document.body);
+    document.documentElement.lang = (LANG === 'en') ? 'en' : 'zh-CN';
+    const btn = document.getElementById('langBtn');
+    if(btn) btn.textContent = (LANG === 'en') ? '中文' : 'EN';
+  } finally {
+    _i18nBusy = prev;
+  }
+}
+
+function setLang(l){
+  LANG = (l === 'en') ? 'en' : 'zh';
+  try { localStorage.setItem(LANG_KEY, LANG); } catch(e){}
+
+  // i18n 只处理静态界面文案：一次性重扫，不监听 DOM。
+  // 动态渲染的内容全是数据库数据（车型 / 产品 / 品类 / 地区），不归 i18n 管。
+  applyI18n(document.body);
+
+  // 地区显示值来自车型库英文列，不属于 i18n 字典。
+  // 这里只就地替换已渲染的文本，不重查、不重建下拉（避免大结果集长任务）。
+  try { if(typeof _refreshRegionDisplay === 'function') _refreshRegionDisplay(); }
+  catch(e){ console.warn('[region] refresh failed:', e.message); }
+
+  // 品类名 / 产品名由 nm() 读数据库英文字段，切语言时只需重绘可见的树
+  const visible = id => { const el = document.getElementById(id); return !!el && el.style.display !== 'none'; };
+  const redraw = name => {
+    try { const f = window[name]; if(typeof f === 'function') f(); }
+    catch(e){ console.warn('[i18n] redraw ' + name + ' failed:', e.message); }
+  };
+  if(visible('paneS'))    redraw('renderProdTree');
+  // 函数名是 renderEditProdTree（曾误写 eRenderProdTree，导致编辑页产品树
+  // 在英文界面下不重绘、仍显示中文品名）。
+  if(visible('paneEdit')) redraw('renderEditProdTree');
+  if(visible('paneM'))    redraw('renderCats');
+  if(visible('panePm'))   redraw('renderPmAllProducts');
+  // 产品表格是 innerHTML 动态生成的，静态全页扫描够不到；切语言时只重扫
+  // 这两个小容器（不是 observer，不碰车型卡片大结果集）。
+  try { applyI18nProdPanel(document.getElementById('cardsProds'));
+        applyI18nProdPanel(document.getElementById('ecardsProds')); } catch(e){}
+  // 位置列是受控方位词，切语言时就地换文本（不重绘表格，不查库）。
+  try { _refreshLocCells(); } catch(e){}
+  // 结果计数是动态生成的（静态扫描够不到），按元素里的数字重算一次，
+  // 只改文本，不重查、不重绘卡片。
+  try {
+    if(typeof updateResultCount === 'function')     updateResultCount();
+    if(typeof updateEditResultCount === 'function') updateEditResultCount();
+  } catch(e){ console.warn('[i18n] refresh counts failed:', e.message); }
+
+  // 顶栏角色名
+  try {
+    if(typeof ROLE_NAMES !== 'undefined' && CURRENT_USER){
+      const el = document.getElementById('suRole');
+      if(el) el.textContent = t(ROLE_NAMES[CURRENT_USER.role] || CURRENT_USER.role);
+    }
+  } catch(e){}
+}
+
+function toggleLang(){ setLang(LANG === 'en' ? 'zh' : 'en'); }
+
+
+/* ---- 补词典：9476bc4 基线版特有、改造版字典里没有的文案 ---- */
+Object.assign(I18N_EN, {
+  '输入 VIN 码或 ID，如 LSJWH4092PU123456 或 CDI1000': 'Enter a VIN or ID, e.g. LSJWH4092PU123456 or CDI1000',
+  '请输入 VIN 码或 ID（如 CDI1000）': 'Enter a VIN or ID (e.g. CDI1000)',
+  '（同名多配置）': ' (same name, multiple variants)',
+  '产品型号加载中…': 'Loading products…',
+  '正在后台加载产品数据，稍候自动显示…': 'Loading products, please wait…',
+  '该车型暂无关联产品（可从左侧品类树「＋」添加）': 'No products linked to this vehicle (add from the category tree on the left)',
+  '产品筛选': 'Product Filter',
+  '查找': 'Search',
+  '搜索产品（支持中英文）': 'Search products…',
+  '所有类别': 'All categories',
+  '帮助与反馈': 'Help & Feedback',
+  '未找到匹配车型，可清空部分条件后再试': 'No matching vehicles. Try clearing some filters.',
+  '加载中...': 'Loading…',
+  '搜索中...': 'Searching…',
+  '无法加载品类数据：': 'Unable to load categories: ',
+  '未找到匹配车型。': 'No matching vehicles.',
+  '实际VIN': 'Actual VIN',
+  '车型配置': 'Model code',
+  '校验位': 'Check digit',
+  '工厂': 'Plant',
+  '序列号': 'Serial',
+  '+ 添加 VIN 码': '+ Add VIN'
+});
+
+/* ---- 产品表格：局部 applyI18n(container)，不上全局 observer ----
+   表头 / 按钮 / 空状态 / 提示是静态界面文案；tbody 数据行 td 已在
+   NO_I18N_SEL 里整片排除（品名、OE、品牌、位置、备注、供应商…都是数据库值）。
+   数据行里的按钮被 td 的 REJECT 一起跳过，单独作为 root 补翻一次。 */
+function applyI18nProdPanel(box){
+  if(!box || box.nodeType !== 1 || !box.innerHTML) return;
+  applyI18n(box);
+  for(const b of box.querySelectorAll('.ptab tbody button')) applyI18n(b);
+}
+
+/* ---- 语言按钮：插到侧栏底部用户区最前面，随用户区一起贴底 ---- */
+function _ensureLangBtn(){
+  if(document.getElementById('langBtn')) return;
+  const user = document.getElementById('sideUser');
+  if(!user) return;
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'lang-btn';
+  btn.id = 'langBtn';
+  btn.title = 'Switch language';
+  btn.setAttribute('onclick', 'event.stopPropagation();toggleLang()');
+  user.insertBefore(btn, user.firstChild);
+}
+
+/* ---- 切语言后：地区显示值就地换文本（数据来自车型库，不是 i18n）----
+   不重建下拉、不重发 /api/filter-options、不重新查询卡片，
+   否则一次切换会再渲染上万张卡片，正是之前「点不动」的根因。 */
+function _refreshRegionDisplay(){
+  ['fRegion','efRegion'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el && el.value) el.value = regShow(regRaw(el.value));
+  });
+  // 只有 region 两个下拉带 data-cn（其余字段是车型库原值，不随语言变化）；
+  // 值没变就不写 DOM，避免大结果集下上万次无谓 mutation。
+  document.querySelectorAll('.filter-dropdown-item[data-cn]').forEach(el => {
+    const want = regShow(el.dataset.cn);
+    if(el.textContent !== want) el.textContent = want;
+  });
+  const lr = document.getElementById('libRegion');
+  if(lr){
+    // 空值那项是「全部地区 / All regions」占位符，走字典；有值的读地区英文列。
+    for(const o of lr.options){
+      const want = o.value ? regShow(o.value) : t('全部地区');
+      if(o.textContent !== want) o.textContent = want;
+    }
+  }
+  // 车型库品牌下拉占位符同样是字典文案，init() 重建后要跟着语言走。
+  const lb = document.getElementById('libBrand');
+  if(lb && lb.options.length && !lb.options[0].value){
+    const want = t('全部品牌');
+    if(lb.options[0].textContent !== want) lb.options[0].textContent = want;
+  }
+}
+
+/* ---- 切语言后：产品「位置」列就地换文本 ----
+   loc 是受控方位词（左/右/前/后… 可组合成「左前下」），数据来自库，
+   不归 i18n 字典管；这里按 data-loc 存的原始中文重算显示值。
+   只改这几个 td 的文本，不重绘表格、不访问后端。 */
+function _refreshLocCells(){
+  if(typeof locShow !== 'function') return;
+  document.querySelectorAll('td[data-loc]').forEach(td => {
+    const raw = td.getAttribute('data-loc') || '';
+    const want = raw ? locShow(raw) : '—';
+    if(td.textContent !== want) td.textContent = want;
+  });
+}
+
+function _initI18n(){
+  _ensureLangBtn();
+  // 静态文案在 DOMContentLoaded 时已全部就位，一次扫描即可。
+  applyI18n(document.body);
+}
+if(document.readyState === 'loading')
+  document.addEventListener('DOMContentLoaded', _initI18n);
+else
+  _initI18n();
 </script>
 </body>
 </html>

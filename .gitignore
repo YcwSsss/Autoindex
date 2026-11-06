@@ -28,6 +28,8 @@ _check_vin.py
 _page_check.html
 test_match.js
 library_dump.json
+_dangling_archive_*.csv
+_dangling_report.html
 
 # OS files
 .DS_Store
