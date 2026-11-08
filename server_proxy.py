@@ -90,14 +90,17 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 q = parse_qs(urlparse(self.path).query)
                 filters = {k: v[0] for k, v in q.items()}
                 options = dbstore.get_filter_options(filters)
-                # 地区组权限：CDC 只看澳新，CDI 排除澳新
+                # 地区组权限：CDC 只看澳新，CDI 排除澳新。
+                # 地区值来自车型库英文列 region_en，比较也用该列值。
                 user = self._session_user()
                 if user:
                     rg = (user.get('region_group') or '').strip()
-                    if rg == 'CDC':
-                        options['region'] = [r for r in options.get('region', []) if r == '澳新地区']
-                    elif rg == 'CDI':
-                        options['region'] = [r for r in options.get('region', []) if r != '澳新地区']
+                    if rg in ('CDC', 'CDI'):
+                        anz = dbstore.anz_region_en()
+                        if rg == 'CDC':
+                            options['region'] = [r for r in options.get('region', []) if r == anz]
+                        else:
+                            options['region'] = [r for r in options.get('region', []) if r != anz]
                 return self._send_json({'ok': True, 'options': options})
             except Exception as e:
                 return self._send_json({'ok': False, 'error': str(e)}, 500)

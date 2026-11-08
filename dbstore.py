@@ -380,7 +380,7 @@ def set_product_vehicle_remark(pid, vid, remark):
 def get_all_data(include_products=True):
     conn = get_db()
     c = conn.cursor()
-    vrows = c.execute("SELECT id," + ",".join(VEHICLE_COLS) + ",serial FROM vehicles").fetchall()
+    vrows = c.execute("SELECT id," + ",".join(VEHICLE_COLS) + ",serial,region_en FROM vehicles").fetchall()
     rows = [dict(r) for r in vrows]
 
     products = {}
@@ -412,24 +412,40 @@ def get_all_data(include_products=True):
             part = part.strip()
             if part:
                 _region_set.add(part)
-    regions = sorted(_region_set)
-    # 地区中英对照：regions 表优先，回退车型库 vehicles.region_en 列。
-    # 只供前端在英文界面下显示，查询/过滤仍用中文 region 列。
-    region_labels = {}
+    # 地区列表 = 车型库英文列 region_en（界面只显示英文，不翻译、不映射）。
+    _en_set = set()
     try:
-        for rl in c.execute("SELECT cn, en FROM regions "
-                            "WHERE en IS NOT NULL AND en != ''").fetchall():
-            k = (rl["cn"] or '').strip()
-            if k:
-                region_labels[k] = (rl["en"] or '').strip()
+        for _er in c.execute("SELECT DISTINCT region_en FROM vehicles "
+                            "WHERE region_en IS NOT NULL AND TRIM(region_en) != ''").fetchall():
+            _v = (_er[0] or '').strip()
+            if _v:
+                _en_set.add(_v)
     except Exception:
         pass
+    regions = sorted(_en_set) or sorted(_region_set)
+    # CDC（仅澳新）对应的英文地区值，同样取自车型库地区表英文列。
+    anz_region = ''
     try:
-        for rl in c.execute("SELECT DISTINCT region, region_en FROM vehicles "
-                            "WHERE region_en IS NOT NULL AND region_en != ''").fetchall():
-            k = (rl["region"] or '').strip()
-            if k and k not in region_labels:
-                region_labels[k] = (rl["region_en"] or '').strip()
+        _anz = c.execute("SELECT en FROM regions WHERE UPPER(code)='ANZ' "
+                        "AND en IS NOT NULL AND en != '' LIMIT 1").fetchone()
+        if _anz:
+            anz_region = (_anz[0] or '').strip()
+    except Exception:
+        pass
+    if not anz_region:
+        for _v in regions:
+            if 'Australia' in _v or 'NZ' in _v:
+                anz_region = _v
+                break
+    # 同一批记录的中文原值列 region：仅供 canEditRegion 兼容老调用点，
+    # 界面显示永远不用它。值同样直接查车型库，不构造对照表。
+    anz_region_cn = ''
+    try:
+        _anz_cn = c.execute("SELECT DISTINCT region FROM vehicles "
+                            "WHERE region_en=? AND region IS NOT NULL "
+                            "AND TRIM(region) != '' LIMIT 1", [anz_region]).fetchone()
+        if _anz_cn:
+            anz_region_cn = (_anz_cn[0] or '').strip()
     except Exception:
         pass
     prefixes = sorted({r["prefix"] for r in rows if r["prefix"]})
@@ -438,7 +454,8 @@ def get_all_data(include_products=True):
         "source": "SQLite (vin_data.db)",
         "brands": brands,
         "regions": regions,
-        "region_labels": region_labels,
+        "anz_region": anz_region,
+        "anz_region_cn": anz_region_cn,
         "nRecords": len(rows),
         "nPrefixes": len(prefixes),
         "nWmi": len(wmis),
@@ -478,8 +495,8 @@ def get_vehicles_page(limit=200, offset=0, q="", brand="", region="", serial="")
         where.append("UPPER(brand) = UPPER(?)")
         params.append(brand)
     if region:
-        where.append("region LIKE ?")
-        params.append(f"%{region}%")
+        where.append("(region LIKE ? OR region_en LIKE ?)")
+        params.extend([f"%{region}%", f"%{region}%"])
     if serial:
         # 车型 ID（CDI 流水号）精确查询，大小写不敏感；前端搜索框用这个
         where.append("UPPER(serial) = UPPER(?)")
@@ -489,13 +506,13 @@ def get_vehicles_page(limit=200, offset=0, q="", brand="", region="", serial="")
     if limit is None:
         # 不限制，返回全部
         rows = c.execute(
-            f"SELECT id," + ",".join(VEHICLE_COLS) + ",serial" +
+            f"SELECT id," + ",".join(VEHICLE_COLS) + ",serial,region_en" +
             f" FROM vehicles{where_sql} ORDER BY id",
             params
         ).fetchall()
     else:
         rows = c.execute(
-            f"SELECT id," + ",".join(VEHICLE_COLS) + ",serial" +
+            f"SELECT id," + ",".join(VEHICLE_COLS) + ",serial,region_en" +
             f" FROM vehicles{where_sql} ORDER BY id LIMIT ? OFFSET ?",
             params + [limit, offset]
         ).fetchall()
@@ -503,11 +520,24 @@ def get_vehicles_page(limit=200, offset=0, q="", brand="", region="", serial="")
     return [dict(r) for r in rows], int(total)
 
 
+def anz_region_en():
+    """CDC 地区组（仅澳新）对应的英文地区值，取自车型库英文列。"""
+    conn = get_db()
+    row = conn.execute("SELECT DISTINCT region_en FROM vehicles "
+                       "WHERE region LIKE '%澳新%' AND region_en IS NOT NULL "
+                       "AND TRIM(region_en) != '' LIMIT 1").fetchone()
+    if not row:
+        row = conn.execute("SELECT en FROM regions WHERE UPPER(code)='ANZ' "
+                           "AND en IS NOT NULL AND en != '' LIMIT 1").fetchone()
+    conn.close()
+    return (row[0] or '').strip() if row else ''
+
+
 def list_regions():
     """返回所有不重复的地区列表（拆分逗号分隔的多值，按名称排序）。"""
     conn = get_db()
     c = conn.cursor()
-    rows = c.execute("SELECT region FROM vehicles WHERE region IS NOT NULL AND region != ''").fetchall()
+    rows = c.execute("SELECT region_en FROM vehicles WHERE region_en IS NOT NULL AND TRIM(region_en) != ''").fetchall()
     conn.close()
     seen = set()
     for r in rows:
@@ -536,20 +566,24 @@ def get_filter_options(filters: dict) -> dict:
     c = conn.cursor()
     result = {}
     for field in _FILTER_FIELDS:
-        # 构建 WHERE：用 filters 中除当前字段外的所有条件
+        # region 用车型库英文列 region_en，其余字段用自身列。
+        col = "region_en" if field == "region" else field
         where_parts = []
         params = []
         for f, v in filters.items():
             if f == field or not v:
                 continue
             if f in _FILTER_FIELDS:
-                where_parts.append(f"[{f}] LIKE ?")
-                params.append(f"%{v}%")
-        # 加 NOT NULL / NOT EMPTY 条件
-        where_parts.append(f"[{field}] IS NOT NULL AND [{field}] != ''")
+                if f == "region":
+                    where_parts.append("(region LIKE ? OR region_en LIKE ?)")
+                    params.extend([f"%{v}%", f"%{v}%"])
+                else:
+                    where_parts.append(f"[{f}] LIKE ?")
+                    params.append(f"%{v}%")
+        where_parts.append(f"[{col}] IS NOT NULL AND [{col}] != ''")
         where_sql = " WHERE " + " AND ".join(where_parts)
         rows = c.execute(
-            f"SELECT DISTINCT [{field}] FROM vehicles{where_sql} ORDER BY [{field}]",
+            f"SELECT DISTINCT [{col}] FROM vehicles{where_sql} ORDER BY [{col}]",
             params
         ).fetchall()
         result[field] = [r[0] for r in rows]
@@ -946,7 +980,12 @@ def add_vehicle(rec):
         row = c.execute("SELECT MAX(CAST(SUBSTR(serial,4) AS INTEGER)) AS n "
                         "FROM vehicles WHERE serial LIKE 'CDI%'").fetchone()
         rec["serial"] = "CDI" + str((row["n"] or 999) + 1)
-    cols = VEHICLE_COLS + ["serial"]
+    if not rec.get("region_en"):
+        r = c.execute("SELECT en FROM regions WHERE cn=? AND en IS NOT NULL AND en != '' LIMIT 1",
+                     [rec.get("region")]).fetchone()
+        if r:
+            rec["region_en"] = (r[0] or '').strip()
+    cols = VEHICLE_COLS + ["serial", "region_en"]
     vals = [rec.get(col) for col in cols]
     cur = c.execute("INSERT INTO vehicles(" + ",".join(cols) + ") VALUES (" +
                     ",".join("?" * len(cols)) + ")", vals)
@@ -1345,7 +1384,7 @@ def export_vehicles_excel(vids=None, filters=None):
                     'YEAR': ('year',), 'CAPACITY': ('cap',), 'ENGINE': ('engine',),
                     'CHASSIS': ('chassis',), 'SERIES': ('series',), 'POWER': ('kw',),
                     'BODY': ('body',), 'FUEL': ('fuel',), 'DRIVE': ('drive',),
-                    'ORIGIN': ('origin',), 'REGION': ('region',),
+                    'ORIGIN': ('origin',), 'REGION': ('region', 'region_en'),
                 }
                 cols = field_map.get(key, ())
                 if not cols:

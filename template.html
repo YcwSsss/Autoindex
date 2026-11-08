@@ -994,39 +994,6 @@
 // 数据全部来自服务器 SQLite；页面启动时由 bootstrap() 从 /api/data 拉取。
 // 这里只声明可变容器，查询与编辑都基于它们；web 端的增删改直接写回 SQLite（不再用本机 localStorage）。
 let DATA = null;     // 车型库（数组）
-/* ===== 地区列：界面一律显示英文，数据层仍用中文原值 =====
-   META.region_labels 由 /api/data 返回（regions.cn/en + vehicles.region_en）。
-   显示统一用 regShow()，中英界面都返回英文列；
-   所有查询 / 过滤 / 权限判断一律 regRaw() 转回中文原值，
-   因为后端 vehicles.region 列存的是中文（canEditRegion 也按中文比对）。
-   注意：车型库导出仍输出中文原值，否则导出再导入会写坏 region 列。
-   没有任何轮询、observer 或全页扫描。 */
-function _regionEn(){
-  if(document.documentElement.lang === 'en') return true;
-  try { return localStorage.getItem('vin_tools_lang') === 'en'; } catch(e){ return false; }
-}
-function _regionMap(){
-  try { return (typeof META !== 'undefined' && META && META.region_labels) || {}; }
-  catch(e){ return {}; }
-}
-function regShow(v){
-  // 地区只保留英文一种显示，中文界面也不例外（不再跟随语言切换）。
-  if(!v) return v;
-  const m = _regionMap();
-  return m[v] || v;
-}
-function regRaw(v){
-  if(!v) return v;
-  const m = _regionMap();
-  if(Object.prototype.hasOwnProperty.call(m, v)) return v;
-  for(const cn in m){ if(m[cn] === v) return cn; }
-  return v;
-}
-function regVal(id){
-  const el = document.getElementById(id);
-  return regRaw(el ? (el.value || '').trim() : '');
-}
-
 /* ===== 车型 ID：vehicles.serial（CDI1000 格式）=====
    仅用于「显示」与「搜索入口」；产品关联、API 参数、DATA 内部键仍用 vid，不动。 */
 function idOf(r){ return (r && r.serial) ? String(r.serial) : ''; }
@@ -1242,7 +1209,7 @@ function init(){
   }
   // 地区下拉（车型库管理 + 产品编辑 - 车辆查询的 fRegion/fMake 已改为 input+datalist）
   const _regionOpts = (META && Array.isArray(META.regions))
-    ? META.regions.map(r=>`<option value="${esc(r)}">${esc(regShow(r))}</option>`).join('')
+    ? META.regions.map(r=>`<option value="${esc(r)}">${esc(r)}</option>`).join('')
     : '';
   ['libRegion','efRegion'].forEach(id => {
     const sel = document.getElementById(id);
@@ -1278,7 +1245,7 @@ function applyLibraryFilter(){
     const lc = document.getElementById('libCount');
     const _bf = (document.getElementById('libBrand')||{}).value;
     const _rf = (document.getElementById('libRegion')||{}).value;
-    const _filterHint = (_bf || _rf) ? `（已筛选${_rf ? ' 地区:'+regShow(_rf) : ''}${_bf ? ' 品牌:'+_bf : ''}）` : '';
+    const _filterHint = (_bf || _rf) ? `（已筛选${_rf ? ' 地区:'+_rf : ''}${_bf ? ' 品牌:'+_bf : ''}）` : '';
     if(lc) lc.textContent = `共 ${VEH_TOTAL || 0} 条${_filterHint}`;
   }, 300);
 }
@@ -1948,9 +1915,9 @@ function renderLibrary(){
   const regionF = document.getElementById('libRegion')?.value || '';
   let recs = DATA.slice();
   if(brandF) recs = recs.filter(r => r.brand === brandF);
-  if(regionF) recs = recs.filter(r => (r.region||'').split(',').map(s=>s.trim()).includes(regionF));
+  if(regionF) recs = recs.filter(r => (r.region_en||'').split(',').map(s=>s.trim()).includes(regionF));
   if(q) recs = recs.filter(r =>
-    (r.brand+' '+r.model+' '+r.sub+' '+r.prefix+' '+r.engine+' '+r.fuel+' '+r.body+' '+r.chassis+' '+r.series+' '+(r.vid||'')+' '+(r.vin17||'')+' '+(r.region||'')).toLowerCase().includes(q)
+    (r.brand+' '+r.model+' '+r.sub+' '+r.prefix+' '+r.engine+' '+r.fuel+' '+r.body+' '+r.chassis+' '+r.series+' '+(r.vid||'')+' '+(r.vin17||'')+' '+(r.region_en||'')).toLowerCase().includes(q)
   );
   // 顶部简短提示：仅在筛选/总数 > 已加载 时提示
   if(hint){
@@ -2770,7 +2737,7 @@ async function queryEditByAttrs(){
   document.querySelectorAll('#eoutF .vcard:not(.vcard-vin).active').forEach(c => c.classList.remove('active'));
   const out = document.getElementById('eoutF');
   if(!out) return;
-  const regionVal = regVal('efRegion');
+  const regionVal = (document.getElementById('efRegion').value || '').trim();
   const brandVal  = (document.getElementById('efMake').value || '').trim();
   const items = [
     ['MODEL',   (document.getElementById('efModel')  .value || '').trim().toUpperCase(),    r => String(r.model   || '').toUpperCase()],
@@ -4128,7 +4095,7 @@ async function queryByAttrs(){
   if(!out) return;
   
   // Collect filter values
-  const regionVal = regVal('fRegion');   // 英文显示值 -> 车型库中文原值
+  const regionVal = (document.getElementById('fRegion')?.value || '').trim();
   const brandVal = (document.getElementById('fMake')?.value || '').trim();
   
   const items = [
@@ -4347,7 +4314,7 @@ function onFilterChange(immediate, map){
     const filters = {};
     map.forEach(item => {
       const v = (document.getElementById(item.id)?.value || '').trim();
-      if(v) filters[item.field] = (item.field === 'region') ? regRaw(v) : v;
+      if(v) filters[item.field] = v;
     });
     // 请求服务端级联选项
     const params = new URLSearchParams(filters);
@@ -4370,18 +4337,18 @@ function onFilterChange(immediate, map){
         
         // 产品编辑页的 region 字段权限过滤
         if(isEditMap && item.field === 'region' && rg) {
+          const _anz = (META && META.anz_region) || '';
           if(rg === 'CDC') {
-            values = values.filter(v => v === '澳新地区');
+            values = values.filter(v => v === _anz);
           } else if(rg === 'CDI') {
-            values = values.filter(v => v !== '澳新地区');
+            values = values.filter(v => v !== _anz);
           }
         }
         
         // 取当前输入值做前缀过滤（联想）
-        const raw = (document.getElementById(item.id)?.value || '').trim();
-        const curVal = ((item.field === 'region') ? regRaw(raw) : raw).toLowerCase();
+        const curVal = (document.getElementById(item.id)?.value || '').trim().toLowerCase();
         const filtered = curVal ? values.filter(v => v.toLowerCase().includes(curVal)) : values;
-        dd.innerHTML = filtered.map(v => `<div class="filter-dropdown-item"${item.field === 'region' ? ` data-cn="${esc(v)}"` : ''} onmousedown="pickFilter('${item.id}','${esc(v).replace(/'/g,"\\'")}')">${esc(item.field === 'region' ? regShow(v) : v)}</div>`).join('');
+        dd.innerHTML = filtered.map(v => `<div class="filter-dropdown-item" onmousedown="pickFilter('${item.id}','${esc(v).replace(/'/g,"\\'")}')">${esc(v)}</div>`).join('');
       });
     } catch(e) { /* 静默失败 */ }
   };
@@ -4393,7 +4360,7 @@ function onFilterChange(immediate, map){
 function pickFilter(inputId, value){
   const inp = document.getElementById(inputId);
   if(inp) {
-    inp.value = regShow(value);   // 存显示值；查询时 regRaw() 转回中文原值
+    inp.value = value;
     const wrap = inp.closest('.filter-input-wrap');
     if(wrap) wrap.classList.add('has-value');
   }
@@ -4656,8 +4623,13 @@ function canEditRegion(region){
   if(!rg) return true; // admin 或未设置地区组的 pm 无限制
   const regions = String(region || '').split(',').map(s=>s.trim()).filter(Boolean);
   if(!regions.length) return false;
-  if(rg === 'CDC') return regions.includes('澳新地区');
-  if(rg === 'CDI') return regions.some(r => r !== '澳新地区');
+  // 比较值直接取车型库列：下拉/界面用英文列 region_en，
+  // 老调用点传中文原值列 region，两者都由数据库提供，不做翻译映射。
+  const _anzEn = (META && META.anz_region) || '';
+  const _anzCn = (META && META.anz_region_cn) || '';
+  const _isAnz = v => (_anzEn && v === _anzEn) || (_anzCn && v === _anzCn);
+  if(rg === 'CDC') return regions.some(_isAnz);
+  if(rg === 'CDI') return regions.some(r => !_isAnz(r));
   return true;
 }
 // 产品编辑页：根据地区组限制 efRegion 下拉选项
@@ -4668,8 +4640,8 @@ function setupEditRegionFilter(){
   if(!rg) return; // admin 无限制
   
   if(rg === 'CDC'){
-    // 强制设为澳新地区，禁用编辑
-    inp.value = '澳新地区';
+    // 强制锁定为 CDC 对应地区，值直接取车型库英文列 region_en
+    inp.value = (META && META.anz_region) || '';
     inp.disabled = true;
     const wrap = inp.closest('.filter-input-wrap');
     if(wrap) wrap.classList.add('has-value');
@@ -4991,7 +4963,7 @@ checkAuth();
 /* ==================================================================
    i18n 叠加层：9476bc4 原界面 + 中英双语（只翻译静态界面文案）
    - 车型库 / 产品库 / 品类 / 地区的值都来自数据库英文字段，前端不翻译；
-   - 地区显示由 regShow() 读 META.region_labels（车型库英文列），查询用 regRaw()；
+   - 地区值直接读车型库 region_en 英文列，前端不翻译、不映射；
    - 不挂 MutationObserver、不发额外接口、不轮询、不动业务表。
    ================================================================== */
 const LANG_KEY = 'vin_tools_lang';
@@ -5273,29 +5245,15 @@ function _ensureLangBtn(){
   user.insertBefore(btn, user.firstChild);
 }
 
-/* ---- 切语言后：地区显示值就地换文本（数据来自车型库，不是 i18n）----
-   不重建下拉、不重发 /api/filter-options、不重新查询卡片，
-   否则一次切换会再渲染上万张卡片，正是之前「点不动」的根因。 */
+/* ---- 切语言后：只更新下拉占位符 ----
+   地区值来自车型库 region_en 列，本身恒为英文，不随语言变化，无需任何重映射。
+   不重建下拉、不重发接口、不重新查询卡片。 */
 function _refreshRegionDisplay(){
-  ['fRegion','efRegion'].forEach(id => {
-    const el = document.getElementById(id);
-    if(el && el.value) el.value = regShow(regRaw(el.value));
-  });
-  // 只有 region 两个下拉带 data-cn（其余字段是车型库原值，不随语言变化）；
-  // 值没变就不写 DOM，避免大结果集下上万次无谓 mutation。
-  document.querySelectorAll('.filter-dropdown-item[data-cn]').forEach(el => {
-    const want = regShow(el.dataset.cn);
-    if(el.textContent !== want) el.textContent = want;
-  });
   const lr = document.getElementById('libRegion');
-  if(lr){
-    // 空值那项是「全部地区 / All regions」占位符，走字典；有值的读地区英文列。
-    for(const o of lr.options){
-      const want = o.value ? regShow(o.value) : t('全部地区');
-      if(o.textContent !== want) o.textContent = want;
-    }
+  if(lr && lr.options.length && !lr.options[0].value){
+    const want = t('全部地区');
+    if(lr.options[0].textContent !== want) lr.options[0].textContent = want;
   }
-  // 车型库品牌下拉占位符同样是字典文案，init() 重建后要跟着语言走。
   const lb = document.getElementById('libBrand');
   if(lb && lb.options.length && !lb.options[0].value){
     const want = t('全部品牌');
