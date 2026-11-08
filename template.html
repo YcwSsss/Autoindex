@@ -2469,7 +2469,7 @@ function renderProducts(items){
   // 分组顺序按 grp 代码升序（A/B/C…）；每组内产品按英文名（en）升序，方便查找
   const order = Object.keys(groups).sort((a, b) => a.localeCompare(b));
   order.forEach(g => groups[g].sort((a, b) => (a.en || '').localeCompare(b.en || '', undefined, {numeric: true, sensitivity: 'base'})));
-  let body = `<table class="ptab"><thead><tr><th>品名</th><th>OE 号</th><th>品牌</th><th>CDAP</th><th>位置</th><th>备注</th></tr></thead><tbody>`;
+  let body = `<table class="ptab"><thead><tr><th>品名</th><th>OE 号</th><th data-zh="品牌" data-en="Brand">品牌</th><th>CDAP</th><th>位置</th><th>备注</th></tr></thead><tbody>`;
   order.forEach(g => {
     if(g) body += `<tr class="pgrp-tr"><td colspan="6" data-zh="${esc(catNameByCode(g,'zh'))}" data-en="${esc(catNameByCode(g,'en'))}">${esc(catNameByCode(g,LANG))}</td></tr>`;
     groups[g].forEach(p => {
@@ -3113,7 +3113,7 @@ function renderEditProductsTable(items, vid){
   items.forEach(p => { const g = p.grp || ''; (groups[g] = groups[g] || []).push(p); });
   // 分组顺序按 grp 代码升序（A/B/C…）；每组内产品按英文名（en）升序
   const order = Object.keys(groups).sort((a, b) => a.localeCompare(b));
-  let body = `<table class="ptab"><thead><tr><th>品名</th><th>OE 号</th><th>品牌</th><th>CDAP</th><th>供应商</th><th>MOQ</th><th>采购价</th><th>位置</th><th>备注</th><th style="width:60px;text-align:right;padding-right:4px"></th></tr></thead><tbody>`;
+  let body = `<table class="ptab"><thead><tr><th>品名</th><th>OE 号</th><th data-zh="品牌" data-en="Brand">品牌</th><th>CDAP</th><th>供应商</th><th>MOQ</th><th>采购价</th><th>位置</th><th>备注</th><th style="width:60px;text-align:right;padding-right:4px"></th></tr></thead><tbody>`;
   order.forEach(g => {
     if(g) body += `<tr class="pgrp-tr"><td colspan="10" data-zh="${esc(catNameByCode(g,'zh'))}" data-en="${esc(catNameByCode(g,'en'))}">${esc(catNameByCode(g,LANG))}</td></tr>`;
     groups[g].forEach(p => {
@@ -3687,7 +3687,7 @@ function queryByOe(){
     html += `<div class="cand">
       <h4>${esc(p.cn) || '—'} <span style="color:#8a897f;font-weight:400;font-size:12px">· OE ${esc(p.oe) || '无'}</span>
         ${p.brand ? `<span class="pcnt" style="margin-left:6px">${esc(p.brand)}</span>` : ''}</h4>
-      <table class="ptab"><thead><tr><th>品名</th><th>OE 号</th><th>品牌</th><th>CDAP</th><th>供应商</th></tr></thead><tbody>
+      <table class="ptab"><thead><tr><th>品名</th><th>OE 号</th><th data-zh="品牌" data-en="Brand">品牌</th><th>CDAP</th><th>供应商</th></tr></thead><tbody>
         <tr><td>${esc(p.cn) || '—'}${p.en ? ` <span class="pen">${esc(p.en)}</span>` : ''}</td>
             <td class="mono">${esc(p.oe) || '—'}</td>
             <td>${esc(p.brand) || '—'}</td>
@@ -3773,7 +3773,7 @@ function renderPmAllProducts(){
     return;
   }
   wrap.innerHTML = '<table><thead><tr>'
-    + '<th>品名</th><th>英文名</th><th>品牌</th><th>OE 号</th><th>CDAP</th><th>互换号</th><th>位置</th><th>供应商</th><th>MOQ</th><th>采购价</th><th>操作</th>'
+    + '<th>品名</th><th>英文名</th><th data-zh="品牌" data-en="Brand">品牌</th><th>OE 号</th><th>CDAP</th><th>互换号</th><th>位置</th><th>供应商</th><th>MOQ</th><th>采购价</th><th>操作</th>'
     + '</tr></thead><tbody id="pmAllBody"></tbody></table>';
   PM_ALL_IDX = 0;
   appendPmAllBatch();
