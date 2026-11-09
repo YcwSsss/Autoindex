@@ -457,14 +457,18 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             except Exception as e:
                 return self._send_json({'ok': False, 'error': str(e)}, 500)
         if self.path.startswith('/api/export-vehicles'):
-            # 导出当前查询结果为 Excel：POST body = {"vids":[...]}（优先）或兼容旧 {"filters":[[field,value],...]}
+            # 导出当前查询结果为 Excel：POST body = {"vids":[...], "allCategories":true/false}
+            # （兼容旧 {"filters":[[field,value],...]}；不传 allCategories 时保持原模板）
             try:
                 vids = d.get('vids') if isinstance(d, dict) else None
                 filters = d.get('filters') if isinstance(d, dict) else (d if isinstance(d, list) else None)
-                data = dbstore.export_vehicles_excel(vids=vids, filters=filters)
+                all_categories = bool(d.get('allCategories')) if isinstance(d, dict) else False
+                data = dbstore.export_vehicles_excel(vids=vids, filters=filters,
+                                                    all_categories=all_categories)
                 if not data:
                     return self._send_json({'ok': False, 'error': '无匹配数据，请调整筛选条件'}, 400)
-                filename = f"AutoIndex_Export_{__import__('datetime').date.today().isoformat()}.xlsx"
+                suffix = '_AllCategories' if all_categories else ''
+                filename = f"AutoIndex_Export{suffix}_{__import__('datetime').date.today().isoformat()}.xlsx"
                 self.send_response(200)
                 self.send_header('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
                 self.send_header('Content-Disposition', f'attachment; filename="{filename}"')

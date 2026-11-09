@@ -1346,12 +1346,18 @@ def _is_email(s):
     return bool(re.fullmatch(r"[^@\s]+@[^@\s]+\.[^@\s]+", s or ""))
 
 
-def export_vehicles_excel(vids=None, filters=None):
+def export_vehicles_excel(vids=None, filters=None, all_categories=False):
     """导出车型+产品为 Excel（LIST 汇总表 + 每个 VID 一个 sheet）。
 
     车型来源（二选一，优先 vids）：
     - vids: 前端传来的「当前查询结果显示的 VID 列表」（车型筛选 / VIN / VID 查询的结果）
     - filters: 兼容旧逻辑，按属性筛选条件匹配车型
+
+    两种模板：
+    - all_categories=False（默认，原模板）：每个 VID sheet 只列该车型「已登记」的产品行。
+    - all_categories=True（全品类模板）：按 categories + product_catalog 铺出全部品类与标准
+      产品行；该车型已登记的产品填到对应行（同一品名下多个号码则展开多行），未登记的
+      行保留 Category / Part Description，其余列留空待填。目录外的历史登记产品追加在末尾。
     布局参考 D:\\linshi\\新模板.xlsx：
     - LIST: Brand | Vehicle(宽) | VID | VIN(超链接)
     - VID sheet: R2 Vehicle:/D2车型(合并D2:J2)  R3 VIN:/D3VIN  R4 VID:/D4VID  R6表头(从B列)  R7+数据
@@ -1438,6 +1444,32 @@ def export_vehicles_excel(vids=None, filters=None):
     cat_rows = c.execute("SELECT code, en FROM categories").fetchall()
     cat_en_map = {r['code']: (r['en'] or '') for r in cat_rows}
 
+    # 全品类模板骨架：categories 按代码排序，每个品类下列出 product_catalog 的全部标准产品。
+    # 没有任何产品的品类也保留一行（只有 Category），保证「所有品类」都出现在表里。
+    skeleton = []
+    if all_categories:
+        cat_prods = {}
+        for r in c.execute("SELECT grp, cn, en FROM product_catalog ORDER BY grp, cn").fetchall():
+            cat_prods.setdefault(str(r['grp'] or '').strip(), []).append(
+                (str(r['cn'] or '').strip(), r['en'] or ''))
+        known_codes = set()
+        for cr in c.execute("SELECT code, en FROM categories ORDER BY code").fetchall():
+            code = str(cr['code'] or '').strip()
+            known_codes.add(code)
+            cen = cr['en'] or ''
+            plist = cat_prods.get(code, [])
+            if plist:
+                for pcn, pen in plist:
+                    skeleton.append({'grp': code, 'cat_en': cen, 'prod_cn': pcn, 'prod_en': pen})
+            else:
+                skeleton.append({'grp': code, 'cat_en': cen, 'prod_cn': '', 'prod_en': ''})
+        # 保险：目录里有、但 categories 表缺代码的品类，也要出现在表里
+        for g in sorted(cat_prods):
+            if g and g not in known_codes:
+                for pcn, pen in cat_prods[g]:
+                    skeleton.append({'grp': g, 'cat_en': cat_en_map.get(g, g),
+                                     'prod_cn': pcn, 'prod_en': pen})
+
     conn.close()
 
     # 3. 构建 Excel
@@ -1473,6 +1505,54 @@ def export_vehicles_excel(vids=None, filters=None):
         if v['engine']: extra.append(v['engine'])
         if extra: parts.append(', '.join(extra))
         return ' '.join(parts).strip()
+
+    def _rows_for(vid_str, prods, full):
+        """返回一个 VID sheet 的数据行（每行 9 列，从 B 列开始，首列是序号）。
+        full=False 时逐行输出已登记产品（原模板）；full=True 时铺满全品类骨架。"""
+        out = []
+
+        def emit(p=None, cat_en='', prod_en=''):
+            if p is None:      # 空白待填行
+                out.append([len(out) + 1, cat_en, prod_en, '', '', '', '', '', ''])
+                return
+            pid = p['id']
+            rem = remark_map.get((pid, vid_str), '') or (p['notes'] or '')
+            out.append([
+                len(out) + 1,
+                cat_en or cat_en_map.get(p['grp'] or '', ''),
+                prod_en or (p['en'] or ''),
+                (p['cdap'] or ''), (p['oe'] or ''), rem,
+                (p['supplier'] or ''), (p['cost'] or ''), (p['moq'] or ''),
+            ])
+
+        if not full:
+            for p in prods:
+                emit(p)
+            return out
+
+        reg_by_key = {}
+        for p in prods:
+            k = ((p['grp'] or '').strip(), (p['cn'] or '').strip())
+            reg_by_key.setdefault(k, []).append(p)
+
+        sk_keys = set()
+        for sk in skeleton:
+            key = (sk['grp'], sk['prod_cn'])
+            matches = reg_by_key.get(key, []) if sk['prod_cn'] else []
+            if sk['prod_cn']:
+                sk_keys.add(key)
+            if matches:
+                for p in matches:
+                    emit(p, cat_en=sk['cat_en'], prod_en=sk['prod_en'])
+            else:
+                emit(None, cat_en=sk['cat_en'], prod_en=sk['prod_en'])
+
+        # 目录外的历史登记产品（如未填品类）追加在末尾，保证不丢数据
+        for p in prods:
+            k = ((p['grp'] or '').strip(), (p['cn'] or '').strip())
+            if k not in sk_keys:
+                emit(p)
+        return out
 
     # ---- LIST 汇总表 ----
     ws_list = wb.create_sheet("LIST", 0)
@@ -1551,23 +1631,7 @@ def export_vehicles_excel(vids=None, filters=None):
 
         # R7+: 数据行（从 B 列开始）
         prods = prods_by_vid.get(vid_str, [])
-        for pi, p in enumerate(prods, 7):
-            pid = p['id']
-            rem = remark_map.get((pid, vid_str), '') or ((p['notes'] or ''))
-            seq_no = pi - 6  # 序号从1开始
-            cat_en = cat_en_map.get(p['grp'] or '', '')
-
-            row_data = [
-                seq_no,              # B: # 序号
-                cat_en,              # C: Category（英文品类名）
-                (p['en'] or ''),     # D: Part Description（英文品名）
-                (p['cdap'] or ''),   # E: CDAP No
-                (p['oe'] or ''),     # F: OE Part No
-                rem,                 # G: Notes
-                (p['supplier'] or ''),# H: Supplier
-                (p['cost'] or ''),   # I: COST CNY
-                (p['moq'] or ''),    # J: MOQ
-            ]
+        for pi, row_data in enumerate(_rows_for(vid_str, prods, all_categories), 7):
             for ci, val in enumerate(row_data, 2):
                 cell = ws.cell(row=pi, column=ci, value=val)
                 cell.border = thin_border

@@ -59,6 +59,11 @@
   .pm-modal{position:fixed;inset:0;background:rgba(20,18,40,.38);z-index:70;display:none;align-items:center;justify-content:center}
   .pm-modal.show{display:flex}
   .pm-card{background:#fff;width:min(560px,94vw);max-height:86vh;overflow:auto;border-radius:12px;box-shadow:0 14px 44px rgba(0,0,0,.24)}
+  /* 导出模板选择 */
+  .exp-opt{display:block;width:100%;text-align:left;border:1px solid #d9d7cf;background:#fff;border-radius:10px;padding:11px 14px;margin-bottom:10px;cursor:pointer;transition:border-color .15s,background .15s}
+  .exp-opt:hover{border-color:#534ab7;background:#f7f6ff}
+  .exp-opt-t{display:block;font-size:14px;font-weight:500;color:#26215c}
+  .exp-opt-d{display:block;font-size:12px;color:#8a897f;margin-top:3px;line-height:1.45}
   /* 导出加载遮罩 */
   .export-loading{position:fixed;inset:0;background:rgba(20,18,40,.45);z-index:80;display:none;align-items:center;justify-content:center;flex-direction:column}
   .export-loading.show{display:flex}
@@ -655,7 +660,7 @@
           <div class="fld-btns">
             <button class="btn" onclick="queryEditByAttrs()">查询</button>
             <button class="ghost btn" onclick="clearEditAttrs()">清空</button>
-            <button class="btn" style="background:#0d6efd;color:#fff;border-color:#0d6efd" onclick="exportEditVehicles()">导出</button>
+            <button class="btn" style="background:#0d6efd;color:#fff;border-color:#0d6efd" onclick="openExportChoice()">导出</button>
             <span id="eResultCount" class="result-count"></span>
           </div>
           <div class="fld-prods" style="margin-top:10px">
@@ -858,6 +863,29 @@
       </div>
     </div>
   </div>
+  </div>
+
+  <!-- 导出模板选择：点「导出」后弹出，两种模板并列，原模板保持不变 -->
+  <div id="exportChoiceModal" class="pm-modal" onclick="if(event.target===this)closeExportChoice()">
+    <div class="pm-card" style="width:min(440px,94vw)">
+      <div class="pm-card-hd">
+        <div class="t" data-zh="选择导出模板" data-en="Choose Export Template">选择导出模板</div>
+        <button class="pm-card-close" onclick="closeExportChoice()" title="关闭">×</button>
+      </div>
+      <div class="pm-card-bd" style="padding-bottom:6px">
+        <button class="exp-opt" onclick="closeExportChoice();exportEditVehicles(false)">
+          <span class="exp-opt-t" data-zh="仅已登记产品" data-en="Registered Products Only">仅已登记产品</span>
+          <span class="exp-opt-d" data-zh="原模板：只列出该车型已登记的产品信息" data-en="Original template: only products already registered">原模板：只列出该车型已登记的产品信息</span>
+        </button>
+        <button class="exp-opt" onclick="closeExportChoice();exportEditVehicles(true)">
+          <span class="exp-opt-t" data-zh="所有品类（完整模板）" data-en="All Categories (Full Template)">所有品类（完整模板）</span>
+          <span class="exp-opt-d" data-zh="列出全部品类与产品，未登记的行留空待填" data-en="Lists every category and product; unregistered rows left blank">列出全部品类与产品，未登记的行留空待填</span>
+        </button>
+      </div>
+      <div class="pm-card-ft">
+        <button class="ghost btn" data-zh="取消" data-en="Cancel" onclick="closeExportChoice()">取消</button>
+      </div>
+    </div>
   </div>
 
   <!-- 产品管理：编辑产品（品牌/OE/CDAP/供应商/MOQ/采购价） -->
@@ -2835,8 +2863,18 @@ function hideExportLoading(){
   const el = document.getElementById('exportLoading');
   if(el) el.classList.remove('show');
 }
+// 点「导出」先选模板：false=仅已登记产品（原模板），true=所有品类（完整模板）
+function openExportChoice(){
+  const m = document.getElementById('exportChoiceModal');
+  if(m) m.classList.add('show');
+}
+function closeExportChoice(){
+  const m = document.getElementById('exportChoiceModal');
+  if(m) m.classList.remove('show');
+}
 // 导出 = 当前查询结果显示的车型（车型筛选 / VIN / ID 查询，只看屏幕结果）
-async function exportEditVehicles(){
+async function exportEditVehicles(allCategories){
+  allCategories = !!allCategories;
   // 采集屏幕上结果卡片的 VID（eoutS=VIN/VID 查询，eoutF=车型属性筛选；二者互斥，仅其一有内容）
   const vids = new Set();
   document.querySelectorAll('#eoutS .vcard[data-vid], #eoutF .vcard[data-vid]').forEach(c => {
@@ -2848,14 +2886,16 @@ async function exportEditVehicles(){
   showExportLoading();
   try{
     const r = await fetch('/api/export-vehicles', {
-      method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({vids: vidArr})
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({vids: vidArr, allCategories: allCategories})
     });
     if(!r.ok){ alert('导出失败：HTTP '+r.status); return; }
     const blob = await r.blob();
     if(blob.size < 100){ alert('导出失败：无数据或服务器错误'); return; }
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
-    a.href = url; a.download = 'AutoIndex_Export_' + new Date().toISOString().slice(0,10) + '.xlsx';
+    a.href = url;
+    a.download = 'AutoIndex_Export' + (allCategories ? '_AllCategories' : '') + '_' + new Date().toISOString().slice(0,10) + '.xlsx';
     document.body.appendChild(a); a.click(); document.body.removeChild(a);
     URL.revokeObjectURL(url);
   }catch(e){ alert('导出失败：' + e.message); }
