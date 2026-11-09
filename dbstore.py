@@ -1362,6 +1362,9 @@ def export_vehicles_excel(vids=None, filters=None, all_categories=False):
     - LIST: Brand | Vehicle(宽) | VID | VIN(超链接)
     - VID sheet: R2 Vehicle:/D2车型(合并D2:J2)  R3 VIN:/D3VIN  R4 VID:/D4VID  R6表头(从B列)  R7+数据
       列: B=#  C=Category(英文品类)  D=Part Description(英文品名)  E=CDAP No  F=OE Part No  G=Notes  H=Supplier  I=COST CNY  J=MOQ
+          K=Brand  L=Position(中文原值,如 左前)  M=Position (EN)(逐字映射,如 Left Front)
+          N=Interchange  O=Part Description (CN)(中文品名)
+      K~O 为后补字段，追加在末尾，B~J 原有列位置保持不变。
     """
     import openpyxl
     from openpyxl.styles import Font, Alignment, Border, Side, PatternFill
@@ -1507,22 +1510,25 @@ def export_vehicles_excel(vids=None, filters=None, all_categories=False):
         return ' '.join(parts).strip()
 
     def _rows_for(vid_str, prods, full):
-        """返回一个 VID sheet 的数据行（每行 9 列，从 B 列开始，首列是序号）。
+        """返回一个 VID sheet 的数据行（每行 14 列 B~O，首列是序号）。
         full=False 时逐行输出已登记产品（原模板）；full=True 时铺满全品类骨架。"""
         out = []
 
-        def emit(p=None, cat_en='', prod_en=''):
-            if p is None:      # 空白待填行
-                out.append([len(out) + 1, cat_en, prod_en, '', '', '', '', '', ''])
+        def emit(p=None, cat_en='', prod_en='', prod_cn=''):
+            if p is None:      # 空白待填行：带品类 + 中英文品名骨架，其余留空
+                out.append([len(out) + 1, cat_en, prod_en] + [''] * 10 + [prod_cn])
                 return
             pid = p['id']
             rem = remark_map.get((pid, vid_str), '') or (p['notes'] or '')
+            loc = p['loc'] or ''
             out.append([
                 len(out) + 1,
                 cat_en or cat_en_map.get(p['grp'] or '', ''),
                 prod_en or (p['en'] or ''),
                 (p['cdap'] or ''), (p['oe'] or ''), rem,
                 (p['supplier'] or ''), (p['cost'] or ''), (p['moq'] or ''),
+                (p['brand'] or ''), loc, _loc_en(loc),
+                (p['interchange'] or ''), (p['cn'] or ''),
             ])
 
         if not full:
@@ -1545,7 +1551,8 @@ def export_vehicles_excel(vids=None, filters=None, all_categories=False):
                 for p in matches:
                     emit(p, cat_en=sk['cat_en'], prod_en=sk['prod_en'])
             else:
-                emit(None, cat_en=sk['cat_en'], prod_en=sk['prod_en'])
+                emit(None, cat_en=sk['cat_en'], prod_en=sk['prod_en'],
+                     prod_cn=sk['prod_cn'])
 
         # 目录外的历史登记产品（如未填品类）追加在末尾，保证不丢数据
         for p in prods:
@@ -1581,11 +1588,21 @@ def export_vehicles_excel(vids=None, filters=None, all_categories=False):
 
     # ---- 每个 VID 一个 sheet（匹配新模板布局）----
     prod_headers = ["#", "Category", "Part Description", "CDAP No", "OE Part No",
-                     "Notes", "Supplier", "COST CNY", "MOQ"]
-    # 新模板列宽
+                     "Notes", "Supplier", "COST CNY", "MOQ",
+                     "Brand", "Position", "Position (EN)", "Interchange",
+                     "Part Description (CN)"]
+    # 列宽（B~J 沿用模板，K~O 为后补字段）
     vid_col_widths = {'A': 0.45, 'B': 3.78, 'C': 21.11, 'D': 41.22,
                        'E': 26.56, 'F': 27.67, 'G': 23.56, 'H': 24.44,
-                       'I': 16.67, 'J': 10.89}
+                       'I': 16.67, 'J': 10.89,
+                       'K': 16.0, 'L': 12.0, 'M': 18.0, 'N': 30.0, 'O': 22.0}
+    # 位置是封闭方位词枚举，逐字映射即可覆盖「左前下」这类组合值（与前端 LOC_EN 一致）
+    _LOC_EN = {'左': 'Left', '右': 'Right', '前': 'Front', '后': 'Rear',
+               '里': 'Inner', '外': 'Outer', '上': 'Upper', '下': 'Lower',
+               '内': 'Inner'}
+
+    def _loc_en(loc):
+        return ' '.join(_LOC_EN.get(ch, ch) for ch in (loc or ''))
 
     for v in vehicles:
         vid_str = str(v['vid'])
